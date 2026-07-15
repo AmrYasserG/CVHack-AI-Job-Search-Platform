@@ -1,0 +1,224 @@
+.cert-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  font-family: var(--font-body);
+}
+
+.cert-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.cert-card__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  font-family: var(--font-display);
+}
+
+.cert-card__add-btn {
+  background-color: var(--copperSoft);
+  color: var(--copper);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cert-card__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.cert-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cert-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.cert-item__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--amberSoft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.cert-item__info {
+  flex: 1;
+}
+
+.cert-item__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 2px;
+}
+
+.cert-item__meta {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 4px;
+}
+
+.cert-item__link {
+  font-size: 12px;
+  color: var(--copper);
+  text-decoration: none;
+}
+
+.cert-item__link:hover {
+  text-decoration: underline;
+}
+
+.cert-item__actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cert-item__edit,
+.cert-item__delete {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background-color: var(--surface2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.cert-item__delete:hover {
+  background-color: var(--redSoft);
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.cert-form {
+  margin-top: 16px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background-color: var(--surface2);
+}
+
+.cert-form__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 16px;
+}
+
+.cert-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cert-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cert-form__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--faint);
+  text-transform: uppercase;
+}
+
+.cert-form__input {
+  padding: 8px 12px;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  background-color: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--font-body);
+}
+
+.cert-form__input:focus {
+  outline: none;
+  border-color: var(--copper);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.cert-form__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.cert-form__cancel {
+  background-color: var(--surface);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.cert-form__save {
+  background-color: var(--copper);
+  border: none;
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cert-form__save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cert-form__input--error {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px var(--redSoft);
+}
+
+.cert-form__error {
+  font-size: 12px;
+  color: var(--red);
+  margin-top: 2px;
+}
+@media (max-width: 768px) {
+  .cert-card {
+    padding: 16px;
+  }
+
+  .cert-form {
+    padding: 16px;
+  }
+
+  .cert-form__grid {
+    grid-template-columns: 1fr;
+  }
+}

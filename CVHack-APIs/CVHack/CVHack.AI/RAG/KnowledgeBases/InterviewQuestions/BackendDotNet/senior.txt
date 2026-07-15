@@ -1,0 +1,151 @@
+================================================================================
+BACKEND .NET INTERVIEW QUESTIONS — SENIOR LEVEL
+================================================================================
+Target: 5+ years of experience
+Focus: System design, distributed systems, deep .NET internals, leadership, architecture decisions, cloud-native patterns
+================================================================================
+
+--------------------------------------------------------------------------------
+SECTION 1: DEEP .NET INTERNALS & PERFORMANCE
+--------------------------------------------------------------------------------
+
+Q1: How does the .NET CLR's garbage collector work in detail? What are the implications of Gen 2 collections?
+EXPECTED: CLR uses a generational GC (Gen 0/1/2 + LOH/POH). Gen 0 collections are cheap/frequent. Promotion to Gen 2 triggers a full GC — all threads stop (stop-the-world). Gen 2 collections are expensive. Mitigation: object pooling (`ArrayPool<T>`, `ObjectPool<T>`), `Span<T>` for stack allocation, avoiding finalizers, minimizing allocations in hot paths.
+
+Q2: What is `Span<T>` and `Memory<T>`? How do they improve performance?
+EXPECTED: `Span<T>` is a stack-only ref struct providing a view over contiguous memory (array, stack, native) without allocation. `Memory<T>` is the heap-compatible version usable in async. Both avoid array copying. Critical for parsing, serialization, high-throughput scenarios. Used heavily in ASP.NET Core's Kestrel.
+
+Q3: What is the `ArrayPool<T>` and when should you use it?
+EXPECTED: A shared pool of reusable arrays to reduce GC allocations. Use when you need temporary large arrays (e.g., buffers for serialization, HTTP body reading). Call `ArrayPool<T>.Shared.Rent(size)` and always `Return()` in a try/finally.
+
+Q4: What is the difference between `Thread`, `Task`, and `ValueTask`? When does spinning up a new thread make sense?
+EXPECTED: `Thread` — OS thread, expensive, 1MB stack. `Task` — scheduled on thread pool, lightweight. `ValueTask` — allocation-free for sync-complete paths. New threads rarely make sense in modern .NET — use `Task.Run()` for CPU-bound work, `async/await` for I/O-bound. Explicit threads only for long-running, blocking work that must not starve the thread pool.
+
+Q5: What is `System.Threading.Channels`? When would you use it over a `ConcurrentQueue`?
+EXPECTED: Channels provide async-friendly, high-performance producer/consumer pipelines. Unlike `ConcurrentQueue`, Channels support backpressure (bounded channels), async waiting with `WaitToReadAsync`/`WaitToWriteAsync`. Use for streaming pipelines, decoupling producers/consumers without polling.
+
+Q6: What are source generators in C#? Give practical use cases.
+EXPECTED: Compile-time code generation using the Roslyn compiler API. Run at compile time, no runtime reflection. Use cases: `System.Text.Json` serialization (no reflection), auto-implementing boilerplate (Mapster, AutoMapper alternatives), logging source generators in .NET 6+ (`LoggerMessage`), Refit/gRPC client generation.
+
+Q7: What is the difference between `IAsyncEnumerable<T>` and returning `Task<IEnumerable<T>>`?
+EXPECTED: `IAsyncEnumerable<T>` streams items as they become available (true async streaming) — consumer processes each item without waiting for the full collection. `Task<IEnumerable<T>>` materializes everything before returning. Use `IAsyncEnumerable` for paginated DB results, real-time feeds, large data sets to reduce memory and TTFB.
+
+Q8: How does AOT (Ahead-of-Time) compilation work in .NET? What are its trade-offs?
+EXPECTED: AOT compiles to native code at publish time (.NET Native AOT in .NET 7+). Benefits: faster startup, smaller binaries, no JIT overhead — ideal for serverless/containers. Trade-offs: no dynamic code generation, limited reflection, longer build times, some NuGet packages incompatible. Contrast with JIT (Just-in-Time), which optimizes at runtime based on actual usage.
+
+Q9: What are minimal APIs in ASP.NET Core? When would you prefer them over controllers?
+EXPECTED: Introduced in .NET 6 — define endpoints inline without controller classes. Less ceremony, better for microservices/lightweight APIs. Controllers still better for large APIs needing filters, model binding complexity, versioning organization. Minimal APIs now support filters, groups, and OpenAPI in .NET 8+.
+
+Q10: What improvements did .NET 8 bring that a senior engineer should know?
+EXPECTED: Native AOT improvements, `TimeProvider` abstraction (testable time), `IExceptionHandler` for centralized error handling, output caching improvements, `HybridCache` (preview → GA in .NET 9), `FrozenDictionary`/`FrozenSet` for immutable high-read collections, `System.Text.Json` improvements (custom converters, non-public members), Keyed DI services (`[FromKeyedServices]`).
+
+--------------------------------------------------------------------------------
+SECTION 2: SYSTEM DESIGN & ARCHITECTURE
+--------------------------------------------------------------------------------
+
+Q11: Design a scalable REST API for a high-traffic e-commerce product catalog. What are the key architectural decisions?
+EXPECTED: Discuss: horizontal scaling behind a load balancer, read replicas for catalog queries, distributed caching (Redis) for product data, CDN for static assets, eventual consistency vs strong consistency trade-offs, pagination/filtering strategies, rate limiting, async search indexing (Elasticsearch/Azure AI Search), event-driven updates via message bus.
+
+Q12: What is eventual consistency? How do you design around it in a distributed .NET system?
+EXPECTED: In distributed systems, after a write, replicas may not reflect the change immediately. Design around it by: using optimistic UI updates, idempotent operations, saga patterns for distributed transactions, event sourcing to track state changes, clear SLAs for consistency windows. Avoid assuming reads immediately reflect recent writes across services.
+
+Q13: What is the Outbox Pattern? Why is it important in microservices?
+EXPECTED: Ensures atomicity between database writes and message publishing. Instead of publishing to a message broker directly (two-phase commit risk), write the event to an "outbox" table in the same DB transaction, then a background process reliably publishes it. Prevents lost messages on crashes. Libraries: NServiceBus, MassTransit, or custom polling.
+
+Q14: What is the Saga pattern? Compare Choreography vs Orchestration.
+EXPECTED: Manages distributed transactions across services without 2PC. Choreography: each service reacts to events independently (decoupled, harder to debug). Orchestration: a central Saga orchestrator tells each service what to do (easier to trace, single point of failure). MassTransit and NServiceBus support both in .NET.
+
+Q15: How would you implement distributed tracing in a .NET microservices system?
+EXPECTED: Use OpenTelemetry (.NET's first-class support via `System.Diagnostics.Activity`). Propagate trace context (W3C TraceContext headers) across service calls. Export to Jaeger, Zipkin, or Azure Monitor / Application Insights. Instrument HTTP clients, EF Core, message brokers. Correlate logs with trace IDs via structured logging (Serilog/Structured Enrichers).
+
+Q16: What is an API Gateway? What responsibilities does it typically own?
+EXPECTED: Single entry point for all clients. Responsibilities: routing, authentication/JWT validation, rate limiting, SSL termination, request aggregation, caching, logging, circuit breaking. Examples: Azure API Management, AWS API Gateway, YARP (Yet Another Reverse Proxy — a .NET native option).
+
+Q17: What is YARP? When would you use it over an external API gateway?
+EXPECTED: Microsoft's open-source reverse proxy library built on ASP.NET Core. Use when you need a fully customizable .NET-native proxy (custom middleware, C# configuration, fine-grained control). External API gateways (APIM, Kong) better for enterprise management, portal, billing. YARP excellent for BFF (Backend for Frontend) patterns.
+
+Q18: Explain the Strangler Fig pattern. How would you apply it to modernize a legacy .NET Framework monolith?
+EXPECTED: Incrementally migrate functionality from a legacy system by routing new requests to new services while the old system handles the rest. Apply: set up an API gateway/reverse proxy in front of the monolith, extract domain modules as .NET 8 services one by one (starting with stable, high-value domains), redirect traffic progressively. Avoid big-bang rewrites.
+
+Q19: How do you handle secrets management in a production .NET application?
+EXPECTED: Never store secrets in appsettings.json or code. Use: Azure Key Vault (with Managed Identity — no credentials needed), AWS Secrets Manager, HashiCorp Vault. In development: `dotnet user-secrets`. Inject via `IConfiguration` with Key Vault provider. Rotate secrets without redeployment.
+
+Q20: What are the ACID vs BASE trade-offs in database selection?
+EXPECTED: ACID (Atomicity, Consistency, Isolation, Durability) — relational DBs — strong consistency, transactions. BASE (Basically Available, Soft state, Eventual consistency) — NoSQL — better scalability/availability. Senior engineers choose based on domain needs: financial transactions need ACID; social feeds, product catalogs can tolerate BASE. Don't default to either without reasoning.
+
+--------------------------------------------------------------------------------
+SECTION 3: MESSAGING & EVENT-DRIVEN ARCHITECTURE
+--------------------------------------------------------------------------------
+
+Q21: What is the difference between a message queue and a message broker? Give .NET examples.
+EXPECTED: Queue — point-to-point (one producer, one consumer). Broker — routes messages between multiple producers/consumers, supports topics/subscriptions. Examples: Azure Service Bus (queue + topic), RabbitMQ (exchange/queue), AWS SQS/SNS. .NET libraries: MassTransit, NServiceBus (abstractions over brokers).
+
+Q22: What is MassTransit? What problems does it solve?
+EXPECTED: Open-source .NET messaging library abstracting over RabbitMQ, Azure Service Bus, Amazon SQS. Provides: consumer lifetime management, retry policies, outbox pattern, sagas, request/response over messaging, dead-letter queue handling. Prevents vendor lock-in and reduces boilerplate.
+
+Q23: What is event sourcing? How does it differ from traditional state storage?
+EXPECTED: Store a sequence of events (what happened) rather than current state. State reconstructed by replaying events. Benefits: full audit log, temporal queries ("what was state at time X?"), event replay for new projections. Complexity: eventual consistency for reads, event schema evolution challenges. Often paired with CQRS.
+
+Q24: How do you handle idempotency in a message consumer?
+EXPECTED: Ensure processing a message multiple times produces the same result. Strategies: check-and-set in DB (idempotency key), deduplication table, natural idempotency (e.g., SET price = X is idempotent). Message brokers guarantee at-least-once delivery — consumers must be idempotent.
+
+Q25: What is a dead-letter queue (DLQ)? How do you handle messages in it?
+EXPECTED: A queue where messages are sent after exhausting retry attempts. Monitor DLQ for failures, alert on spikes. Process DLQ messages with human review, automated replay after fixing root cause, or discard with audit logging. Never silently drop messages.
+
+--------------------------------------------------------------------------------
+SECTION 4: CLOUD-NATIVE & DEVOPS
+--------------------------------------------------------------------------------
+
+Q26: What is the 12-Factor App methodology? How does it apply to .NET services?
+EXPECTED: Guidelines for building scalable, maintainable cloud-native apps. Key factors for .NET: config via env vars (not appsettings checked in), stateless processes, explicit dependencies (NuGet), dev/prod parity, treat logs as streams (structured logging → stdout), disposability (fast startup/graceful shutdown).
+
+Q27: How do you implement health checks in ASP.NET Core? What should they check?
+EXPECTED: Use `services.AddHealthChecks()` and `app.MapHealthChecks("/health")`. Separate liveness (is app running?) from readiness (is app ready to receive traffic?). Check: DB connectivity, external dependency availability, cache connectivity. Expose to Kubernetes probes. Libraries: `AspNetCore.HealthChecks.*` NuGet packages.
+
+Q28: What is a circuit breaker pattern? How do you implement it in .NET?
+EXPECTED: Prevents cascading failures by stopping calls to a failing dependency after a threshold of failures, allowing it time to recover. States: Closed (normal), Open (failing — reject calls), Half-Open (test recovery). Implement with Polly (`.AddCircuitBreaker()`), now via `Microsoft.Extensions.Resilience` (built on Polly v8) in .NET 8+.
+
+Q29: What is `Microsoft.Extensions.Resilience`? How does it differ from raw Polly?
+EXPECTED: First-party .NET 8+ library wrapping Polly v8 with DI integration, standardized pipelines, and telemetry out of the box. Use `AddResilienceHandler()` on `IHttpClientBuilder`. Provides: retry, circuit breaker, timeout, rate limiter, hedging — composable via `ResiliencePipeline`. Simpler than manual Polly setup.
+
+Q30: How do you achieve zero-downtime deployments for a .NET API on Kubernetes?
+EXPECTED: Rolling deployments (gradually replace pods), readiness probes (don't route until ready), graceful shutdown (`IHostApplicationLifetime.ApplicationStopping`, drain active requests), `terminationGracePeriodSeconds`, connection draining for DB pools. Blue/green or canary deployments for high-risk changes. Feature flags to decouple deploy from release.
+
+Q31: What is OpenTelemetry and how do you integrate it in .NET 8?
+EXPECTED: Vendor-neutral observability standard (traces, metrics, logs). In .NET 8: `AddOpenTelemetry()`, instrument with `AddAspNetCoreInstrumentation()`, `AddHttpClientInstrumentation()`, `AddEntityFrameworkCoreInstrumentation()`. Export to Jaeger, Prometheus, OTLP collector, or Azure Monitor. .NET's `Activity` API aligns with OTel spans.
+
+--------------------------------------------------------------------------------
+SECTION 5: LEADERSHIP, ARCHITECTURE DECISIONS & SOFT SKILLS
+--------------------------------------------------------------------------------
+
+Q32: How do you approach technical debt in a production system? How do you prioritize refactoring vs new features?
+EXPECTED: Classify debt (deliberate/reckless vs inadvertent/prudent). Track debt as items in the backlog. Allocate a percentage of each sprint (20% rule). Build the business case: quantify cost of delay, risk of incidents. Avoid "big bang" rewrites — use incremental improvement patterns (Strangler Fig, Branch by Abstraction). Communicate impact to non-technical stakeholders.
+
+Q33: How do you design an API versioning strategy?
+EXPECTED: Options: URL path versioning (`/api/v1/`), query string (`?api-version=1`), headers (`Api-Version: 1`). .NET library: `Microsoft.AspNetCore.Mvc.Versioning` (or `Asp.Versioning.Mvc` for .NET 6+). Deprecation policy: sunset headers, changelog. Avoid breaking changes — prefer additive changes. Support at least one previous version during migration windows.
+
+Q34: A critical bug is in production causing data inconsistency. Walk me through your incident response process.
+EXPECTED: 1) Mitigate first (feature flag off, rollback, disable endpoint). 2) Communicate status (stakeholders, status page). 3) Gather data (logs, traces, metrics). 4) Root cause analysis — don't blame individuals. 5) Fix and deploy with monitoring. 6) Write post-mortem: timeline, root cause, contributing factors, action items. 7) Improve: add tests, alerting, runbook. Blameless culture is key.
+
+Q35: How do you mentor junior/mid developers? What does "code review culture" look like to you?
+EXPECTED: Mentoring: pair programming, structured feedback, encouraging questions, delegating ownership not just tasks, explaining why not just what. Code review culture: reviews are about code quality, not personal criticism; provide context in comments; use automated tools (linters, Roslyn analyzers) to catch style issues; focus human review on logic, security, architecture; acknowledge good code, not just problems; timely reviews to avoid blocking.
+
+Q36: How do you evaluate whether to use a microservices vs monolith architecture for a new project?
+EXPECTED: Start with a modular monolith unless you have clear scaling bottlenecks, team size >10+, or truly independent deployment needs. Microservices add: distributed systems complexity, operational overhead, network latency, harder debugging. Benefits (when warranted): independent scaling, polyglot persistence, team autonomy. "Modular monolith first, extract services when the seams are clear."
+
+Q37: How do you approach database schema changes in a zero-downtime, CI/CD environment?
+EXPECTED: Expand/Contract pattern: 1) Expand — add new column/table (backward compatible). 2) Deploy new code that writes to both old and new. 3) Backfill data. 4) Contract — remove old column in a future deploy after code no longer reads it. Never drop columns/tables in the same deploy as the code change. Use Flyway, Liquibase, or EF Core migrations with careful sequencing.
+
+Q38: What is a BFF (Backend for Frontend)? When would you introduce one?
+EXPECTED: A backend service tailored to a specific frontend (mobile app, web app, third-party). Aggregates calls to internal microservices, transforms data to match the UI's needs, handles auth/session for that client. Introduce when: multiple frontends have very different data needs, mobile needs smaller payloads, or you want to shield the frontend from internal service topology. Build with YARP or a dedicated ASP.NET Core project.
+
+Q39: How do you approach observability in a production system? What's the difference between monitoring and observability?
+EXPECTED: Monitoring = watching known metrics/alerts for known failure modes. Observability = ability to understand internal system state from external outputs (logs, traces, metrics) — handles unknown unknowns. Pillars: structured logging (Serilog → Elastic/Seq), distributed tracing (OpenTelemetry → Jaeger), metrics (Prometheus + Grafana). Correlate all three with trace IDs. Senior engineers design for observability from day one.
+
+Q40: What is your approach to designing for security in a .NET backend system (security by design)?
+EXPECTED: Threat modeling early (STRIDE). Principle of least privilege (scoped DB users, Managed Identities). Input validation + output encoding everywhere. Parameterized queries (no raw SQL with user input). Secrets in Key Vault, not code. Audit logging for sensitive operations. Dependency scanning (OWASP, `dotnet list package --vulnerable`). Regular pen testing. OWASP API Security Top 10 awareness. Security as a first-class architectural concern, not an afterthought.
+
+================================================================================
+END OF FILE — SENIOR LEVEL
+Total Questions: 40
+================================================================================

@@ -1,0 +1,130 @@
+====================================================
+REACT FRONTEND INTERVIEW QUESTIONS — JUNIOR LEVEL
+====================================================
+Target: 0–2 years of experience
+Focus: Core React concepts, basic JavaScript/TypeScript, fundamental HTML/CSS, simple tooling
+
+----------------------------------------------------
+SECTION 1: CORE REACT FUNDAMENTALS
+----------------------------------------------------
+
+Q1. What is React and what problem does it solve compared to plain HTML/JavaScript?
+Expected answer: React is a UI library for building component-based interfaces. It solves the problem of manually updating the DOM by introducing a virtual DOM and declarative rendering — you describe what the UI should look like for a given state, and React figures out the minimal DOM updates needed.
+
+Q2. What is the difference between a functional component and a class component? Which would you use today and why?
+Expected answer: Functional components are plain JavaScript functions that return JSX. Class components extend React.Component and use lifecycle methods. Today, functional components with Hooks are the standard — they're simpler, easier to test, and Hooks cover everything class components could do.
+
+Q3. What is JSX? Is it required to write React?
+Expected answer: JSX is a syntax extension that looks like HTML inside JavaScript. It compiles to React.createElement() calls. It's not required but is strongly conventional because it makes component structure readable. You could use React without JSX but it becomes verbose.
+
+Q4. Explain the difference between props and state.
+Expected answer: Props are read-only inputs passed from a parent to a child component. State is mutable data managed inside a component. When state changes, React re-renders the component. Props flow down (parent → child); state is local unless lifted up.
+
+Q5. What does useState return and how do you use it?
+Expected answer: useState returns a tuple: [currentValue, setterFunction]. The setter triggers a re-render with the new value. Example: const [count, setCount] = useState(0); then setCount(count + 1) or setCount(prev => prev + 1).
+
+Q6. What is the purpose of useEffect? Give a simple example.
+Expected answer: useEffect runs side effects after render — data fetching, subscriptions, manual DOM manipulation. Example: useEffect(() => { document.title = `Count: ${count}`; }, [count]); — runs after every render where count changed.
+
+Q7. What is the dependency array in useEffect and what happens if you omit it?
+Expected answer: The dependency array controls when the effect re-runs. Empty array [] = runs once on mount. [dep1, dep2] = runs when those values change. Omitting it = runs after every render, which often causes infinite loops when the effect updates state.
+
+Q8. How do you handle a click event in React?
+Expected answer: Pass an event handler as a prop: <button onClick={handleClick}>Click me</button>. The handler is a function — avoid calling it immediately (onClick={handleClick()} is wrong; that invokes on render). Use arrow functions for inline handlers with arguments: onClick={() => handleClick(id)}.
+
+Q9. What is conditional rendering in React? Show two ways to do it.
+Expected answer:
+  1. Ternary: {isLoggedIn ? <Dashboard /> : <Login />}
+  2. Short-circuit: {isLoggedIn && <Dashboard />}
+  3. Also valid: early return inside the component, or an if/else before the return statement.
+
+Q10. What is a key prop and why does React need it in lists?
+Expected answer: Keys help React identify which items in a list have changed, been added, or removed. Without them, React can't efficiently reconcile list diffs and may re-render incorrectly. Keys should be stable, unique IDs — not array indexes when the list can reorder.
+
+----------------------------------------------------
+SECTION 2: JAVASCRIPT / TYPESCRIPT BASICS
+----------------------------------------------------
+
+Q11. What is the difference between let, const, and var?
+Expected answer: var is function-scoped and hoisted. let and const are block-scoped. const prevents reassignment (not mutation of objects/arrays). In modern React code, var is almost never used.
+
+Q12. What are arrow functions and how do they differ from regular functions?
+Expected answer: Arrow functions are a shorter syntax and do not have their own this context — they inherit this from the enclosing scope. This matters in class components. In functional components it matters less, but arrow functions are still the standard for event handlers.
+
+Q13. Explain destructuring with a React example.
+Expected answer: Destructuring extracts values from objects/arrays. In React: const { name, age } = props; or function UserCard({ name, age }) {}. Also used with hooks: const [value, setValue] = useState('').
+
+Q14. What is the spread operator and how is it used in React?
+Expected answer: ... spreads iterable values. In React: <Component {...props} /> passes all props through. Also used to copy state immutably: setUser({ ...user, name: 'Alice' }) instead of mutating directly.
+
+Q15. What is the difference between == and === in JavaScript?
+Expected answer: == performs type coercion (0 == '0' is true). === checks value AND type (0 === '0' is false). In React/JS you almost always want === to avoid unexpected bugs.
+
+----------------------------------------------------
+SECTION 3: STYLING & HTML
+----------------------------------------------------
+
+Q16. What are the different ways to style a React component?
+Expected answer: CSS files imported into components, CSS Modules (scoped classes), inline styles (style={{ color: 'red' }}), CSS-in-JS libraries (styled-components, Emotion), and utility-first frameworks like Tailwind CSS.
+
+Q17. What is the difference between CSS Modules and plain CSS imports?
+Expected answer: Plain CSS is global — class names can clash. CSS Modules scope styles to the component by generating unique class names at build time. You import styles as an object: import styles from './Card.module.css'; and use styles.card.
+
+Q18. What does the className prop do and why is it className instead of class?
+Expected answer: className sets the HTML class attribute. React uses className because class is a reserved keyword in JavaScript.
+
+----------------------------------------------------
+SECTION 4: TOOLING & ECOSYSTEM
+----------------------------------------------------
+
+Q19. What is Vite and how does it differ from Create React App (CRA)?
+Expected answer: Vite is a modern build tool that uses native ES modules for near-instant dev server startup. CRA uses Webpack, which bundles everything before serving — making startup slower on large apps. CRA is largely deprecated; Vite or frameworks like Next.js are the current standard.
+
+Q20. What is npm/yarn and what is package.json?
+Expected answer: npm and yarn are package managers for JavaScript. package.json lists project dependencies, scripts, and metadata. Running npm install installs all listed packages into node_modules.
+
+Q21. What does npm run dev / npm start typically do in a React project?
+Expected answer: It runs the script defined under "dev" or "start" in package.json — usually starting the local development server so you can preview the app in the browser with hot reloading.
+
+----------------------------------------------------
+SECTION 5: DEBUGGING & PROBLEM SOLVING
+----------------------------------------------------
+
+Q22. A component isn't re-rendering after you update a value. What are common causes?
+Expected answer: Directly mutating state instead of calling the setter (e.g., state.count++ instead of setCount(count + 1)); forgetting to call useState; updating a ref instead of state; stale closure issues in useEffect.
+
+Q23. You see "Cannot read properties of undefined" in React. How do you approach debugging it?
+Expected answer: Check if data is undefined before accessing it (optional chaining: user?.name). Add console.log to trace where the undefined comes from. Check if an async fetch hasn't completed before render — use conditional rendering or a loading state.
+
+Q24. What are React DevTools and how do you use them?
+Expected answer: A browser extension that lets you inspect the component tree, view/edit props and state in real time, and profile render performance. Very useful for debugging why a component re-renders unexpectedly.
+
+----------------------------------------------------
+SECTION 6: PRACTICAL / CODING CHALLENGES
+----------------------------------------------------
+
+Q25. Build a simple counter component with increment, decrement, and reset buttons.
+Expected answer: Uses useState(0). Three buttons calling setCount(c => c+1), setCount(c => c-1), setCount(0). Tests understanding of state updates.
+
+Q26. Fetch a list of users from https://jsonplaceholder.typicode.com/users and display their names.
+Expected answer: useEffect with fetch or axios, useState for data and loading, conditional render for loading/error states. Tests async patterns and basic effects.
+
+Q27. Given an array of todo items as props, render them as a list. Allow the user to mark one as complete.
+Expected answer: Map over todos to render list items, manage a "completed" set or toggle via state lifted to parent, use key prop correctly.
+
+Q28. Create a controlled input where the typed value appears below it in real time.
+Expected answer: useState for the value, onChange updates state, value prop makes it controlled. Shows understanding of controlled vs uncontrolled components.
+
+----------------------------------------------------
+SECTION 7: BEHAVIORAL / CULTURE FIT
+----------------------------------------------------
+
+Q29. How do you usually look something up when you're stuck — docs, Stack Overflow, AI tools?
+(Open-ended — assessing learning habits and resourcefulness)
+
+Q30. Describe a small project or component you've built with React. What was the hardest part?
+(Open-ended — assessing communication and real experience)
+
+====================================================
+END OF JUNIOR QUESTION BANK
+====================================================

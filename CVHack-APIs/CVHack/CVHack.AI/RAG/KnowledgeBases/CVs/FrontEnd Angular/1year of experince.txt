@@ -1,0 +1,150 @@
+# Emma Wilson
+
+**Frontend Angular Developer**
+Manchester, United Kingdom
+
+📧 [emma.wilson.dev@gmail.com](mailto:emma.wilson.dev@gmail.com)
+📞 +44 7712 456789
+🔗 LinkedIn: linkedin.com/in/emmawilsondev
+🔗 GitHub: github.com/emmawilsondev
+🌐 Portfolio: emmawilson.dev
+
+---
+
+# PROFESSIONAL SUMMARY
+
+Frontend Angular Developer with **1 year of professional experience** building responsive, user-friendly, and high-performance web applications using Angular and TypeScript. Experienced in consuming RESTful APIs, creating reusable UI components, implementing responsive layouts, and collaborating with backend developers in Agile teams. Passionate about clean code, accessibility, and delivering intuitive user experiences.
+
+---
+
+# PROFESSIONAL EXPERIENCE
+
+## Frontend Angular Developer
+
+**Bright Digital Solutions** — Manchester, United Kingdom
+
+**August 2025 – Present**
+
+* Developed responsive web applications using Angular 18, TypeScript, HTML5, and CSS3.
+* Built reusable Angular components to improve maintainability across multiple projects.
+* Integrated REST APIs developed with ASP.NET Core.
+* Implemented Reactive Forms with custom validation.
+* Improved application responsiveness across desktop, tablet, and mobile devices.
+* Collaborated with UI/UX designers to transform Figma designs into functional interfaces.
+* Fixed UI bugs and improved overall user experience.
+* Participated in sprint planning, code reviews, and daily Scrum meetings.
+
+**Technologies:** Angular, TypeScript, HTML5, CSS3, Bootstrap, RxJS, REST APIs, Git
+
+---
+
+# TECHNICAL SKILLS
+
+### Programming Languages
+
+* TypeScript
+* JavaScript
+* HTML5
+* CSS3
+
+### Frontend Frameworks
+
+* Angular
+* RxJS
+* Angular Router
+* Angular CLI
+
+### UI Technologies
+
+* Bootstrap
+* SCSS
+* Responsive Web Design
+* Flexbox
+* CSS Grid
+
+### API Integration
+
+* REST APIs
+* JSON
+* HTTP Client
+
+### Tools
+
+* Visual Studio Code
+* Git
+* GitHub
+* Postman
+* Figma
+
+### Version Control
+
+* Git
+* GitHub
+
+---
+
+# PROJECTS
+
+## E-Commerce Store
+
+**Tech Stack:** Angular, Bootstrap, ASP.NET Core Web API
+
+* Developed responsive product catalog pages.
+* Integrated authentication and product APIs.
+* Built shopping cart functionality.
+* Implemented product filtering and search.
+
+---
+
+## Task Management Dashboard
+
+**Tech Stack:** Angular, RxJS, Bootstrap
+
+* Built reusable dashboard components.
+* Implemented task filtering and sorting.
+* Added reactive forms for task creation and editing.
+* Connected frontend with REST APIs.
+
+---
+
+## Weather Forecast Application
+
+**Tech Stack:** Angular, OpenWeather API
+
+* Consumed third-party REST APIs.
+* Displayed weather forecasts with responsive UI.
+* Implemented search and location-based weather lookup.
+
+---
+
+# EDUCATION
+
+**Bachelor of Science in Computer Science**
+
+University of Leeds
+
+Graduated: **2024**
+
+---
+
+# CERTIFICATIONS
+
+* Angular - The Complete Guide (Udemy)
+* Responsive Web Design Certification (freeCodeCamp)
+* JavaScript Algorithms and Data Structures (freeCodeCamp)
+
+---
+
+# LANGUAGES
+
+* English (Native)
+* French (Intermediate)
+
+---
+
+# ADDITIONAL INFORMATION
+
+* Strong understanding of component-based architecture.
+* Familiar with Agile/Scrum development methodologies.
+* Passionate about building accessible and responsive web applications.
+* Excellent communication and teamwork skills.

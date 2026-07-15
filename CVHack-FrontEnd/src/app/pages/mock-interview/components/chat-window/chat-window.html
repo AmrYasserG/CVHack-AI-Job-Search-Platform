@@ -1,0 +1,35 @@
+<div class="chat-area" #scrollArea>
+  @for (msg of messages; track $index) {
+
+    <!-- AI Question -->
+    @if (msg.type === 'ai-question') {
+      <div class="msg-row msg-row--ai">
+        <div class="avatar avatar--ai">AI</div>
+        <div class="bubble bubble--ai">{{ msg.text }}</div>
+      </div>
+    }
+
+    <!-- User Answer -->
+    @if (msg.type === 'user-answer') {
+      <div class="msg-row msg-row--user">
+        <div class="bubble bubble--user">{{ msg.text }}</div>
+      </div>
+    }
+
+    <!-- AI Feedback -->
+    @if (msg.type === 'ai-feedback') {
+      <div class="msg-row msg-row--ai">
+        <div class="avatar avatar--spark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+          </svg>
+        </div>
+        <div class="bubble bubble--feedback">
+          <div class="feedback-label">FEEDBACK</div>
+          <div class="feedback-text">{{ msg.text }}</div>
+        </div>
+      </div>
+    }
+
+  }
+</div>

@@ -1,0 +1,76 @@
+.iheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.iheader-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mic-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--copper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.mic-icon svg { width: 22px; height: 22px; }
+
+.iheader-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.iheader-company {
+  font-family: var(--font-body);
+  font-size: .8rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.iheader-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.q-counter {
+  font-family: var(--font-body);
+  font-size: .8rem;
+  color: var(--copper);
+  font-weight: 500;
+}
+
+.q-counter strong { font-weight: 700; }
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border2);
+  transition: background .2s, width .2s;
+}
+
+.dot--done   { background: var(--copper); }
+.dot--active { background: var(--copper); width: 24px; border-radius: 5px; }

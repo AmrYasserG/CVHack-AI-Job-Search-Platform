@@ -1,0 +1,13 @@
+.admin-link-active {
+  color: var(--white); ;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+  border-left: 3px solid var(--copper);
+}
+.admin-link-active-icon {
+  color: var(--copper);
+}
+:host {
+  display: block;
+  background: var(--teal);
+}

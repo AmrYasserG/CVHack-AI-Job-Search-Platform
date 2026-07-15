@@ -1,0 +1,25 @@
+<div class="chart-card">
+  <div class="chart-header">
+    <div class="chart-title">Match score distribution</div>
+    <div class="chart-sub">How well candidates match available roles</div>
+  </div>
+
+  <!-- Values -->
+  <div class="bar-values">
+    @for (item of data; track item.range) {
+      <span class="bar-val">{{ item.value }}</span>
+    }
+  </div>
+
+  <!-- Bars -->
+  <div class="bars-row">
+    @for (item of data; track item.range) {
+      <div class="bar-col">
+        <div class="bar-wrap">
+          <div class="bar" [style.height]="barHeight(item.value) + '%'" [style.background]="item.color"></div>
+        </div>
+        <span class="bar-label">{{ item.range }}</span>
+      </div>
+    }
+  </div>
+</div>

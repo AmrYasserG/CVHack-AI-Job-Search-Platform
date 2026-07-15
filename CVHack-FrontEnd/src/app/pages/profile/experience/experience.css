@@ -1,0 +1,223 @@
+.experience-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  font-family: var(--font-body);
+}
+
+.experience-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.experience-card__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  font-family: var(--font-display);
+}
+
+.experience-card__add-btn {
+  background-color: var(--copperSoft);
+  color: var(--copper);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.experience-card__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.experience-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.experience-item:last-child {
+  border-bottom: none;
+}
+
+.experience-item__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--tealSoft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.experience-item__info {
+  flex: 1;
+}
+
+.experience-item__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 2px;
+}
+
+.experience-item__meta {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 6px;
+}
+
+.experience-item__description {
+  font-size: 13px;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.experience-item__actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.experience-item__edit,
+.experience-item__delete {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background-color: var(--surface2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.experience-item__delete:hover {
+  background-color: var(--redSoft);
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.experience-form {
+  margin-top: 16px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background-color: var(--surface2);
+}
+
+.experience-form__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 16px;
+}
+
+.experience-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.experience-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.experience-form__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--faint);
+  text-transform: uppercase;
+}
+
+.experience-form__input,
+.experience-form__textarea {
+  padding: 8px 12px;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  background-color: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--font-body);
+}
+
+.experience-form__textarea {
+  min-height: 80px;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+.experience-form__input:focus,
+.experience-form__textarea:focus {
+  outline: none;
+  border-color: var(--copper);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.experience-form__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.experience-form__cancel {
+  background-color: var(--surface);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.experience-form__save {
+  background-color: var(--copper);
+  border: none;
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.experience-form__save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.experience-form__error {
+  font-size: 12px;
+  color: var(--red);
+  margin-top: 2px;
+}
+@media (max-width: 768px) {
+  .experience-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-card {
+    padding: 16px;
+  }
+
+  .experience-form {
+    padding: 16px;
+  }
+}

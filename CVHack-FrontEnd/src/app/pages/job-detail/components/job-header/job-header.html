@@ -1,0 +1,47 @@
+<div class="rounded-2xl p-6 border" style="background: var(--surface); border-color: var(--border); box-shadow: var(--shadow);">
+
+  <!-- Back link -->
+  <a href="/jobs" class="inline-flex items-center gap-1 text-sm no-underline mb-4" style="color: var(--muted); font-family: var(--font-body);">
+    <span>&larr;</span>
+    <span>Back to results</span>
+  </a>
+
+  <div class="flex items-start gap-4">
+    <!-- Company avatar -->
+    <div class="w-14 h-14 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0"
+         style="background: var(--tealSoft); color: var(--onSoft); font-family: var(--font-display);">
+      {{ data.companyInitials }}
+    </div>
+
+    <div class="flex-1">
+      <h1 class="text-2xl font-bold m-0" style="color: var(--text); font-family: var(--font-display);">
+        {{ data.title }}
+      </h1>
+      <div class="mt-1 text-sm font-semibold" style="color: var(--muted); font-family: var(--font-body);">
+        {{ data.companyName }}
+      </div>
+      <div class="mt-1 flex items-center gap-3 text-sm" style="color: var(--faint); font-family: var(--font-body);">
+        <span class="flex items-center gap-1">
+          <span>📍</span> {{ data.location }}
+        </span>
+        <span class="flex items-center gap-1">
+          <span>🕐</span> {{ data.postedAt }}
+        </span>
+      </div>
+
+      <!-- Tags -->
+      <div class="mt-4 flex items-center gap-2 flex-wrap">
+        @for (tag of data.tags; track tag) {
+          <span class="px-3 py-1 rounded-lg text-xs font-semibold border"
+                style="background: var(--surface2); border-color: var(--border2); color: var(--muted); font-family: var(--font-body);">
+            {{ tag }}
+          </span>
+        }
+        <!-- <span class="px-3 py-1 rounded-lg text-xs font-semibold border"
+              style="background: var(--copperSoft); border-color: var(--aiBorder); color: var(--copper); font-family: var(--font-body);">
+          {{ data.salary }}
+        </span> -->
+      </div>
+    </div>
+  </div>
+</div>

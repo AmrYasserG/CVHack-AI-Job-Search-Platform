@@ -1,0 +1,321 @@
+.landing {
+  position: relative;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+/* Top bar (theme toggle) */
+.landing-topbar {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 20;
+}
+
+/* Big centered logo above the hero title */
+.hero-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 96px;
+  margin-bottom: 70px;
+  
+}
+
+.hero-logo app-logo {
+  display: inline-block;
+  transform: scale(6);
+  transform-origin: center;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 140px 24px 120px;
+  text-align: center;
+  background: var(--bg);
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-dots {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background-image: radial-gradient(var(--border2) 2px, transparent 2px);
+  background-size: 20px 20px;
+  opacity: .55;
+}
+
+.hero-dots--tl { top: 0; left: 0; }
+.hero-dots--br { bottom: 0; right: 0; }
+
+.hero-content {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+  margin: 0 0 24px;
+}
+
+.hero-sub {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.8;
+  margin: 0 auto 40px;
+  max-width: 520px;
+}
+
+.btn-primary {
+  background: var(--copper);
+  color: var(--white);
+  border: none;
+  padding: 16px 40px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px var(--ring);
+  transition: background .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-primary:hover { background: var(--copperHover); }
+
+/* Features */
+.features {
+  padding: 100px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px 24px;
+  box-shadow: var(--shadow);
+}
+
+.feature-icon {
+  font-size: 1.6rem;
+  width: 56px;
+  height: 56px;
+  background: var(--copperSoft);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.feature-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 12px;
+}
+
+.feature-desc {
+  font-size: .875rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Mission */
+.mission {
+  background: var(--surface2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 100px 40px;
+}
+
+.mission-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 80px;
+}
+
+.mission-text { flex: 1; }
+
+.mission-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 20px;
+}
+
+.mission-desc {
+  font-size: .95rem;
+  color: var(--muted);
+  line-height: 1.8;
+  margin: 0;
+  max-width: 460px;
+}
+
+.mission-icon {
+  flex-shrink: 0;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mission-ring {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.mission-ring::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--copper);
+  border-radius: 50%;
+  top: 16px;
+  right: 16px;
+}
+
+.mission-star {
+  font-size: 3rem;
+  color: var(--copper);
+}
+
+/* Support */
+.support {
+  padding: 80px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.support-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px 48px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  box-shadow: var(--shadow);
+}
+
+.support-icon {
+  font-size: 1.8rem;
+  width: 72px;
+  height: 72px;
+  background: var(--copperSoft);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.support-text { flex: 1; }
+
+.support-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.support-desc {
+  font-size: .875rem;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--copper);
+  border: 1.5px solid var(--copper);
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: .875rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .2s;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-outline:hover { background: var(--copperSoft); }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 28px 24px;
+  border-top: 1px solid var(--border);
+  font-size: .8rem;
+  color: var(--faint);
+}
+
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .9rem;
+  color: var(--text);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 100px 24px 80px; min-height: auto; }
+  .features, .support { padding: 60px 24px; }
+  .mission { padding: 60px 24px; }
+  .mission-content { flex-direction: column; gap: 40px; text-align: center; }
+  .mission-desc { max-width: 100%; }
+  .support-card { flex-direction: column; text-align: center; padding: 32px 24px; }
+}
+
+@media (max-width: 480px) {
+  .features-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 1.8rem; }
+  .hero-logo { height: 72px; margin-bottom: 20px; }
+  .hero-logo app-logo { transform: scale(3); }
+}

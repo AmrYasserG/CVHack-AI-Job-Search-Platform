@@ -1,0 +1,34 @@
+<div class="iheader">
+
+  <!-- Left: icon + title -->
+  <div class="iheader-left">
+    <div class="mic-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="9" y="2" width="6" height="12" rx="3"/>
+        <path d="M5 10a7 7 0 0 0 14 0"/>
+        <line x1="12" y1="19" x2="12" y2="22"/>
+        <line x1="8"  y1="22" x2="16" y2="22"/>
+      </svg>
+    </div>
+    <div>
+      <div class="iheader-title">Mock Interview · {{ data.jobTitle }}</div>
+      <div class="iheader-company">{{ data.company }}</div>
+    </div>
+  </div>
+
+  <!-- Right: question counter + progress dots -->
+  <div class="iheader-right">
+    <span class="q-counter">
+      Question <strong>{{ data.currentQuestion }}</strong> of {{ data.totalQuestions }}
+    </span>
+    <div class="dots">
+      @for (dot of dots; track dot) {
+        <span class="dot"
+              [class.dot--done]="dot < data.currentQuestion - 1"
+              [class.dot--active]="dot === data.currentQuestion - 1">
+        </span>
+      }
+    </div>
+  </div>
+
+</div>

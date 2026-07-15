@@ -1,0 +1,132 @@
+================================================================================
+CYBERSECURITY INTERVIEW QUESTIONS — SENIOR LEVEL
+================================================================================
+Target: 5+ years of experience
+Focus: Security architecture, threat intelligence, advanced adversary TTPs, GRC at scale,
+       cloud-native security, program leadership, emerging threats, AI security
+================================================================================
+
+--------------------------------------------------------------------------------
+SECTION 1: SECURITY ARCHITECTURE & PROGRAM LEADERSHIP
+--------------------------------------------------------------------------------
+
+Q1: How do you build a security program from scratch for a 500-person company?
+EXPECTED: Start with risk-based approach: asset inventory → threat modeling → gap assessment against a framework (NIST CSF, ISO 27001, CIS Controls). Prioritize: 1) Identity (MFA, SSO, PAM), 2) Endpoint protection (EDR), 3) Network visibility (logging, SIEM), 4) Vulnerability management, 5) Incident response capability. Don't try to do everything at once. Build a security roadmap tied to business risk. Get executive sponsorship (CISO/CTO buy-in). Hire/train before buying tools. Establish metrics from day one. Work with legal/compliance for regulatory requirements. Security must be a business enabler, not just a blocker.
+
+Q2: How do you present cybersecurity risk to a non-technical executive team or board?
+EXPECTED: Translate technical risk to business risk: financial impact (cost of a breach — IBM: avg $4.88M in 2024), operational disruption, reputational damage, regulatory fines. Use risk registers with business impact, likelihood, and cost to remediate. Frame in terms executives understand: "We have a 40% chance of a ransomware incident that would cost $5M and 2 weeks of downtime if we don't invest $300K in EDR and backup improvements." Use heat maps. Reference industry-relevant breaches (MGM, Change Healthcare). Avoid technical jargon. Request budget as risk transfer decisions, not IT cost.
+
+Q3: What is threat modeling? Walk through the STRIDE methodology.
+EXPECTED: Threat modeling identifies and prioritizes threats to a system during design. STRIDE (Microsoft): Spoofing (impersonating a user/system), Tampering (modifying data or code), Repudiation (denying an action occurred), Information Disclosure (exposing data to unauthorized parties), Denial of Service (making a system unavailable), Elevation of Privilege (gaining higher access than authorized). Process: diagram system (data flows, trust boundaries, components) → identify threats per component using STRIDE → rate severity (DREAD or CVSS) → define mitigations → validate in design review. Shift left — threat model before building, not after.
+
+Q4: What is a security architecture review? What artifacts do you review?
+EXPECTED: Systematic evaluation of a system's design for security weaknesses before implementation. Review: data flow diagrams (where does sensitive data go?), trust boundaries (what authenticates/authorizes across them?), authentication/authorization model, encryption in transit and at rest, secrets management, third-party integrations and their access, network segmentation, logging and monitoring coverage, disaster recovery. Output: findings with severity, threat scenarios, recommendations. Done at design phase to avoid costly post-build rework.
+
+Q5: What is a Purple Team exercise? How does it differ from Red and Blue team operations?
+EXPECTED: Red team — offensive, simulates attackers (stealth, realistic TTPs, tests detection). Blue team — defensive, monitors, detects, responds. Purple team — collaborative: red and blue work together simultaneously. Red executes a technique, blue immediately checks if they detected it, if not — why? — and improves detection rule on the spot. More efficient than traditional red team (don't wait weeks for a report). Outputs: detection coverage mapped to MITRE ATT&CK, new SIEM rules, tuned alerts, improved playbooks. Best run regularly to systematically improve SOC coverage.
+
+Q6: How do you design a security metrics program? What KPIs and KRIs do you track?
+EXPECTED: KPIs (performance): Mean Time to Detect (MTTD), Mean Time to Respond (MTTR), % of systems with EDR coverage, % of users with MFA, patch coverage within SLA, vulnerability closure rate, phishing simulation click rate. KRIs (risk indicators): number of critical unpatched vulnerabilities, % of third parties with security assessments, number of privilege accounts, open high-severity findings age. Present as trends, not point-in-time snapshots. Tie to business outcomes. Board-level: risk posture score, regulatory compliance %, cost per incident.
+
+Q7: What is a Security Operations Center (SOC) maturity model? How do you improve SOC maturity?
+EXPECTED: SOC maturity levels (e.g., SOC-CMM): L1 — basic logging/monitoring, reactive. L2 — correlation rules, some automation. L3 — threat hunting, threat intelligence, SOAR. L4 — proactive risk management, adversary emulation. L5 — fully adaptive, continuous improvement, metrics-driven. Improvement levers: reduce MTTD/MTTR, increase log source coverage, add threat intel enrichment, develop playbooks for all common incident types, implement SOAR, run purple team exercises, shift from reactive to proactive (threat hunting), invest in analyst training (SANS, GIAC certs).
+
+--------------------------------------------------------------------------------
+SECTION 2: ADVANCED THREAT INTELLIGENCE
+--------------------------------------------------------------------------------
+
+Q8: What is the threat intelligence lifecycle? How do you operationalize it?
+EXPECTED: Six phases: Planning (what intelligence do we need? — threat actors targeting our sector, TTPs of ransomware groups), Collection (threat feeds, dark web monitoring, ISAC sharing, vendor reports, internal telemetry), Processing (normalize, deduplicate, enrich), Analysis (what does this mean for us? — relevance, confidence, priority), Dissemination (right intel to right audience — tactical to SOC, strategic to CISO/board), Feedback (did it improve decisions?). Operationalize: integrate IOCs into SIEM/EDR automatically, map TTPs to ATT&CK for detection gaps, produce regular threat briefings per stakeholder level.
+
+Q9: What is threat actor attribution? What are the challenges?
+EXPECTED: Identifying the group, nation-state, or individual behind an attack. Evidence: TTPs (tools, techniques, infrastructure reuse), malware code similarities, C2 infrastructure overlaps, language artifacts, working hours (correlate to timezone), victimology patterns. Challenges: false flag operations (deliberate misattribution — attacker uses another group's tools), shared tooling (multiple groups use same commodity malware), infrastructure purchased through bulletproof hosts, technical attribution ≠ legal attribution (different standards). Senior analysts distinguish between technical indicators and geopolitical attribution — don't overclaim.
+
+Q10: What is the Diamond Model of Intrusion Analysis?
+EXPECTED: A framework for analyzing intrusions using four core features connected by relationships: Adversary (who is behind the attack), Infrastructure (the IPs, domains, email accounts used), Capability (the tools, malware, exploits used), Victim (the targeted entity — company, person, system). Each intrusion event is a "diamond" connecting these four. Meta-features: timestamp, phase, result, direction, methodology. Used to: pivot across incidents to find linked campaigns, predict adversary behavior, group related intrusions into campaigns attributed to the same actor.
+
+Q11: What is an ISAC? Why is threat intelligence sharing important?
+EXPECTED: Information Sharing and Analysis Center — sector-specific organizations that facilitate sharing of cybersecurity threat information among member organizations. Examples: FS-ISAC (financial), H-ISAC (healthcare), E-ISAC (energy). Sharing: IOCs (hashes, IPs, domains), TTPs, advisories, early warnings. Benefits: collective defense — an attacker who hit one member gets their IOCs shared so others can block them before being hit. Formats: STIX (Structured Threat Information eXpression) and TAXII (transport protocol) are standards for machine-readable sharing. Trust levels and TLP (Traffic Light Protocol) govern what can be shared and with whom.
+
+Q12: What is a nation-state APT? How do their TTPs differ from cybercriminals?
+EXPECTED: APT (Advanced Persistent Threat) — sophisticated, well-resourced threat actors (often nation-state sponsored — Lazarus/NK, APT28/Russia, APT41/China, CL0P/criminal with state tolerance). Differences from cybercriminals: Patience (dwell for months before acting vs. immediate monetization), Stealth (living-off-the-land, custom malware, anti-forensics vs. commodity tools), Objectives (espionage, sabotage, IP theft vs. financial), Zero-days (access to novel exploits), Persistence (multiple backdoors, regularly rotate C2 infrastructure). Defense: assume breach, focus on detection over pure prevention, protect crown jewels (IP, PIII data, OT systems).
+
+--------------------------------------------------------------------------------
+SECTION 3: ADVANCED ATTACKS & DEFENSES
+--------------------------------------------------------------------------------
+
+Q13: What is Active Directory tiering? How does it defend against credential theft attacks?
+EXPECTED: AD tiering (Microsoft PAW model) divides the environment into tiers: Tier 0 (AD itself — Domain Controllers, AD Connect, PKI — most sensitive), Tier 1 (servers and applications), Tier 2 (workstations). Credential isolation: Tier 0 admins ONLY log into Tier 0 systems (using Privileged Access Workstations — PAWs), never onto lower tiers. If a Tier 2 workstation is compromised, attacker cannot find Tier 0 credentials there. Complements: Credential Guard (protect LSASS), LAPS (randomize local admin passwords), JIT admin access (PIM/PAM), no persistent Domain Admin logons.
+
+Q14: What is BloodHound/SharpHound? How do defenders use it?
+EXPECTED: BloodHound is a tool that maps Active Directory relationships and attack paths to Domain Admin (and other high-value targets) using graph theory. SharpHound is the collector (runs on domain member, queries LDAP and SMB). Output: visualizes shortest paths to DA — "user X on workstation Y can reach Domain Admin in 3 hops via this group membership chain." Attackers use it offensively. Defenders should run BloodHound on their own AD regularly to find and break attack paths: remove unnecessary group memberships, implement tiering, revoke dangerous ACLs (WriteDACL, GenericAll on privileged objects).
+
+Q15: What is a Golden Ticket attack? How do you detect and recover from one?
+EXPECTED: Golden Ticket = forged Kerberos TGT signed with the domain's krbtgt account hash. Valid for up to 10 years, works even after password changes (unless krbtgt is reset TWICE — two resets required because of caching). With a Golden Ticket, attacker can impersonate any user including Domain Admin. Obtain via: DCSync (replicate krbtgt hash from DC using Domain Admin rights). Detection: Event ID 4769 with unusual ticket lifetimes, Kerberos tickets for non-existent users, detect DCSync (4662 with specific GUIDs on DC). Recovery: reset krbtgt password TWICE, rotate all service account passwords, consider forest rebuild in severe cases.
+
+Q16: What is Living off the Land (LotL)? Why does it challenge traditional AV/EDR?
+EXPECTED: Attackers use legitimate built-in OS tools to achieve their objectives, avoiding custom malware that AV signatures would detect. Windows LotL: PowerShell, WMI, CertUtil (download files), MSHTA, Regsvr32, Rundll32, BITSAdmin, PsExec, LOLBins (Living Off the Land Binaries). Challenges AV: no malicious file to detect, trusted signed binaries, blends with normal admin activity. EDR advantage: behavioral detection — "certutil downloading an executable from a random domain is suspicious regardless of it being a signed Microsoft binary." Defense: constrained PowerShell language mode, application allowlisting (WDAC), script block logging (Event ID 4104), AMSI (Antimalware Scan Interface).
+
+Q17: What is a supply chain attack at the nation-state level? Reference a real example and lessons learned.
+EXPECTED: SolarWinds (2020 — Cozy Bear/APT29/Russia): attackers compromised the SolarWinds Orion build pipeline, inserting malicious code (SUNBURST backdoor) into a legitimate software update. ~18,000 organizations downloaded the trojanized update including US government agencies and Fortune 500 companies. Lessons: 1) Verify software integrity (code signing, SBOMs), 2) Assume trusted vendor software can be malicious, 3) Least privilege for vendor software (Orion had excessive network access), 4) Network segmentation prevents blast radius, 5) Behavioral monitoring (SUNBURST beaconed to C2 — detectable pattern), 6) SBOM (Software Bill of Materials) now required for US government software vendors. Also reference: XZ Utils (2024), 3CX (2023).
+
+Q18: What is Adversary-in-the-Middle (AiTM) phishing? How does it bypass MFA?
+EXPECTED: Modern phishing technique using a reverse proxy (EvilGinx2, Modlishka, Muraena) that sits between victim and legitimate site. Victim authenticates to the proxy thinking it's the real site, proxy forwards credentials and MFA token to the real site in real time, proxy captures the authenticated session cookie. Result: MFA is bypassed — attacker has a valid post-authentication session cookie without ever knowing the password or TOTP code. Defense: phishing-resistant MFA (FIDO2/WebAuthn hardware keys — tied to origin URL, cannot be proxied), Conditional Access policies (device compliance, IP ranges), detect impossible travel, monitor for unfamiliar device sign-ins.
+
+--------------------------------------------------------------------------------
+SECTION 4: CLOUD SECURITY ARCHITECTURE
+--------------------------------------------------------------------------------
+
+Q19: How do you design a secure multi-account AWS architecture?
+EXPECTED: AWS Organizations with SCPs (Service Control Policies) to enforce guardrails across all accounts. Account structure: Management/Root account (billing only, no workloads), Security account (CloudTrail aggregation, SecurityHub, GuardDuty master, SIEM), Log Archive account (immutable, separate from security), Shared Services (DNS, Active Directory, Transit Gateway), Workload accounts per environment/team. Controls: SCPs prevent disabling CloudTrail or leaving regions open, GuardDuty on all accounts, AWS Config rules for compliance, automated remediation via Lambda for critical findings, Macie for S3 data classification, permission boundaries on IAM roles.
+
+Q20: What is CNAPP? How does it unify cloud security tooling?
+EXPECTED: Cloud-Native Application Protection Platform — unified platform combining: CSPM (Cloud Security Posture Management — misconfigurations), CWPP (Cloud Workload Protection Platform — runtime protection for VMs/containers/serverless), CIEM (Cloud Infrastructure Entitlement Management — excessive permissions), KSPM (Kubernetes Security Posture Management), IaC scanning, vulnerability management, and network exposure analysis. Key capability: attack path analysis — visualize how a misconfiguration + exposed vulnerability + excessive IAM permission together could lead to a crown jewel compromise. Leaders: Wiz, Palo Alto Prisma Cloud, Lacework, Orca Security.
+
+Q21: What is CIEM? Why is IAM the new perimeter in cloud environments?
+EXPECTED: Cloud Infrastructure Entitlement Management — identifies, analyzes, and remediates excessive permissions and entitlements across cloud environments. In cloud, there's no traditional network perimeter — an attacker with compromised IAM credentials can operate from anywhere. Most cloud breaches involve IAM: stolen access keys, overly permissive roles, SSRF to metadata service. CIEM tools analyze effective permissions (not just assigned — consider group memberships, inline policies, SCPs, permission boundaries), find least privilege violations, detect privilege escalation paths, enforce just-in-time access. IAM hygiene is the highest-ROI cloud security investment.
+
+Q22: How do you secure Kubernetes workloads at the enterprise level?
+EXPECTED: Multi-layered approach: Supply chain (sign images with cosign/Sigstore, enforce with admission controller, scan in CI with Trivy), Runtime (Falco for anomaly detection — detects shell in container, unusual syscalls), Pod Security (Pod Security Standards — enforce restricted profile: no root, no privileged containers, read-only root filesystem), Network (NetworkPolicies — default deny all, explicit allow), Secrets (External Secrets Operator with Vault — no secrets in K8s Secrets unencrypted, use envelope encryption with KMS), RBAC (least privilege ServiceAccounts, audit with rbac-police/KubiScan), Admission (OPA Gatekeeper or Kyverno for policy enforcement), Audit logging to SIEM.
+
+--------------------------------------------------------------------------------
+SECTION 5: GOVERNANCE, RISK & COMPLIANCE (GRC) AT SCALE
+--------------------------------------------------------------------------------
+
+Q23: What is ISO 27001? How does it compare to SOC 2?
+EXPECTED: ISO 27001 — international standard for Information Security Management Systems (ISMS). Certifiable by accredited auditor. Comprehensive: 93 controls across 4 themes (Organizational, People, Physical, Technological), requires documented ISMS, risk treatment plan, management commitment. Global recognition. SOC 2 — US-focused, AICPA standard. Trust Service Criteria: Security (required), Availability, Processing Integrity, Confidentiality, Privacy. Type 1: controls exist at a point in time. Type 2: controls operating effectively over 6-12 months. SOC 2 Type 2 most valued by US enterprise customers. Many companies pursue both: ISO 27001 for international markets, SOC 2 Type 2 for US enterprise sales.
+
+Q24: What is a risk register? How do you maintain it at scale in a large organization?
+EXPECTED: A document tracking identified risks: risk description, affected assets, threat source, likelihood, impact, inherent risk score, current controls, residual risk score, risk owner, treatment (accept/mitigate/transfer/avoid), remediation target date, status. At scale: integrate with GRC platforms (ServiceNow GRC, Archer, Vanta, Drata for automated evidence collection), map risks to controls to findings, link to asset management, automate evidence collection for compliance, review quarterly with risk owners, escalate high/critical residual risks to CISO/Board. Make it a living document, not an annual exercise.
+
+Q25: What is the difference between risk acceptance, mitigation, transfer, and avoidance?
+EXPECTED: Mitigation — implement controls to reduce likelihood or impact (patch the vulnerability, add MFA). Transfer — shift risk to a third party (cyber insurance, contractual SLAs with vendors). Acceptance — acknowledge the risk and decide no action is needed (low risk, cost of mitigation exceeds potential loss) — must be formally documented with risk owner sign-off. Avoidance — eliminate the activity causing the risk (don't store credit card data → no PCI-DSS scope). All require informed business decisions — security provides the analysis, business owns the decision.
+
+Q26: How do you manage third-party and vendor security risk at scale?
+EXPECTED: Third-party risk management (TPRM) program: vendor inventory + criticality tiering (access to sensitive data? critical systems?), pre-onboarding security assessment (questionnaire, SOC 2 report review, penetration test results), contract security requirements (right to audit, breach notification SLA, data handling requirements, minimum security standards), ongoing monitoring (SecurityScorecard, BitSight for continuous external posture monitoring), annual reassessment for critical vendors, offboarding (revoke access, data deletion confirmation). Prioritize: Tier 1 vendors (crown jewel access) → full assessment; Tier 3 (low risk) → questionnaire only.
+
+Q27: What is cyber insurance? What security controls do underwriters commonly require?
+EXPECTED: Transfers financial risk of a cyber incident. Coverage: business interruption, breach response costs (forensics, legal, notification), ransom payment (controversial), regulatory fines, third-party liability. Commonly required controls for coverage: MFA on all remote access and email, EDR on all endpoints, privileged access management (PAM), network segmentation, tested backups (offline/immutable), vulnerability management program, incident response plan, security awareness training. Poor controls = higher premiums or coverage denial. Insurers increasingly require EDR data access during claims investigation.
+
+--------------------------------------------------------------------------------
+SECTION 6: EMERGING THREATS & AI SECURITY
+--------------------------------------------------------------------------------
+
+Q28: What are the security implications of AI/LLM adoption in enterprises?
+EXPECTED: New attack surfaces: prompt injection (manipulate LLM via crafted inputs to bypass controls or exfiltrate data), data poisoning (corrupt training data to influence model behavior), model inversion (extract training data from model outputs), shadow AI (employees using unapproved AI tools that process sensitive data). Defense: DLP controls on AI tool inputs/outputs, approved AI tool list, LLM security testing (Garak, PyRIT), system prompt hardening, output validation before acting on LLM responses, OWASP LLM Top 10 awareness. Also: using AI defensively — AI-assisted threat detection, automated code review, anomaly detection at scale.
+
+Q29: What is prompt injection? Why is it a critical risk for AI-powered applications?
+EXPECTED: A class of attacks where malicious inputs manipulate an LLM's behavior by overriding system instructions. Direct: attacker directly inputs "Ignore previous instructions and..." Indirect: attacker plants malicious content in data the LLM will process (web page, document, email) that contains hidden instructions. In agentic AI systems (LLM with tools — browse web, execute code, send emails), prompt injection can cause the AI to exfiltrate data, execute unintended commands, or bypass safety controls. Critical because LLMs cannot reliably distinguish between data and instructions. Defense: least privilege for AI agents, human-in-the-loop for sensitive actions, output validation, sandboxing.
+
+Q30: What is OT/ICS security? How does it differ from traditional IT security?
+EXPECTED: OT (Operational Technology) / ICS (Industrial Control Systems) — systems controlling physical processes (manufacturing, power grids, water treatment, oil pipelines). Key differences: Availability > Confidentiality (a patch that requires reboot may be unacceptable if it stops a production line), long asset lifecycles (20+ year old PLCs/SCADA systems that can't be patched), proprietary protocols (Modbus, DNP3, OPC-UA), no EDR/AV agents possible on legacy equipment, physical consequences of cyber attacks (Stuxnet destroyed centrifuges, Ukraine power grid attacks caused blackouts). Defense: network segmentation (Purdue Model / ISA-99), OT-specific monitoring (Claroty, Dragos, Nozomi), air-gapped critical systems, strict change management.
+
+Q31: What is ransomware-as-a-service (RaaS)? How has the ransomware ecosystem evolved?
+EXPECTED: RaaS — criminal business model where ransomware developers ("core group") lease their malware and infrastructure to affiliates who conduct attacks and share revenue (70-80% to affiliate, 20-30% to developer). Lowered barrier: affiliates only need initial access skills, not malware development. Evolution: 2019-now — double extortion (encrypt + exfiltrate, threaten to publish data if ransom not paid), triple extortion (add DDoS or notify victim's customers), big game hunting (target large enterprises for $1M+ demands), attacks on critical infrastructure (hospitals, water utilities), targeting backup systems first. Major groups: LockBit, ALPHV/BlackCat (disrupted by law enforcement), Cl0p (MOVEit campaign). Defense: immutable offline backups, MFA, EDR, IR plan, cyber insurance.
+
+Q32: How do you stay current with the evolving threat landscape? What sources do you follow?
+EXPECTED: Primary sources: vendor threat intelligence reports (CrowdStrike Global Threat Report, Mandiant M-Trends, Verizon DBIR — essential annual reading), US-CERT/CISA advisories, Microsoft Security Blog, Google Project Zero, sector-specific ISACs. Community: Twitter/X security researchers, Mastodon infosec community, DEF CON/Black Hat talks (YouTube), SANS Internet Stormcast, Risky Business podcast. Dark web monitoring (via threat intel vendors or manual). CVE feeds (NVD, vendor advisories). Bug bounty platforms (HackerOne disclosures). Certifications that require CPE credits (CISSP, CISM, GIAC) enforce structured learning. The best senior practitioners also learn by doing: CTFs, home labs, contributing to open source security tools.
+
+================================================================================
+END OF FILE — SENIOR LEVEL
+Total Questions: 32
+================================================================================

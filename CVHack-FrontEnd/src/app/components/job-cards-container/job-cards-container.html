@@ -1,0 +1,95 @@
+<div class="flex flex-col gap-4 px-4 py-1 h-full min-h-0">
+  <div class="flex flex-wrap items-center justify-between gap-3 shrink-0">
+    <div>
+      <h2 class="text-xl font-bold" style="color: var(--text); font-family: var(--font-display)">
+        Recommended jobs
+      </h2>
+      <p class="text-sm mt-0.5" style="color: var(--copper)">
+        {{ sortedJobs.length }} roles
+        <span style="color: var(--muted)">· sorted by {{ selectedSort }}</span>
+      </p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <!-- Filters button: sm only -->
+      <button
+        (click)="openFilters.emit()"
+        class="md:hidden flex items-center gap-2 text-sm px-4 py-2 rounded-xl border"
+        style="background: var(--surface); border-color: var(--border2); color: var(--text)"
+      >
+        <app-filter-icon></app-filter-icon>
+        Filters
+      </button>
+
+      <select
+        [(ngModel)]="selectedSort"
+        (ngModelChange)="onSortChange()"
+        class="text-sm px-4 py-2 rounded-xl border outline-none cursor-pointer"
+        style="background: var(--surface); border-color: var(--border2); color: var(--text)"
+      >
+        @for (opt of sortOptions; track opt) {
+          <option [value]="opt">{{ opt }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- show job cards -->
+  <div class="flex flex-col gap-4 flex-1 min-h-0 overflow-y-auto scroll-area pr-2">
+    @if (isLoading) {
+      <!-- loading state -->
+      <div class="flex flex-1 flex-col items-center justify-center gap-3 py-16" style="color: var(--muted)">
+        <div
+          class="h-10 w-10 rounded-full border-4 animate-spin"
+          style="border-color: var(--border2); border-top-color: var(--copper)"
+        ></div>
+        <p class="text-sm">Loading jobs…</p>
+      </div>
+    } @else if (sortedJobs.length === 0) {
+      <!-- empty state -->
+      <div class="flex flex-1 flex-col items-center justify-center gap-2 py-16 text-center" style="color: var(--muted)">
+        <p class="text-lg font-semibold" style="color: var(--text)">No jobs found</p>
+        <p class="text-sm">Try adjusting your search or filters.</p>
+      </div>
+    } @else {
+      @for (job of pagedJobs; track job.id) {
+        <app-job-card [job]="job" />
+      }
+    }
+  </div>
+
+  <!-- pagination -->
+  @if (!isLoading && totalPages > 1) {
+    <div class="flex items-center justify-center gap-1 shrink-0 pt-2">
+      <button
+        (click)="prevPage()"
+        [disabled]="currentPage === 1"
+        class="px-3 py-1.5 rounded-lg border text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+        style="background: var(--surface); border-color: var(--border2); color: var(--text)"
+      >
+        Prev
+      </button>
+
+      @for (p of pages; track p) {
+        <button
+          (click)="goToPage(p)"
+          class="min-w-9 px-3 py-1.5 rounded-lg border text-sm"
+          [style.background]="p === currentPage ? 'var(--copper)' : 'var(--surface)'"
+          [style.color]="p === currentPage ? 'var(--white)' : 'var(--text)'"
+          [style.borderColor]="p === currentPage ? 'var(--copper)' : 'var(--border2)'"
+        >
+          {{ p }}
+        </button>
+      }
+
+      <button
+        (click)="nextPage()"
+        [disabled]="currentPage === totalPages"
+        class="px-3 py-1.5 rounded-lg border text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+        style="background: var(--surface); border-color: var(--border2); color: var(--text)"
+      >
+        Next
+      </button>
+    </div>
+  }
+</div>

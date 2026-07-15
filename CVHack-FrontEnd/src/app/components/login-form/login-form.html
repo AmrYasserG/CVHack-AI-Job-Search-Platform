@@ -1,0 +1,101 @@
+<form (ngSubmit)="onSubmit()">
+  <!-- Email -->
+  <div class="mb-4">
+    <label class="block text-sm font-semibold mb-1.5" style="color: var(--text)">Email</label>
+    <div
+      class="flex items-center gap-2 rounded-xl px-4 py-3 border"
+      style="background: var(--surface2); border-color: var(--border2)"
+    >
+      <app-mail-icon></app-mail-icon>
+      <input
+        type="email"
+        [ngModel]="email()"
+        (ngModelChange)="email.set($event)"
+        name="email"
+        placeholder="you@example.com"
+        class="bg-transparent text-sm outline-none w-full"
+        style="color: var(--text)"
+      />
+    </div>
+    @if (showEmailError()) {
+      <p class="text-xs mt-1.5" style="color: var(--red)">Please enter a valid email address.</p>
+    }
+  </div>
+
+  <!-- Password -->
+  <div class="mb-2">
+    <label class="block text-sm font-semibold mb-1.5" style="color: var(--text)">Password</label>
+    <div
+      class="flex items-center gap-2 rounded-xl px-4 py-3 border"
+      style="background: var(--surface2); border-color: var(--border2)"
+    >
+      <app-lock-icon></app-lock-icon>
+      <input
+        [type]="showPassword() ? 'text' : 'password'"
+        [ngModel]="password()"
+        (ngModelChange)="password.set($event)"
+        name="password"
+        placeholder="••••••••"
+        class="bg-transparent text-sm outline-none w-full"
+        style="color: var(--text)"
+      />
+      <button type="button" (click)="togglePassword()" class="shrink-0" style="color: var(--faint)">
+        <app-eye-icon></app-eye-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Forgot password -->
+  <!-- <div class="text-right mb-5">
+    <a
+      routerLink="/forgot-password"
+      class="text-sm font-medium no-underline"
+      style="color: var(--copper)"
+    >
+      Forgot password?
+    </a>
+  </div> -->
+  <!-- Error message -->
+  @if (errorMessage()) {
+    <div class="mb-4 text-sm" style="color: var(--red)">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Submit -->
+  <button
+    type="submit"
+    [disabled]="!formValid() || loading()"
+    class="w-full py-3.5 rounded-xl text-sm font-semibold mb-5 mt-3 disabled:opacity-50 disabled:cursor-not-allowed"
+    style="background: var(--teal); color: var(--white)"
+  >
+    {{ loading() ? 'Logging in...' : 'Log in' }}
+  </button>
+
+  
+
+  <!-- Divider -->
+  <div class="flex items-center gap-3 mb-5">
+    <div class="flex-1 border-t" style="border-color: var(--border)"></div>
+    <span class="text-xs" style="color: var(--muted)">New to CVHack?</span>
+    <div class="flex-1 border-t" style="border-color: var(--border)"></div>
+  </div>
+
+  <!-- Create account -->
+  <a
+    routerLink="/register"
+    class="block w-full text-center py-3.5 rounded-xl text-sm font-semibold border no-underline"
+    style="background: var(--surface); border-color: var(--border2); color: var(--text)"
+  >
+    Create an account
+  </a>
+
+  <!-- Home -->
+  <a
+    routerLink="/home"
+    class="block w-full text-center py-3.5 rounded-xl text-sm font-semibold no-underline mt-5 border"
+    style="background: transparent; border-color: var(--border2); color: var(--text) ;"
+  >
+    Back to Home Page
+  </a>
+</form>

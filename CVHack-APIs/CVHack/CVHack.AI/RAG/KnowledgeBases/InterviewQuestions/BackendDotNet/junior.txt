@@ -1,0 +1,136 @@
+================================================================================
+BACKEND .NET INTERVIEW QUESTIONS — JUNIOR LEVEL
+================================================================================
+Target: 0–2 years of experience
+Focus: Fundamentals, basic OOP, C# syntax, simple API development, core concepts
+================================================================================
+
+--------------------------------------------------------------------------------
+SECTION 1: C# FUNDAMENTALS
+--------------------------------------------------------------------------------
+
+Q1: What is the difference between value types and reference types in C#? Give examples of each.
+EXPECTED: Value types (int, bool, struct, enum) stored on stack; reference types (class, string, array, object) stored on heap. Value types copied on assignment, reference types share the same memory address.
+
+Q2: What is the difference between `string` and `StringBuilder` in C#? When would you use each?
+EXPECTED: `string` is immutable — every modification creates a new object (memory overhead in loops). `StringBuilder` is mutable and efficient for repeated string concatenation. Use `StringBuilder` when building strings in a loop or with many modifications.
+
+Q3: Explain the difference between `==` and `.Equals()` in C#.
+EXPECTED: `==` compares references for objects (unless overloaded); `.Equals()` compares values by default for value types and can be overridden for custom equality logic. For strings, `==` is overloaded to compare values.
+
+Q4: What are nullable types in C#? How do you declare and use them?
+EXPECTED: Allow value types to hold null. Declared with `?` (e.g., `int? x = null`). Access with `.HasValue`, `.Value`, or the null-coalescing operator `??`.
+
+Q5: What is the difference between `var` and explicit type declaration? When should you avoid `var`?
+EXPECTED: `var` lets the compiler infer the type at compile time — it's still strongly typed. Avoid when the type isn't obvious from the right-hand side (hurts readability).
+
+Q6: What are access modifiers in C#? List them and explain each.
+EXPECTED: `public`, `private`, `protected`, `internal`, `protected internal`, `private protected`. Controls visibility/accessibility of types and members.
+
+Q7: What is the difference between `const` and `readonly` in C#?
+EXPECTED: `const` is compile-time constant, implicitly static, must be initialized at declaration. `readonly` is runtime constant, can be set in constructor, can be instance-level.
+
+Q8: What are generics in C#? Why are they useful?
+EXPECTED: Allow writing type-safe code that works with any data type without boxing/unboxing. Example: `List<T>`, `Dictionary<TKey, TValue>`. Improves reusability and performance.
+
+Q9: What is the difference between an interface and an abstract class in C#?
+EXPECTED: Interface defines a contract (no implementation by default pre-C#8, can have default methods in C#8+), supports multiple inheritance. Abstract class can have partial implementation, constructors, fields; supports single inheritance only.
+
+Q10: What is the `using` statement in C#? What does it do?
+EXPECTED: Ensures `IDisposable` objects (like file streams, DB connections) are properly disposed after use, even if an exception occurs. Syntactic sugar for try/finally with `.Dispose()`.
+
+--------------------------------------------------------------------------------
+SECTION 2: OBJECT-ORIENTED PROGRAMMING (OOP)
+--------------------------------------------------------------------------------
+
+Q11: What are the four pillars of OOP? Briefly explain each.
+EXPECTED: Encapsulation (hiding internal state), Abstraction (exposing only necessary details), Inheritance (child class inherits from parent), Polymorphism (same interface, different behavior).
+
+Q12: What is method overloading vs method overriding?
+EXPECTED: Overloading = same method name, different parameters, in same class (compile-time polymorphism). Overriding = child class redefines parent's virtual/abstract method (runtime polymorphism), uses `override` keyword.
+
+Q13: What is a constructor? Can you have multiple constructors in C#?
+EXPECTED: Special method called when an object is instantiated. Yes, through constructor overloading. Can also use constructor chaining with `this(...)`.
+
+Q14: What is the difference between a class and a struct in C#?
+EXPECTED: Class is a reference type (heap), struct is a value type (stack). Structs don't support inheritance (except interfaces), no parameterless constructors (pre-C#10), better for small/immutable data. Classes better for complex objects.
+
+Q15: What does the `sealed` keyword do in C#?
+EXPECTED: Prevents a class from being inherited or a method from being overridden in derived classes.
+
+--------------------------------------------------------------------------------
+SECTION 3: ASP.NET CORE BASICS
+--------------------------------------------------------------------------------
+
+Q16: What is ASP.NET Core? How is it different from the older ASP.NET Framework?
+EXPECTED: ASP.NET Core is a cross-platform, open-source, high-performance web framework. Key differences: runs on Linux/macOS/Windows, modular middleware pipeline, built-in DI, no System.Web dependency, better performance.
+
+Q17: What is middleware in ASP.NET Core?
+EXPECTED: Components that form a pipeline to handle HTTP requests and responses. Each middleware can short-circuit the pipeline or pass to the next component. Configured in `Program.cs` using `app.Use...()` methods.
+
+Q18: What is a Web API? How do you create a simple GET endpoint in ASP.NET Core?
+EXPECTED: A service that responds to HTTP requests (GET, POST, PUT, DELETE) with data (usually JSON). Create with `[ApiController]`, `[Route]`, and action methods decorated with `[HttpGet]`, etc.
+
+Q19: What is the difference between `IActionResult` and a specific return type like `ActionResult<T>` in a controller?
+EXPECTED: `IActionResult` allows returning any HTTP response. `ActionResult<T>` is strongly typed and also allows returning HTTP responses — better for Swagger documentation and type safety.
+
+Q20: What is model binding in ASP.NET Core?
+EXPECTED: The process by which ASP.NET Core maps HTTP request data (route, query string, body, headers) to action method parameters or model objects automatically.
+
+Q21: What is data annotation? Give two examples.
+EXPECTED: Attributes used for model validation and metadata. Examples: `[Required]`, `[MaxLength(100)]`, `[EmailAddress]`, `[Range(1, 100)]`.
+
+Q22: What does `[FromBody]`, `[FromQuery]`, and `[FromRoute]` do?
+EXPECTED: Specify the binding source for action parameters. `[FromBody]` reads from request body (JSON), `[FromQuery]` from query string, `[FromRoute]` from route parameters.
+
+Q23: What is the purpose of `appsettings.json` in ASP.NET Core?
+EXPECTED: Configuration file for storing app settings (connection strings, API keys, feature flags). Supports environment-specific overrides (`appsettings.Development.json`). Read via `IConfiguration`.
+
+Q24: What is Dependency Injection (DI)? Why is it useful?
+EXPECTED: A design pattern where dependencies are provided to a class rather than created inside it. Promotes loose coupling, easier testing, and flexibility. ASP.NET Core has a built-in DI container.
+
+Q25: What are the three service lifetimes in ASP.NET Core DI?
+EXPECTED: `Transient` (new instance every time), `Scoped` (one instance per HTTP request), `Singleton` (one instance for the app's lifetime).
+
+--------------------------------------------------------------------------------
+SECTION 4: ENTITY FRAMEWORK CORE BASICS
+--------------------------------------------------------------------------------
+
+Q26: What is Entity Framework Core (EF Core)?
+EXPECTED: An ORM (Object-Relational Mapper) that lets you work with a database using .NET objects instead of raw SQL. Supports LINQ queries, migrations, and multiple database providers.
+
+Q27: What is the difference between Code First and Database First approaches in EF Core?
+EXPECTED: Code First: define C# models, EF generates the database schema. Database First: start with an existing database, scaffold models from it.
+
+Q28: What is a DbContext in EF Core?
+EXPECTED: The main class for interacting with the database. Represents a session, contains `DbSet<T>` properties for each entity, manages connections and change tracking.
+
+Q29: What is a migration in EF Core? How do you create one?
+EXPECTED: A migration tracks changes to your model and applies them to the database schema. Commands: `dotnet ef migrations add <Name>` to create, `dotnet ef database update` to apply.
+
+Q30: What is LINQ? Give a simple example.
+EXPECTED: Language Integrated Query — allows querying collections using C# syntax. Example: `var adults = users.Where(u => u.Age >= 18).ToList();`
+
+--------------------------------------------------------------------------------
+SECTION 5: GENERAL / BEHAVIORAL
+--------------------------------------------------------------------------------
+
+Q31: What is the HTTP request/response cycle? Name common HTTP status codes.
+EXPECTED: Client sends request → server processes → server responds. Status codes: 200 OK, 201 Created, 204 No Content, 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 500 Internal Server Error.
+
+Q32: What is REST? What makes an API RESTful?
+EXPECTED: Representational State Transfer — architectural style using stateless HTTP. RESTful principles: uniform interface, stateless, client-server, cacheable, use HTTP verbs (GET/POST/PUT/DELETE) correctly with resource-based URLs.
+
+Q33: What is the difference between GET and POST HTTP methods?
+EXPECTED: GET retrieves data (idempotent, no body, cacheable). POST submits data to create a resource (not idempotent, has body).
+
+Q34: Have you used Git? Describe a basic Git workflow.
+EXPECTED: `git clone` → create branch → make changes → `git add` → `git commit` → `git push` → open pull request → code review → merge.
+
+Q35: What is a NuGet package? How do you add one to your project?
+EXPECTED: NuGet is the .NET package manager. Add via `dotnet add package <PackageName>` CLI, or the NuGet Package Manager in Visual Studio / JetBrains Rider.
+
+================================================================================
+END OF FILE — JUNIOR LEVEL
+Total Questions: 35
+================================================================================

@@ -1,0 +1,158 @@
+# Michael Chen
+
+**Backend .NET Developer**
+Toronto, Canada
+📧 [michael.chen.dev@email.com](mailto:michael.chen.dev@email.com) | 📞 +1 416-555-0187
+🔗 LinkedIn: linkedin.com/in/michaelchendev
+🔗 GitHub: github.com/michaelchendev
+
+---
+
+# Professional Summary
+
+Backend .NET Developer with **2 years of professional experience** building scalable RESTful APIs and business applications using ASP.NET Core and C#. Experienced in Entity Framework Core, SQL Server, authentication, clean architecture, and microservice fundamentals. Passionate about writing maintainable code, optimizing API performance, and collaborating within Agile teams. Strong understanding of SOLID principles, design patterns, and secure software development practices.
+
+---
+
+# Professional Experience
+
+## Backend .NET Developer
+
+**NovaTech Solutions** — Toronto, Canada
+**July 2024 – Present**
+
+* Developed RESTful APIs using ASP.NET Core Web API following Clean Architecture.
+* Designed and implemented CRUD operations with Entity Framework Core and SQL Server.
+* Built authentication and authorization using ASP.NET Identity and JWT.
+* Improved API response time by optimizing LINQ queries and database indexing.
+* Implemented FluentValidation for request validation and global exception handling middleware.
+* Participated in Agile sprints, sprint planning, and daily stand-up meetings.
+* Collaborated with frontend developers to integrate Angular applications with backend services.
+* Wrote unit tests using xUnit to improve application reliability.
+
+**Technologies:** ASP.NET Core, C#, Entity Framework Core, SQL Server, JWT, AutoMapper, FluentValidation, Git
+
+---
+
+## Junior Backend .NET Developer
+
+**BrightCode Technologies** — Toronto, Canada
+**June 2023 – June 2024**
+
+* Developed API endpoints for HR and inventory management systems.
+* Created reusable service and repository layers following dependency injection principles.
+* Integrated SQL Server databases with Entity Framework Core migrations.
+* Fixed production bugs and improved application stability.
+* Assisted in API documentation using Swagger/OpenAPI.
+* Participated in code reviews and Git workflow.
+
+**Technologies:** ASP.NET Core, SQL Server, EF Core, Git, Swagger
+
+---
+
+# Technical Skills
+
+### Programming Languages
+
+* C#
+* SQL
+* JavaScript
+* TypeScript
+
+### Backend
+
+* ASP.NET Core Web API
+* Entity Framework Core
+* LINQ
+* Dependency Injection
+* REST APIs
+* Authentication & Authorization
+* JWT
+* ASP.NET Identity
+
+### Database
+
+* SQL Server
+* Database Design
+* Stored Procedures
+* Query Optimization
+
+### Architecture & Design
+
+* Clean Architecture
+* Repository Pattern
+* Unit of Work
+* SOLID Principles
+* Design Patterns
+
+### Tools & Platforms
+
+* Visual Studio
+* VS Code
+* Git
+* GitHub
+* Postman
+* Swagger
+* Azure DevOps
+
+### Testing
+
+* xUnit
+* Unit Testing
+
+---
+
+# Projects
+
+## E-Commerce REST API
+
+* Developed a complete e-commerce backend with authentication, products, orders, and shopping cart modules.
+* Implemented JWT authentication and role-based authorization.
+* Applied Repository Pattern and Clean Architecture.
+* Designed SQL Server database with Entity Framework Core.
+
+**Technologies:** ASP.NET Core, EF Core, SQL Server, JWT
+
+---
+
+## Employee Management System
+
+* Built REST APIs for employee and department management.
+* Implemented CRUD operations and pagination.
+* Added validation and centralized error handling.
+
+**Technologies:** ASP.NET Core, SQL Server, AutoMapper
+
+---
+
+# Education
+
+**Bachelor of Computer Science**
+York University
+Toronto, Canada
+
+Graduated: 2023
+
+---
+
+# Certifications
+
+* Microsoft Certified: Azure Fundamentals (AZ-900)
+* REST API Design Best Practices
+* SQL for Developers
+
+---
+
+# Languages
+
+* English (Native)
+* Mandarin Chinese (Native)
+
+---
+
+# Additional Information
+
+* Strong understanding of software development lifecycle (SDLC).
+* Comfortable working in Agile/Scrum environments.
+* Experience collaborating with cross-functional teams.
+* Passionate about writing clean, scalable, and maintainable backend code.

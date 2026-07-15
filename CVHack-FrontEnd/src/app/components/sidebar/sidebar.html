@@ -1,0 +1,176 @@
+<aside
+  class="rounded-none md:rounded-2xl p-5 w-full md:w-64 shrink-0 border-0 md:border"
+  style="background: var(--surface); border-color: var(--border); box-shadow: var(--shadow)"
+>
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-5">
+    <div
+      class="flex items-center gap-2 font-semibold text-base"
+      style="color: var(--text); font-family: var(--font-display)"
+    >
+      <div style="color: var(--copper)">
+        <app-filter-icon></app-filter-icon>
+      </div>
+      Filters
+    </div>
+    <button (click)="clearAll()" style="color: var(--copper)">Clear</button>
+  </div>
+
+  <!-- Country -->
+  <div class="mb-4">
+    <label
+      class="block text-xs font-semibold mb-1 tracking-widest uppercase"
+      style="color: var(--muted)"
+      >Country</label
+    >
+    <select
+      [ngModel]="filters().country"
+      (ngModelChange)="onCountryChange($event)"
+      class="w-full rounded-lg px-3 py-2 text-sm border outline-none"
+      style="background: var(--surface2); border-color: var(--border2); color: var(--text)"
+    >
+      <option value="">All locations</option>
+      @for (country of options().countries; track country) {
+        <option [value]="country">{{ country }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- City -->
+  <div class="mb-4">
+    <label
+      class="block text-xs font-semibold mb-1 tracking-widest uppercase"
+      style="color: var(--muted)"
+      >City</label
+    >
+    <select
+      [ngModel]="filters().city"
+      (ngModelChange)="onCityChange($event)"
+      class="w-full rounded-lg px-3 py-2 text-sm border outline-none"
+      style="background: var(--surface2); border-color: var(--border2); color: var(--text)"
+    >
+      <option value="">All cities</option>
+      @for (city of cities; track city) {
+        <option [value]="city">{{ city }}</option>
+      }
+    </select>
+  </div>
+
+  <!-- Work Type -->
+  <div class="mb-4">
+    <label
+      class="block text-xs font-semibold mb-1 tracking-widest uppercase"
+      style="color: var(--muted)"
+      >Work Type</label
+    >
+    <div class="flex flex-wrap gap-2 mt-2">
+      @for (opt of options().workTypes; track opt) {
+        <button
+          (click)="toggle('workType', opt)"
+          class="px-3 py-1 rounded-full text-sm border"
+          [style]="
+            isSelected('workType', opt)
+              ? 'background: var(--copperSoft); border-color: var(--copper); color: var(--copper); font-weight: 600;'
+              : 'background: var(--surface2); border-color: var(--border2); color: var(--muted);'
+          "
+        >
+          {{ opt }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Work Time -->
+  <div class="mb-4">
+    <label
+      class="block text-xs font-semibold mb-1 tracking-widest uppercase"
+      style="color: var(--muted)"
+      >Work Time</label
+    >
+    <div class="flex flex-wrap gap-2 mt-2">
+      @for (opt of options().workTimes; track opt) {
+        <button
+          (click)="toggle('employment', opt)"
+          class="px-3 py-1 rounded-full text-sm border"
+          [style]="
+            isSelected('employment', opt)
+              ? 'background: var(--copperSoft); border-color: var(--copper); color: var(--copper); font-weight: 600;'
+              : 'background: var(--surface2); border-color: var(--border2); color: var(--muted);'
+          "
+        >
+          {{ opt }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Seniority -->
+  <div class="mb-4">
+    <label
+      class="block text-xs font-semibold mb-1 tracking-widest uppercase"
+      style="color: var(--muted)"
+      >Seniority</label
+    >
+    <div class="flex flex-wrap gap-2 mt-2">
+      @for (opt of options().seniorities; track opt) {
+        <button
+          (click)="toggle('seniority', opt)"
+          class="px-3 py-1 rounded-full text-sm border"
+          [style]="
+            isSelected('seniority', opt)
+              ? 'background: var(--copperSoft); border-color: var(--copper); color: var(--copper); font-weight: 600;'
+              : 'background: var(--surface2); border-color: var(--border2); color: var(--muted);'
+          "
+        >
+          {{ opt }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Min Salary -->
+  <!-- <div class="mb-4">
+    <div class="flex items-center justify-between mb-2">
+      <label class="text-xs font-semibold tracking-widest uppercase" style="color: var(--muted)"
+        >Min Salary</label
+      >
+      <span class="text-sm font-semibold" style="color: var(--copper)">
+        EGP {{ filters().minSalary }}k+/mo
+      </span>
+    </div>
+    <input
+      type="range"
+      [min]="options().salaryMin"
+      [max]="options().salaryMax"
+      [step]="salarySliderStep()"
+      [ngModel]="filters().minSalary"
+      (ngModelChange)="onSalaryChange($event)"
+      class="w-full h-2 rounded-full cursor-pointer salary-slider"
+      style="accent-color: var(--copper)"
+    />
+  </div> -->
+
+  <!-- Date Posted -->
+  <div>
+    <label
+      class="block text-xs font-semibold mb-2 tracking-widest uppercase"
+      style="color: var(--muted)"
+      >Date Posted</label
+    >
+    <div class="grid grid-cols-2 gap-2">
+      @for (opt of dateOptions; track opt) {
+        <button
+          (click)="setDatePosted(opt)"
+          class="px-3 py-2 rounded-xl text-sm border"
+          [style]="
+            filters().datePosted === opt
+              ? 'background: var(--copperSoft); border-color: var(--copper); color: var(--copper); font-weight: 600;'
+              : 'background: var(--surface2); border-color: var(--border2); color: var(--muted);'
+          "
+        >
+          {{ opt }}
+        </button>
+      }
+    </div>
+  </div>
+</aside>

@@ -1,0 +1,29 @@
+<div class="my-tickets-card">
+  <h3 class="my-tickets-card__title">My tickets</h3>
+
+  <div class="my-tickets__loading" *ngIf="isLoading">
+    <p>Loading tickets...</p>
+  </div>
+
+  <div class="my-tickets__empty" *ngIf="!isLoading && tickets.length === 0">
+    <p>No tickets yet. Submit your first ticket!</p>
+  </div>
+
+  <div class="my-tickets-card__list" *ngIf="!isLoading && tickets.length > 0">
+    <div class="my-ticket-item" *ngFor="let ticket of tickets">
+
+      <div class="my-ticket-item__header">
+        <span class="my-ticket-item__id">#{{ ticket.id }}</span>
+        <span [ngClass]="statusClass(ticket.status)">{{ ticket.status }}</span>
+      </div>
+
+      <p class="my-ticket-item__subject">{{ ticket.subject }}</p>
+
+      <div class="my-ticket-item__footer">
+        <span class="my-ticket-item__tag" *ngIf="ticket.category">{{ ticket.category }}</span>
+        <span class="my-ticket-item__date">{{ formatDate(ticket.createdAt) }}</span>
+      </div>
+
+    </div>
+  </div>
+</div>

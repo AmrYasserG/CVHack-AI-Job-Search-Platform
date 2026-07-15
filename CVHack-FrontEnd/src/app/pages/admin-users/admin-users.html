@@ -1,0 +1,27 @@
+<div
+  class="grid grid-cols-[5rem_1fr] lg:grid-cols-[16rem_1fr] min-h-screen md:h-screen md:overflow-hidden"
+>
+    <app-admin-sidebar></app-admin-sidebar>
+
+  <div class="p-4 sm:p-8 flex flex-col md:min-h-0 md:overflow-hidden">
+    <app-admin-users-header (searchChange)="onSearch($event)" />
+
+    <div
+      class="gap-6 grid grid-cols-1 md:grid-cols-3 md:items-start mt-6 md:flex-1 md:min-h-0 md:overflow-hidden"
+    >
+      <div class="md:col-span-2 max-h-[32rem] overflow-y-auto md:max-h-none md:h-full">
+        <app-admin-users-list
+          [users]="filteredUsers()"
+          [selectedUserId]="selectedUser()?.id ?? null"
+          (userSelected)="onUserSelected($event)"
+        />
+      </div>
+
+      <app-admin-user-detail-panel
+        class="md:col-span-1"
+        [user]="selectedUser()"
+        (userUpdated)="onUserUpdated($event)"
+      />
+    </div>
+  </div>
+</div>

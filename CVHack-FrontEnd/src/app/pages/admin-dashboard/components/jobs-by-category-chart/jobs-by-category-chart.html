@@ -1,0 +1,31 @@
+<div class="chart-card">
+  <div class="chart-header">
+    <div class="chart-title">Jobs by category</div>
+    <div class="chart-sub">Active postings</div>
+  </div>
+
+  <!-- Values row -->
+  <div class="bar-values">
+    @for (item of data; track item.label) {
+      <span class="bar-val">{{ item.value }}</span>
+    }
+  </div>
+
+  <!-- Bars (all share the same baseline) -->
+  <div class="bars-row">
+    @for (item of data; track item.label; let i = $index) {
+      <div class="bar-col">
+        <div class="bar"
+             [style.height]="barHeight(item.value) + '%'"
+             [class.bar--accent]="isFirst(i)"></div>
+      </div>
+    }
+  </div>
+
+  <!-- Labels row (wrap downward without moving the bars) -->
+  <div class="bar-labels">
+    @for (item of data; track item.label) {
+      <span class="bar-label">{{ item.label }}</span>
+    }
+  </div>
+</div>

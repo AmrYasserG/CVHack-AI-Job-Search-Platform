@@ -1,0 +1,65 @@
+<app-navbar class="block sticky top-0 z-50"></app-navbar>
+
+@if (error) {
+  <div class="error-state">{{ error }}</div>
+}
+
+@if (!error) {
+  <div class="max-w-6xl mx-auto px-6 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+
+      <!-- Main column: job header + about -->
+      <div class="lg:col-span-2 flex flex-col gap-6">
+        @if (job) {
+          <app-job-header [data]="header"></app-job-header>
+
+          <!-- At a glance -->
+          <div class="rounded-2xl p-6 border" style="background: var(--surface); border-color: var(--border); box-shadow: var(--shadow);">
+            <h2 class="text-lg font-bold m-0 mb-4" style="color: var(--text); font-family: var(--font-display);">
+              At a glance
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4">
+              @for (f of facts; track f.label) {
+                <div>
+                  <div class="text-xs mb-0.5" style="color: var(--faint); font-family: var(--font-body);">{{ f.label }}</div>
+                  <div class="text-sm font-semibold capitalize" style="color: var(--text); font-family: var(--font-body);">{{ f.value }}</div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <app-job-about [data]="about"></app-job-about>
+        } @else {
+          <!-- skeleton لحد ما الـ job details ترجع -->
+          <div class="rounded-2xl p-6 border animate-pulse" style="background: var(--surface); border-color: var(--border);">
+            <div class="h-5 w-1/2 rounded mb-3" style="background: var(--border2);"></div>
+            <div class="h-3 w-1/3 rounded mb-2" style="background: var(--border2);"></div>
+            <div class="h-3 w-1/4 rounded" style="background: var(--border2);"></div>
+          </div>
+          <div class="rounded-2xl p-6 border animate-pulse" style="background: var(--surface); border-color: var(--border);">
+            <div class="h-3 w-full rounded mb-2" style="background: var(--border2);"></div>
+            <div class="h-3 w-5/6 rounded mb-2" style="background: var(--border2);"></div>
+            <div class="h-3 w-2/3 rounded" style="background: var(--border2);"></div>
+          </div>
+        }
+      </div>
+
+      <!-- Side column: كل كارد بيظهر لوحده مستقل عن التاني -->
+      <div class="flex flex-col gap-6">
+        <app-ai-match-card [data]="aiMatch" [loading]="aiMatchLoading" [error]="aiMatchError"></app-ai-match-card>
+
+        @if (job) {
+          <app-company-briefing [data]="companyBriefing"></app-company-briefing>
+        } @else {
+          <div class="rounded-2xl p-6 border animate-pulse" style="background: var(--surface); border-color: var(--border);">
+            <div class="h-3 w-1/2 rounded mb-2" style="background: var(--border2);"></div>
+            <div class="h-3 w-full rounded" style="background: var(--border2);"></div>
+          </div>
+        }
+
+        <app-job-actions [jobId]="jobId" [jobUrl]="job?.jobUrl ?? ''" [overallScore]="aiMatch?.score ?? null"></app-job-actions>
+      </div>
+
+    </div>
+  </div>
+}

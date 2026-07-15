@@ -1,0 +1,78 @@
+<nav
+  class="relative px-4 md:px-6 py-3 flex flex-wrap items-center gap-3 md:gap-6 border-b"
+  style="background: var(--teal); border-color: var(--border); box-shadow: var(--shadow)"
+>
+  <!-- Burger (mobile only) -->
+  <button
+    type="button"
+    (click)="toggleMenu()"
+    class="order-1 md:hidden p-1 cursor-pointer"
+    style="color: var(--white)"
+    aria-label="Toggle menu"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+         stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+
+  <!-- Logo -->
+  <app-logo class="order-2 md:order-1"></app-logo>
+
+  <!-- Search -->
+  <div
+    class="order-4 md:order-2 w-full md:w-auto md:flex-1 md:max-w-md flex items-center rounded-xl px-4 py-2 gap-2 border"
+    style="background: var(--surface2); border-color: var(--border2)"
+  >
+    <app-magnifying-glass-icon></app-magnifying-glass-icon>
+    <input
+      type="text"
+      (input)="onSearch($event)"
+      placeholder="Search roles, companies, locations..."
+      class="bg-transparent text-sm outline-none w-full"
+      style="color: var(--text)"
+    />
+  </div>
+
+  <!-- Nav links: dropdown on mobile, inline cluster on desktop -->
+  <div
+    (click)="menuOpen.set(false)"
+    class="absolute left-0 right-0 top-full  z-50 flex flex-col w-full gap-2 p-4 border rounded-b-xl text-sm font-bold
+           md:flex md:static md:order-3 md:ml-auto md:mt-0 md:w-auto md:flex-row md:items-center md:gap-6 md:p-0 md:border-0"
+    [class.hidden]="!menuOpen()"
+    style="background: var(--teal); border-color: var(--border); font-family: var(--font-body); color: var(--faint)"
+  >
+    <a routerLink="/jobs" routerLinkActive="nav-link-active" class="nav-link no-underline">Jobs</a>
+    @if (!isAdmin) {
+      <a routerLink="/profile" routerLinkActive="nav-link-active" class="nav-link no-underline">Profile</a>
+    }
+    @if (!isAdmin) {
+      <a routerLink="/support" routerLinkActive="nav-link-active" class="nav-link no-underline">Support</a>
+    }
+    @if (isAdmin) {
+      <a routerLink="/admin/dashboard" class="nav-link no-underline">Admin</a>
+    }
+    <button
+      type="button"
+      (click)="logout()"
+      class="nav-link no-underline text-sm font-bold cursor-pointer bg-transparent border-0 text-left"
+      style="font-family: var(--font-body); color: var(--faint)"
+    >
+      Logout
+    </button>
+  </div>
+
+  <!-- Divider (desktop only) -->
+  <div class="hidden md:block md:order-4 w-px h-6 self-center" style="background: var(--border2)"></div>
+
+  <!-- Theme + avatar -->
+  <div class="order-3 md:order-5 ml-auto md:ml-0 flex items-center gap-3 md:gap-4">
+    <app-theme-toggle></app-theme-toggle>
+    <div
+      class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold cursor-pointer"
+      style="background: var(--copper); color: var(--text); font-family: var(--font-display)"
+    >
+      <a [routerLink]="!isAdmin ? '/profile' : null">{{ initials }}</a>
+    </div>
+  </div>
+</nav>

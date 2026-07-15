@@ -1,0 +1,16 @@
+<div
+  class="grid grid-cols-[5rem_1fr] lg:grid-cols-[16rem_1fr] min-h-screen md:h-screen md:overflow-hidden"
+>
+  <app-admin-sidebar></app-admin-sidebar>
+  <div class="admin-tickets-page">
+    <app-tickets-list
+      (ticketSelect)="onTicketSelect($event)"
+      (filterChange)="onFilterChange($event)"
+    ></app-tickets-list>
+
+    <app-ticket-detail
+      [ticket]="selectedTicket"
+      (statusUpdated)="onStatusUpdated()"
+    ></app-ticket-detail>
+  </div>
+</div>

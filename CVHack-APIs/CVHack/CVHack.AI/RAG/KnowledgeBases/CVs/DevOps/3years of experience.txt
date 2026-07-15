@@ -1,0 +1,190 @@
+# Ahmed Hassan
+
+**Senior DevOps Engineer**
+
+📍 Cairo, Egypt
+📧 [ahmed.hassan.devops@gmail.com](mailto:ahmed.hassan.devops@gmail.com)
+📱 +20 10 2456 7819
+🔗 https://linkedin.com/in/ahmedhassandevops
+💻 https://github.com/ahmed-devops
+🌐 https://ahmeddevops.dev
+
+---
+
+# Professional Summary
+
+Senior DevOps Engineer with 3 years of professional experience building scalable cloud infrastructure, automating software delivery pipelines, and improving system reliability across production environments. Experienced in AWS cloud services, Kubernetes, Docker, Infrastructure as Code, CI/CD automation, monitoring, and Linux administration. Passionate about DevOps culture, automation, security best practices, and optimizing cloud-native applications for high availability and performance.
+
+---
+
+# Professional Experience
+
+## Senior DevOps Engineer
+
+**CloudStack Solutions – Cairo, Egypt**
+**July 2024 – Present**
+
+* Designed and maintained highly available Kubernetes clusters for production workloads.
+* Built complete CI/CD pipelines using GitHub Actions and Jenkins, reducing deployment time by over 70%.
+* Automated cloud infrastructure provisioning using Terraform.
+* Managed Docker containerization strategy for multiple microservices.
+* Configured AWS services including EC2, ECS, EKS, RDS, S3, IAM, Route53, and CloudWatch.
+* Implemented monitoring and alerting using Prometheus and Grafana.
+* Improved application scalability through Kubernetes Horizontal Pod Autoscaler.
+* Optimized infrastructure costs by implementing autoscaling and resource management.
+* Worked closely with developers to troubleshoot production incidents and deployment issues.
+* Applied DevSecOps practices including secret management and vulnerability scanning.
+
+---
+
+## DevOps Engineer
+
+**TechBridge Egypt – Cairo, Egypt**
+**June 2023 – June 2024**
+
+* Developed deployment pipelines for multiple .NET and Node.js applications.
+* Managed Linux servers and deployment automation scripts.
+* Configured Docker Compose environments for development and testing.
+* Implemented centralized logging using ELK Stack.
+* Automated backup procedures and infrastructure monitoring.
+* Participated in Agile sprint planning and production releases.
+
+---
+
+## Junior DevOps Engineer
+
+**Smart Systems – Cairo, Egypt**
+**August 2022 – May 2023**
+
+* Assisted in maintaining CI/CD pipelines.
+* Managed Docker images and private container registry.
+* Supported Kubernetes deployments and troubleshooting.
+* Performed Linux server maintenance and patch management.
+* Helped automate repetitive operational tasks using Bash scripts.
+
+---
+
+# Technical Skills
+
+### Cloud Platforms
+
+* Amazon Web Services (AWS)
+* Microsoft Azure (Basic)
+* Google Cloud Platform (Basic)
+
+### Containers & Orchestration
+
+* Docker
+* Kubernetes
+* Helm
+
+### Infrastructure as Code
+
+* Terraform
+* Ansible
+
+### CI/CD
+
+* GitHub Actions
+* Jenkins
+* Azure DevOps Pipelines
+
+### Monitoring & Logging
+
+* Prometheus
+* Grafana
+* ELK Stack
+* CloudWatch
+
+### Operating Systems
+
+* Linux (Ubuntu, CentOS)
+* Windows Server
+
+### Scripting
+
+* Bash
+* PowerShell
+* Python
+
+### Networking
+
+* DNS
+* Load Balancing
+* Reverse Proxy
+* Nginx
+* SSL/TLS
+
+### Version Control
+
+* Git
+* GitHub
+
+---
+
+# Projects
+
+## Enterprise Kubernetes Platform
+
+**Technologies:** Kubernetes, Docker, AWS EKS, Terraform
+
+* Built production-grade Kubernetes infrastructure.
+* Automated deployments using GitHub Actions.
+* Implemented auto-scaling and rolling updates.
+* Reduced deployment downtime significantly.
+
+---
+
+## CI/CD Automation Framework
+
+**Technologies:** Jenkins, Docker, Bash
+
+* Created reusable CI/CD templates.
+* Automated testing and deployment pipelines.
+* Reduced manual deployment errors.
+* Improved release frequency across multiple teams.
+
+---
+
+## Infrastructure Monitoring System
+
+**Technologies:** Prometheus, Grafana, Alertmanager
+
+* Built centralized monitoring dashboards.
+* Configured alert rules for infrastructure health.
+* Improved incident detection and response time.
+
+---
+
+# Education
+
+**Bachelor of Computer Engineering**
+
+Cairo University — Cairo, Egypt
+
+Graduation Year: **2022**
+
+---
+
+# Certifications
+
+* AWS Certified Solutions Architect – Associate
+* HashiCorp Certified: Terraform Associate
+* Docker Certified Associate (DCA)
+
+---
+
+# Languages
+
+* Arabic — Native
+* English — Professional Working Proficiency
+
+---
+
+# Additional Information
+
+* Strong experience with cloud-native infrastructure and Kubernetes.
+* Experienced in production deployments for microservices architecture.
+* Passionate about Infrastructure as Code and automation.
+* Excellent collaboration skills with development and security teams.
+* Familiar with DevSecOps practices, high availability architecture, and disaster recovery planning.

@@ -1,0 +1,204 @@
+====================================================
+ANGULAR FRONTEND INTERVIEW QUESTIONS — SENIOR LEVEL
+====================================================
+Target: 5+ years of experience
+Focus: Angular internals, Signals architecture, enterprise patterns, micro-frontends, performance
+       at scale, security, accessibility, NgRx depth, system design, and technical leadership
+
+----------------------------------------------------
+SECTION 1: ANGULAR COMPILER & INTERNALS
+----------------------------------------------------
+
+Q1. What is the Ivy compiler and how does it differ from View Engine?
+Expected answer: Ivy is Angular's current compilation and rendering pipeline (default since Angular 9). Key differences from View Engine:
+  - Locality: each component is compiled independently (no global analysis). Enables better tree-shaking.
+  - Incremental compilation: only changed files recompile, speeding up large codebases.
+  - Smaller bundle: unused framework features are tree-shaken out.
+  - Better debugging: component definitions are visible at runtime.
+  - Enables standalone components and the new control flow syntax.
+  View Engine is fully removed in Angular 16+.
+
+Q2. How does Angular's template compilation work? What does the generated code look like?
+Expected answer: Angular compiles templates into TypeScript factory functions during build (AOT — Ahead of Time Compilation). The compiler transforms template expressions, structural directives, and bindings into imperative DOM instructions. AOT catches template errors at build time rather than runtime (unlike JIT). The compiled output uses Angular's ɵɵ runtime instructions (prefixed with ɵ — these are internal APIs). Understanding this helps diagnose template type errors and optimize what the compiler generates.
+
+Q3. What is the difference between AOT and JIT compilation? Why is AOT preferred?
+Expected answer: JIT (Just-In-Time) compiles templates in the browser at runtime — slower startup, larger bundle (includes compiler), template errors only at runtime. AOT compiles templates at build time — faster startup, smaller bundle, build-time type checking, better security (templates are pre-compiled, not interpreted). AOT is always used in production (--prod). Angular 9+ defaults to AOT even in development.
+
+Q4. What is Angular's incremental hydration (Angular 17+)?
+Expected answer: Incremental hydration lets Angular defer hydration of specific parts of a server-rendered page until needed — instead of hydrating the entire app at once. Implemented with @defer blocks: components inside a @defer block aren't hydrated until their trigger fires (e.g., viewport intersection, interaction). This reduces Time to Interactive and JS execution on initial load. Builds on SSR + full-app hydration introduced in Angular 16.
+
+Q5. Explain the @defer block in Angular 17+. What triggers are available?
+Expected answer: @defer lazy-loads a component's JS bundle and optionally defers its rendering. Triggers:
+  - idle: loads when the browser is idle.
+  - viewport: loads when the element enters the viewport (Intersection Observer).
+  - interaction: loads on first click/focus.
+  - hover: loads on mouseenter.
+  - timer(2s): loads after a delay.
+  - when condition: loads when an expression becomes truthy.
+  Supports @placeholder (shown before load), @loading (shown while loading), @error (on failure). Replaces manual React.lazy() patterns with a declarative, framework-integrated API.
+
+Q6. What is the Angular Signals architecture and how does it enable zone-less applications?
+Expected answer: Signals (stable Angular 17) are reactive values that track their consumers. When a signal changes, Angular knows exactly which computed values and which template reads are affected — without Zone.js broadcasting a global "something changed." provideExperimentalZonelessChangeDetection() removes Zone.js entirely. Components become reactive by default — Angular schedules only the necessary DOM updates. This dramatically reduces change detection overhead in large apps and improves INP (Interaction to Next Paint) scores.
+
+----------------------------------------------------
+SECTION 2: SIGNALS — DEEP DIVE
+----------------------------------------------------
+
+Q7. What is the difference between signal(), computed(), and effect() in Angular?
+Expected answer:
+  - signal(initialValue): writable reactive primitive. Read: count(). Write: count.set(n) or count.update(fn).
+  - computed(() => expr): derived read-only signal. Lazily evaluated, memoized, only recomputes when dependencies change.
+  - effect(() => sideEffect): runs a function reactively when any read signal inside changes. Avoid for data transformation (use computed); use for DOM side effects, logging, sync to non-reactive systems.
+  Effects run in an injection context and are cleaned up automatically on destroy.
+
+Q8. What are the gotchas and anti-patterns when using Angular Signals?
+Expected answer:
+  - Writing to a signal inside computed() — not allowed, throws error. Computed is for pure derivation.
+  - Forgetting that computed() is lazy — it only recomputes when read. Don't rely on it as an eager side effect trigger (use effect for that).
+  - Overusing effect() for data transformation instead of computed().
+  - Not using toSignal() when bridging from Observables — leads to manual subscriptions in templates.
+  - Mutating objects inside a signal without calling set/update — Angular doesn't detect internal mutations. Use signal({ ...existing, prop: newVal }).
+
+Q9. How do you convert between Signals and Observables? When would you use each bridge?
+Expected answer:
+  - toSignal(observable$): converts an Observable to a Signal. Subscribes automatically, unsubscribes on destroy. Requires injection context. Accepts initialValue.
+  - toObservable(mySignal): converts a Signal to an Observable — useful when you need RxJS operators applied to a signal's changes.
+  Use RxJS for complex async flows (switchMap chains, WebSocket streams, retry logic). Use Signals for synchronous reactive state in components. Bridge at the boundary.
+
+Q10. How do you implement a derived value that combines two signals and an Observable in the same component?
+Expected answer: Convert the Observable with toSignal(obs$), then use computed() to derive from both: const result = computed(() => transform(sig1(), toSignalValue())); This keeps derivation logic declarative and avoids manual subscriptions. The computed automatically re-evaluates when either signal changes.
+
+----------------------------------------------------
+SECTION 3: ENTERPRISE ARCHITECTURE
+----------------------------------------------------
+
+Q11. How do you structure a large Angular monorepo? What tools and conventions do you recommend?
+Expected answer: Nx is the standard tool for Angular monorepos — it adds project graph analysis, affected-only CI (only rebuild/test what changed), code generators, and enforced boundaries via module federation. Structure: libs/ for shared feature, UI, data-access, and utility libraries; apps/ for deployable applications. Enforce boundaries with @nx/enforce-module-boundaries — prevent feature libs from importing each other directly, keeping the dependency graph acyclic. Nx Cloud provides distributed caching and parallelization.
+
+Q12. What is Module Federation in Angular and how does it enable micro-frontends?
+Expected answer: Module Federation (via @angular-architects/module-federation or Native Federation) allows separate Angular apps to share code at runtime — a shell app dynamically loads remote apps' components/modules without bundling them together. Each remote is independently deployed. Angular 17+ supports Native Federation (esbuild-compatible). Key challenges: shared singleton dependencies (Angular itself, NgRx), routing coordination, authentication propagation, and testing across remotes.
+
+Q13. How do you design a scalable Angular feature library?
+Expected answer: Follow the SCAM pattern (Single Component Angular Module — now replaced by standalone) or pure standalone libraries. Each feature lib: data-access layer (services, NgRx store), feature shell component (routing), UI components (dumb, presentational). Public API surface defined by index.ts (barrel) — only export what consumers should use. Internal components not exported, preventing tight coupling. Depends on shared utility/UI libs, never on other feature libs directly.
+
+Q14. How do you handle cross-cutting concerns (logging, error handling, auth headers) in an Angular enterprise app?
+Expected answer:
+  - HTTP Interceptors: inject headers (auth tokens), log requests/responses, retry on 401, redirect on 403. Angular 15+ uses functional interceptors (withInterceptors).
+  - Global error handler: class GlobalErrorHandler implements ErrorHandler — catches uncaught errors app-wide. Forward to logging service (Sentry, Datadog).
+  - APP_INITIALIZER: run setup logic (load config, check auth) before the app bootstraps.
+  - ErrorBoundary pattern: a component that wraps risky child components and shows a fallback on error.
+
+Q15. What is APP_INITIALIZER and what are its pitfalls?
+Expected answer: APP_INITIALIZER provides a factory function run before the app renders. Used for: loading remote config, setting up feature flags, validating auth tokens. Returns a Promise or Observable. Pitfall: if the initializer throws or times out, the app never loads — always handle errors gracefully. Multiple initializers run in parallel by default. Don't put too much in initializers — it delays first render and hurts perceived performance.
+
+----------------------------------------------------
+SECTION 4: NGRX — ADVANCED
+----------------------------------------------------
+
+Q16. What is NgRx Component Store and how does it differ from the global Store?
+Expected answer: ComponentStore manages local state scoped to a component and its children — not global. State is created with new ComponentStore(initialState), uses updaters (reducers), effects, and selects. Destroyed with the component. Use it when state is feature-specific (a form wizard, a complex widget) and doesn't need to be shared globally. Lighter than global Store — no actions, effects are defined locally. Global Store is for app-wide shared state needing strict action-based audit trail.
+
+Q17. Explain NgRx Signals Store (NgRx 17+). How does it differ from traditional NgRx Store?
+Expected answer: NgRx Signals Store uses Angular Signals instead of Observables for state. const UserStore = signalStore({ withState(initialState), withComputed(derived), withMethods(updaters/effects) }). Components inject and read state as signals — no selectors, no async pipe. Better DX for Signals-first codebases. Still action-based under the hood if desired, but can be used without actions for simpler local-ish state. Part of Angular's trajectory away from RxJS as the primary reactivity model.
+
+Q18. How do you handle optimistic updates in NgRx?
+Expected answer: Dispatch the success action immediately with the intended new state, then fire the HTTP request. If the request succeeds, optionally update with server-confirmed data. If it fails, dispatch a rollback action that restores the previous state (saved before the optimistic update). NgRx's immutable state makes rollback straightforward — keep a snapshot before the operation. Communicate errors to the user after rollback.
+
+Q19. What are NgRx Entity and its benefits?
+Expected answer: @ngrx/entity provides EntityAdapter<T> — utilities for managing normalized collections of entities in the store. adapter.addAll(), adapter.upsertOne(), adapter.removeOne() produce correct immutable state updates without writing boilerplate. Provides built-in selectors: selectAll, selectEntities, selectIds, selectTotal. Normalizing state (by ID map) prevents duplication and makes lookups O(1).
+
+----------------------------------------------------
+SECTION 5: PERFORMANCE AT SCALE
+----------------------------------------------------
+
+Q20. Walk through a complete performance audit of a slow Angular enterprise app.
+Expected answer: Systematic approach:
+  1. Web Vitals baselines (INP, LCP, CLS) via Chrome DevTools + PageSpeed Insights.
+  2. Angular DevTools Profiler — identify components with excessive change detection cycles.
+  3. Bundle analysis (source-map-explorer or webpack-bundle-analyzer) — find heavy third-party libraries, duplicated code.
+  4. Network tab — identify render-blocking resources, large assets, slow API responses.
+  5. Fix: OnPush + Signals for CD, lazy loading for bundles, CDK Virtual Scroll for large lists, @defer for below-fold components, image optimization (NgOptimizedImage), HTTP caching.
+  6. Re-measure and validate.
+
+Q21. What is NgOptimizedImage and what does it provide?
+Expected answer: A built-in Angular directive (stable since Angular 15) that enforces image best practices: automatic srcset generation, lazy loading by default, priority loading for LCP images (fetchpriority="high" + preconnect), layout shift prevention (requires explicit width/height), and integration with image CDNs (Cloudinary, Imgix, Cloudflare). Replaces manual <img> optimization and catches common mistakes at dev time.
+
+Q22. How would you implement server-side rendering (SSR) in Angular and what are its current capabilities?
+Expected answer: Angular Universal is now integrated into the core @angular/ssr package (Angular 17+). ng add @angular/ssr adds SSR support. Angular 17 supports full-app hydration (reuses server-rendered DOM instead of discarding it) and incremental hydration via @defer. Supports streaming SSR. Challenges: browser-specific APIs (window, document) must be guarded with isPlatformBrowser(); third-party libraries must be SSR-compatible. Use TransferState to avoid double data fetching (fetch on server, transfer to client).
+
+Q23. How does the Angular CDK's virtual scrolling work internally?
+Expected answer: CdkVirtualScrollViewport maintains a viewport of fixed height and calculates which items are visible based on scroll position and item size. Only visible items (+ a small buffer) are in the DOM. As the user scrolls, Angular adds/removes items and adjusts a spacer element's height to maintain correct scroll position. Works best with fixed-height items (itemSize); variable heights require a custom VirtualScrollStrategy.
+
+----------------------------------------------------
+SECTION 6: SECURITY
+----------------------------------------------------
+
+Q24. How does Angular prevent XSS and what are the ways to bypass Angular's sanitization?
+Expected answer: Angular sanitizes all dynamic values bound to the DOM — interpolation, property bindings, attribute bindings. It uses a built-in sanitizer for HTML, URLs, and styles. Bypass risks: bypassSecurityTrustHtml(), bypassSecurityTrustUrl(), bypassSecurityTrustStyle() — only use with fully controlled content. Also: innerHTML via ElementRef.nativeElement.innerHTML directly bypasses Angular's sanitizer. Never do this with user input. Template injection is prevented because Angular compiles templates at build time — runtime template strings are not executed.
+
+Q25. What security considerations apply to Angular with SSR?
+Expected answer: Server-side code runs in Node.js — Express injection, SSRF (if the server fetches URLs from user input), prototype pollution. Template injection risk if you dynamically generate Angular templates server-side (don't do this). XSS: server-rendered HTML must still escape user data — Angular's renderer does this, but raw string concatenation in server-side data fetching doesn't. CSP headers: Angular's SSR app should set strict Content-Security-Policy. Auth cookies should be httpOnly; avoid token-in-URL patterns that end up in server logs.
+
+Q26. How do you implement CSRF protection in an Angular app?
+Expected answer: Angular's HttpClientModule includes built-in XSRF protection: it reads a cookie named XSRF-TOKEN and sends it as the X-XSRF-TOKEN header on mutating requests (POST, PUT, DELETE). The server must set the cookie and validate the header. Configure with withXsrfConfiguration() if your cookie/header names differ. This is automatic with Angular's HttpClient — no extra code needed if the server is configured correctly.
+
+----------------------------------------------------
+SECTION 7: ACCESSIBILITY
+----------------------------------------------------
+
+Q27. How do you build an accessible custom dropdown in Angular?
+Expected answer: Use a <button> as the trigger (keyboard focusable, screen reader announces role). Set aria-haspopup="listbox" and aria-expanded. The options list has role="listbox"; each option role="option" with aria-selected. Keyboard: Enter/Space to open, Arrow keys to navigate, Escape to close, focus returns to trigger. Use CdkA11y's ListKeyManager to handle keyboard navigation. Trap focus within the open menu. Angular CDK's overlay positions the dropdown correctly. Test with VoiceOver/NVDA.
+
+Q28. What is the Angular CDK's A11y module and what does it provide?
+Expected answer: @angular/cdk/a11y provides:
+  - FocusTrap: traps focus within a container (modals, dialogs).
+  - FocusMonitor: tracks focus origin (keyboard, mouse, touch, programmatic) — lets you apply focus styles only for keyboard navigation.
+  - ListKeyManager: handles arrow-key navigation for lists, implementing roving tabindex or active-descendant patterns.
+  - LiveAnnouncer: programmatically announce messages to screen readers via an ARIA live region.
+  - InteractivityChecker: determines if an element is focusable, tabbable, or visible.
+
+----------------------------------------------------
+SECTION 8: SYSTEM DESIGN
+----------------------------------------------------
+
+Q29. Design a real-time dashboard in Angular that displays live metrics from WebSockets with 20+ widgets.
+Expected answer should cover: WebSocket service wrapping RxJS WebSocketSubject with reconnection logic (retryWhen / timer), NgRx or Signals store per widget category, Signals for fine-grained reactivity (avoid global change detection on every tick), CDK Virtual Scroll if metrics are list-based, @defer for below-fold widgets, worker thread for heavy data transformation (comlink), chart libraries with efficient update APIs (ECharts canvas-based over SVG for high-frequency updates), circuit breaker pattern for WebSocket reconnection back-off, and role-based widget visibility.
+
+Q30. Design an Angular micro-frontend architecture for a large enterprise platform with 5 independent teams.
+Expected answer should cover: Shell app (routing, navigation, auth), Native Federation or Module Federation for remote loading, shared design system library (Angular CDK + custom components, published to internal npm), shared auth token propagation (passed via custom events or shared service in shell), team boundaries enforced by Nx module boundaries lint rules, independent CI/CD pipelines per remote, feature flags for phased rollout, runtime version compatibility strategy (shared singleton Angular runtime), and observability/error tracking per remote.
+
+Q31. How would you architect a form-heavy Angular app with 50+ complex forms across multiple features?
+Expected answer: Reactive forms as the foundation; shared form utility library (reusable validators, form helpers). Dynamic forms engine for config-driven forms (array of field config → FormGroup generator). Shared validation service (async validators hitting API, cross-field validators). FormArray patterns for repeating fieldsets. Autosave with debounce + dirty-checking. Accessibility: ARIA live regions for validation summaries, proper label association. Testing: form unit tests with pure TypeScript (no TestBed needed for reactive form logic). Custom control value accessors for complex reusable inputs.
+
+----------------------------------------------------
+SECTION 9: LEADERSHIP & ENGINEERING EXCELLENCE
+----------------------------------------------------
+
+Q32. How do you lead an Angular upgrade from v14 to v17 in a large codebase?
+Expected answer: Use ng update for automated migrations — run incrementally (one major version at a time, not skipping). Address deprecation warnings before upgrading. Migrate to standalone components gradually (ng generate @angular/core:standalone). Adopt new control flow syntax (@if, @for) with the migration schematic. Migrate to Signals progressively — convert leaf components first. Run the full test suite after each step. Use feature flags to ship incrementally without blocking other teams. Communicate breaking changes and timeline to all consumers.
+
+Q33. How do you enforce code quality standards across a large Angular team?
+Expected answer: ESLint with angular-eslint (includes Angular-specific rules — no unused @Input decorators, no direct DOM access, component selector naming). Prettier for formatting. Husky + lint-staged for pre-commit enforcement. Nx module boundary rules to prevent architectural violations. Angular Compiler strict mode (strictTemplates, strictInjectionParameters). Pull request templates with checklists. ADRs (Architecture Decision Records) for major decisions. Pair reviews for architecture-affecting PRs. Regular team tech debt sessions.
+
+Q34. A junior developer introduces a memory leak in production (Observable never unsubscribed). How do you turn this into a team learning?
+Expected answer: First fix the production issue (deploy the fix). Then: blameless post-mortem — focus on the system, not the person. Improve the system: add ESLint rule (rxjs/no-ignored-observable, rxjs-angular/prefer-async-pipe), add a team pattern document showing preferred unsubscription methods (async pipe, takeUntilDestroyed). Pair with the developer to walk through the fix and explain the underlying model. Add a test that would catch the leak (verify subscription count or check for cleanup). Update the onboarding guide.
+
+----------------------------------------------------
+SECTION 10: ADVANCED PRACTICAL CHALLENGES
+----------------------------------------------------
+
+Q35. Implement a custom ControlValueAccessor for a star-rating component that works inside Angular reactive forms.
+Expected answer: Implement ControlValueAccessor interface (writeValue, registerOnChange, registerOnTouched, setDisabledState). Register with NG_VALUE_ACCESSOR provider. writeValue receives external form value. Clicking a star calls onChange(value). Handles disabled state. Tests understanding of Angular's forms integration contract.
+
+Q36. You need to render 100,000 rows of tabular data in Angular with filtering, sorting, and column resizing. Design the solution.
+Expected answer: Server-side pagination (never load 100k rows client-side for real data). CdkVirtualScrollViewport for client-side display. Angular CDK Table (CdkTable) for accessible, styled-agnostic table structure. Column resizing via CDK Drag. Sort emits to backend query param. Filter debounced (500ms) before hitting API. Row selection with entity IDs (not row references — stable across pages). Web Worker for any client-side aggregation. trackBy on row ID. NgRx or Signals store for filter/sort/page state persisted in query params (so URL is shareable).
+
+Q37. Describe the most architecturally complex Angular decision you've made in production. What were the tradeoffs and what would you do differently?
+(Open-ended — senior signal: ability to articulate architectural reasoning, acknowledge tradeoffs honestly, and reflect on outcomes vs. intent)
+
+Q38. How do you measure the success of an Angular performance optimization? What metrics do you track and how?
+Expected answer: Core Web Vitals: LCP (load), INP (interactivity — replaces FID), CLS (stability). Angular-specific: change detection frequency (Angular DevTools Profiler), hydration errors (SSR), bundle size delta (bundlesize tool in CI). Real User Monitoring (RUM) via Sentry, Datadog, or Grafana Faro — lab metrics don't always reflect real user experience. Track P75/P95 percentiles (not just median). A/B the optimization if possible. Set a performance budget in angular.json (budgets array) so CI fails on bundle size regressions.
+
+====================================================
+END OF SENIOR QUESTION BANK
+====================================================

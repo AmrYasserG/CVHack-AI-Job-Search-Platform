@@ -1,0 +1,168 @@
+# Omar Hassan
+
+**Cybersecurity Analyst**
+
+📍 Cairo, Egypt
+📧 omar.hassan.cyber@gmail.com
+📱 +20 10 2784 9136
+🔗 https://linkedin.com/in/omarhassancyber
+💻 https://github.com/omarhassancyber
+🌐 https://omarhassancyber.dev
+
+---
+
+# Professional Summary
+
+Cybersecurity Analyst with 3 years of professional experience securing enterprise environments through continuous security monitoring, incident response, vulnerability management, threat hunting, and security operations. Experienced in Security Operations Center (SOC) environments utilizing SIEM platforms, endpoint detection and response (EDR) solutions, and cloud security tools to detect, investigate, and mitigate cyber threats. Passionate about strengthening organizational security through proactive defense strategies, automation, and continuous improvement.
+
+---
+
+# Professional Experience
+
+## Senior Cybersecurity Analyst
+
+**Orange Egypt — Cairo, Egypt**
+**January 2025 – Present**
+
+* Led security monitoring activities using Microsoft Sentinel and Splunk across enterprise infrastructure.
+* Investigated advanced security incidents including ransomware, phishing campaigns, insider threats, and privilege escalation attempts.
+* Coordinated incident response activities with infrastructure, cloud, and application teams.
+* Conducted threat hunting exercises using MITRE ATT&CK techniques.
+* Automated security monitoring and reporting using PowerShell and Python scripts.
+* Improved SIEM detection rules to reduce false positives and enhance threat visibility.
+* Managed Microsoft Defender for Endpoint policies across hundreds of enterprise devices.
+* Performed vulnerability assessments using Nessus and coordinated remediation efforts.
+* Assisted in security awareness initiatives and phishing simulation campaigns.
+* Supported ISO 27001 compliance and internal security audits.
+
+---
+
+## Cybersecurity Analyst
+
+**ITWorx — Cairo, Egypt**
+**July 2022 – December 2024**
+
+* Monitored enterprise security events using Microsoft Sentinel.
+* Investigated endpoint alerts, suspicious authentication attempts, and malware incidents.
+* Conducted vulnerability scans and prepared remediation reports.
+* Assisted with firewall rule reviews and VPN security configurations.
+* Generated weekly SOC dashboards and security metrics.
+* Supported penetration testing activities and validated remediation actions.
+
+---
+
+# Technical Skills
+
+### Security
+
+* Security Operations Center (SOC)
+* Incident Response
+* Threat Hunting
+* Vulnerability Assessment
+* Risk Analysis
+* Security Monitoring
+* Endpoint Detection & Response (EDR)
+
+### Security Tools
+
+* Microsoft Sentinel
+* Splunk
+* Microsoft Defender for Endpoint
+* Nessus
+* Wireshark
+* Nmap
+* Burp Suite
+* Microsoft Defender for Cloud
+
+### Operating Systems
+
+* Windows Server
+* Linux (Ubuntu, Kali Linux)
+
+### Networking
+
+* TCP/IP
+* DNS
+* VPN
+* Firewalls
+* IDS/IPS
+* Network Security
+
+### Scripting
+
+* PowerShell
+* Python
+* Bash
+
+### Frameworks & Standards
+
+* MITRE ATT&CK
+* NIST Cybersecurity Framework
+* OWASP Top 10
+* CIS Controls
+
+---
+
+# Projects
+
+## Enterprise Threat Detection Platform
+
+**Technologies:** Microsoft Sentinel, Microsoft Defender for Endpoint, Kusto Query Language (KQL)
+
+* Designed enterprise SOC dashboards for centralized security monitoring.
+* Developed custom detection rules for phishing, brute-force attacks, and suspicious logins.
+* Automated incident reporting to improve analyst productivity.
+
+---
+
+## Enterprise Vulnerability Management
+
+**Technologies:** Nessus, PowerShell
+
+* Conducted organization-wide vulnerability assessments.
+* Prioritized remediation based on CVSS severity ratings.
+* Automated vulnerability reporting and remediation tracking.
+
+---
+
+## Security Automation Toolkit
+
+**Technologies:** Python, PowerShell
+
+* Developed scripts to automate IOC collection and log analysis.
+* Automated repetitive SOC tasks, reducing manual investigation time.
+* Improved security response efficiency through workflow automation.
+
+---
+
+# Education
+
+**Bachelor of Computer Science**
+
+Cairo University — Cairo, Egypt
+
+Graduation Year: **2022**
+
+---
+
+# Certifications
+
+* CompTIA Security+
+* Microsoft Certified: Security Operations Analyst Associate (SC-200)
+* Microsoft Certified: Azure Security Engineer Associate (AZ-500)
+
+---
+
+# Languages
+
+* Arabic — Native
+* English — Professional Working Proficiency
+
+---
+
+# Additional Information
+
+* Experienced working in enterprise Security Operations Center (SOC) environments.
+* Strong background in threat detection, incident response, and vulnerability management.
+* Familiar with Microsoft security ecosystem, cloud security, and enterprise compliance frameworks.
+* Passionate about cyber threat intelligence, security automation, and continuous professional development.

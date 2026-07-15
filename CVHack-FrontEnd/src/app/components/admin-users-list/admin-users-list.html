@@ -1,0 +1,66 @@
+<div
+  class="rounded-2xl border overflow-hidden flex flex-col h-full"
+  style="background: var(--surface); border-color: var(--border); box-shadow: var(--shadow)"
+>
+  <!-- Table header (sticky) -->
+  <div
+    class="sm:grid grid-cols-6 px-6 py-3 border-b text-xs font-semibold tracking-widest uppercase sticky top-0"
+    style="border-color: var(--border); color: var(--muted); background: var(--surface)"
+  >
+    <span class="col-span-4">User</span>
+    <span class="col-span-1 justify-self-center hidden sm:inline">Plan</span>
+    <span class="col-span-1 justify-self-center hidden sm:inline">Status</span>
+  </div>
+
+  <!-- Scrollable rows -->
+  <div class="overflow-y-auto flex-1 scroll-area">
+    @for (user of users; track user.id) {
+      <div
+        (click)="select(user)"
+        class="sm:grid grid-cols-6 items-center px-6 py-4 cursor-pointer border-b last:border-b-0 transition-colors"
+        [style.background]="user.id === selectedUserId ? 'var(--surface2)' : 'transparent'"
+        style="border-color: var(--border)"
+      >
+        <!-- User -->
+        <div class="flex items-center gap-3 col-span-4">
+          <div
+            class="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold shrink-0"
+            style="background: var(--copper); color: var(--white); font-family: var(--font-display)"
+          >
+            {{ user | initials }}
+          </div>
+          <div>
+            <p class="text-sm font-semibold" style="color: var(--text)">{{ user | fullName }}</p>
+            <p class="text-xs" style="color: var(--muted)">
+              {{ user.roles[0] }} · {{ user.email }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Plan -->
+        <span
+          class="text-sm font-semibold justify-self-center col-span-1 hidden sm:inline"
+          style="color: var(--copper)"
+          >{{ user.plan || 'Free' }}</span
+        >
+
+        <!-- Status -->
+        <span class="col-span-1 justify-self-center hidden sm:inline">
+          @if (user.status === 'Active') {
+            <span
+              class="px-3 py-1 rounded-full text-xs font-semibold w-fit"
+              style="background: var(--greenSoft); color: var(--green)"
+              >Active</span
+            >
+          } @else {
+            <span
+              class="px-3 py-1 rounded-full text-xs font-semibold w-fit"
+              style="background: var(--redSoft); color: var(--red)"
+              >Suspended</span
+            >
+          }
+        </span>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,145 @@
+<div class="rounded-2xl p-6 border" style="background: var(--ai); border-color: var(--aiBorder); box-shadow: var(--shadow);">
+
+  <!-- Header -->
+  <div class="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-wide" style="color: var(--copper); font-family: var(--font-display);">
+    <span>✦</span>
+    <span>AI Match Analysis</span>
+  </div>
+
+  <!-- Loading skeleton -->
+  @if (loading) {
+    <div class="animate-pulse">
+      <div class="flex items-center gap-4">
+        <div class="w-20 h-20 rounded-full flex-shrink-0" style="background: var(--border2);"></div>
+        <div class="flex-1 flex flex-col gap-2">
+          <div class="h-3 w-2/3 rounded" style="background: var(--border2);"></div>
+          <div class="h-3 w-full rounded" style="background: var(--border2);"></div>
+          <div class="h-3 w-5/6 rounded" style="background: var(--border2);"></div>
+        </div>
+      </div>
+      <div class="h-px my-5" style="background: var(--aiBorder);"></div>
+      <div class="flex flex-col gap-3">
+        @for (i of [1,2,3,4]; track i) {
+          <div class="h-3 w-full rounded" style="background: var(--border2);"></div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (!loading && error) {
+    <p class="text-xs m-0" style="color: var(--muted); font-family: var(--font-body);">
+      {{ error }}
+    </p>
+  }
+
+  <!-- Score ring + summary -->
+  @if (!loading && !error && data) {
+    <div class="flex items-center gap-4">
+      <div class="relative w-20 h-20 flex-shrink-0">
+        <svg viewBox="0 0 80 80" class="w-20 h-20 -rotate-90">
+          <circle cx="40" cy="40" r="36" fill="none" stroke-width="6" style="stroke: var(--border2);"></circle>
+          <circle cx="40" cy="40" r="36" fill="none" stroke-width="6" stroke-linecap="round"
+                  [style]="'stroke: ' + ringColor + '; transition: stroke-dashoffset .6s ease;'"
+                  [attr.stroke-dasharray]="circumference"
+                  [attr.stroke-dashoffset]="dashOffset"></circle>
+        </svg>
+        <div class="absolute inset-0 flex items-center justify-center text-xl font-bold"
+             style="color: var(--text); font-family: var(--font-display);">
+          {{ data.score }}
+        </div>
+      </div>
+
+      <div>
+        <div class="text-sm font-bold mb-1" style="color: var(--text); font-family: var(--font-display);">
+          {{ matchLabel }}
+        </div>
+        <p class="text-xs leading-relaxed m-0" style="color: var(--muted); font-family: var(--font-body);">
+          {{ data.summary }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="h-px my-5" style="background: var(--aiBorder);"></div>
+
+    <!-- Skill breakdown -->
+    <div class="text-xs font-bold uppercase tracking-wide mb-3" style="color: var(--faint); font-family: var(--font-display);">
+      Skill breakdown
+    </div>
+
+    <div class="flex flex-col gap-3">
+      @for (skill of data.skills; track skill.name) {
+        <div>
+          <div class="flex items-center justify-between gap-2 text-xs mb-1" style="font-family: var(--font-body);">
+            <span class="flex items-center gap-1.5 min-w-0">
+              @if (skill.severity) {
+                <span class="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                      [style.background]="severityColor(skill.severity)" [title]="skill.severity"></span>
+              }
+              <span class="font-semibold truncate" style="color: var(--text);">{{ skill.name }}</span>
+              @if (skill.category) {
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-medium flex-shrink-0"
+                      style="background: var(--surface2); color: var(--faint);">{{ skill.category }}</span>
+              }
+            </span>
+            <span class="flex-shrink-0" style="color: var(--muted);">{{ skill.percent }}%</span>
+          </div>
+          <div class="w-full h-1.5 rounded-full overflow-hidden" style="background: var(--border2);">
+            <div class="h-full rounded-full"
+                 [style.width]="skill.percent + '%'"
+                 [style.background]="skill.status === 'good' ? 'var(--green)' : 'var(--red)'"></div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Skill gap card -->
+@if (loading) {
+  <div class="rounded-2xl p-6 border mt-4 animate-pulse" style="background: var(--surface); border-color: var(--border); box-shadow: var(--shadow);">
+    <div class="h-3 w-1/3 rounded mb-3" style="background: var(--border2);"></div>
+    <div class="h-3 w-full rounded" style="background: var(--border2);"></div>
+  </div>
+}
+
+@if (!loading && !error && data && data.gapSkills.length) {
+  <div class="rounded-2xl p-6 border mt-4" style="background: var(--surface); border-color: var(--border); box-shadow: var(--shadow);">
+    <div class="flex items-center gap-2 mb-3 text-xs font-bold uppercase tracking-wide" style="color: var(--copper); font-family: var(--font-display);">
+      <span>🎯</span>
+      <span>Your action plan</span>
+    </div>
+    <p class="text-sm m-0 mb-3" style="color: var(--muted); font-family: var(--font-body);">
+      To be a top candidate, consider strengthening:
+    </p>
+    <div class="flex flex-col gap-3">
+      @for (skill of data.gapSkills; track skill.name) {
+        <div class="p-3 rounded-lg border" style="background: var(--copperSoft); border-color: var(--aiBorder);">
+          <div class="flex items-center gap-1.5 flex-wrap mb-1">
+            <span class="inline-block px-2 py-0.5 rounded-md text-xs font-semibold"
+                  style="background: var(--surface); color: var(--copper); font-family: var(--font-body);">
+              {{ skill.name }}
+            </span>
+            @if (skill.actionType) {
+              <span class="inline-block px-2 py-0.5 rounded-md text-[10px] font-semibold capitalize"
+                    style="background: var(--surface); color: var(--muted); font-family: var(--font-body);">
+                {{ actionIcon(skill.actionType) }} {{ skill.actionType }}
+              </span>
+            }
+          </div>
+          @if (skill.whyItMatters) {
+            <p class="text-xs m-0 mt-1" style="color: var(--text); font-family: var(--font-body);">
+              {{ skill.whyItMatters }}
+            </p>
+          }
+          @if (skill.suggestedStep) {
+            <p class="text-xs m-0 mt-1" style="color: var(--muted); font-family: var(--font-body);">
+              {{ actionIcon(skill.actionType) }} {{ skill.suggestedStep }}
+            </p>
+          }
+        </div>
+      }
+    </div>
+  </div>
+}

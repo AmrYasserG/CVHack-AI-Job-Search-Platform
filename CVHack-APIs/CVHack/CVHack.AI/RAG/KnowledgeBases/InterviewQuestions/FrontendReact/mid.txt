@@ -1,0 +1,171 @@
+====================================================
+REACT FRONTEND INTERVIEW QUESTIONS — MID-LEVEL
+====================================================
+Target: 2–5 years of experience
+Focus: Hooks depth, performance, state management, TypeScript, testing, architecture patterns
+
+----------------------------------------------------
+SECTION 1: HOOKS — DEEP DIVE
+----------------------------------------------------
+
+Q1. Explain the rules of Hooks and why they exist.
+Expected answer: Hooks must be called at the top level (not inside loops, conditions, or nested functions) and only inside functional components or custom hooks. React relies on call order to associate hook state with the right component — breaking this order corrupts internal state tracking.
+
+Q2. What is useCallback and when should you actually use it?
+Expected answer: useCallback memoizes a function reference so it's stable across renders. Use it when passing callbacks to memoized child components (React.memo) to prevent unnecessary re-renders, or when a function is a dependency of useEffect. Don't use it everywhere — it has its own overhead and adds cognitive complexity.
+
+Q3. What is useMemo and how is it different from useCallback?
+Expected answer: useMemo memoizes a computed value; useCallback memoizes a function. useMemo(() => expensiveCalc(a, b), [a, b]) only recomputes when a or b change. Use it for expensive derivations, not for every calculated value.
+
+Q4. Explain useRef. Give two different use cases.
+Expected answer:
+  1. Accessing a DOM element directly: const inputRef = useRef(null); then inputRef.current.focus().
+  2. Storing a mutable value that persists across renders without triggering re-renders (e.g., tracking a previous value, storing a timer ID).
+
+Q5. What is useReducer and when would you choose it over useState?
+Expected answer: useReducer manages state via a (state, action) => newState reducer function. Choose it when state logic is complex (multiple sub-values), when the next state depends on the previous, or when you want to centralize update logic like a mini-Redux. dispatch({ type: 'INCREMENT' }) is more explicit than multiple setters.
+
+Q6. What is useContext? What problem does it solve and what are its limitations?
+Expected answer: useContext reads a context value provided by a Context.Provider higher in the tree — solving prop drilling. Limitation: every component consuming the context re-renders whenever the context value changes, even if that component only cares about a subset. For fine-grained subscriptions, consider Zustand, Jotai, or splitting contexts.
+
+Q7. How do you write a custom Hook? Give a practical example.
+Expected answer: A custom hook is a function prefixed with "use" that can call other hooks. Example: useFetch(url) internally uses useState and useEffect to fetch data and return { data, loading, error }. It encapsulates reusable logic and keeps components clean.
+
+Q8. What is the stale closure problem in useEffect and how do you fix it?
+Expected answer: When a dependency is missing from the dependency array, the effect captures the old (stale) value from when it was created. Fix: add all referenced values to the dependency array, or use the functional updater form setCount(prev => prev + 1) to avoid capturing count at all.
+
+----------------------------------------------------
+SECTION 2: PERFORMANCE OPTIMIZATION
+----------------------------------------------------
+
+Q9. What is React.memo and when does it help?
+Expected answer: React.memo wraps a functional component and skips re-rendering if props haven't changed (shallow comparison). Useful for pure, expensive child components that receive the same props often. Doesn't help if props are new object/function references every render — combine with useMemo/useCallback.
+
+Q10. What is code splitting and how do you implement it in React?
+Expected answer: Code splitting breaks the bundle into smaller chunks loaded on demand. In React: React.lazy(() => import('./Dashboard')) combined with <Suspense fallback={<Spinner />}>. React Router supports route-level splitting natively. Reduces initial bundle size significantly.
+
+Q11. What causes unnecessary re-renders in React and how do you diagnose them?
+Expected answer: Common causes: new object/array/function references created on every render, context value changing too broadly, parent re-renders propagating down. Diagnose with React DevTools Profiler (highlight updated components), or why-did-you-render library. Fix with memoization, stable references, or component restructuring.
+
+Q12. Explain the concept of "lifting state up" and when it's appropriate vs. overkill.
+Expected answer: Lifting state up moves state to the nearest common ancestor so sibling components can share it. Appropriate when two components need to stay in sync. Can become overkill when it's lifted too high, causing unnecessary re-renders across unrelated components — that's when context or a state manager helps.
+
+Q13. What is virtualization (windowing) and when would you use it?
+Expected answer: Rendering only the visible subset of a large list rather than all items. Libraries: react-window or TanStack Virtual. Use when rendering thousands of rows — it keeps DOM node count low and scrolling smooth. Overkill for lists under ~100 items.
+
+----------------------------------------------------
+SECTION 3: STATE MANAGEMENT
+----------------------------------------------------
+
+Q14. Compare Redux Toolkit, Zustand, and React Context for state management. When would you pick each?
+Expected answer:
+  - Context: simple, low-frequency shared state (theme, auth). No extra library. Bad for high-frequency updates.
+  - Zustand: lightweight, minimal boilerplate, great for most mid-sized apps. Easy to scope stores.
+  - Redux Toolkit: large-scale apps with complex state, time-travel debugging needs, large teams needing strict patterns. Devtools are excellent.
+
+Q15. What is a selector in the context of Redux or Zustand? Why are they important for performance?
+Expected answer: A selector is a function that derives/extracts a specific piece of state. Components subscribe only to what they select — if other state changes, they don't re-render. Reselect (for Redux) memoizes derived selectors to avoid recomputation.
+
+Q16. What is optimistic UI and how do you implement it in React?
+Expected answer: Update the UI immediately before the server confirms — making the app feel instant. Pattern: update local state first, then fire the API call. On error, rollback to previous state and show an error. TanStack Query has built-in optimistic update helpers.
+
+----------------------------------------------------
+SECTION 4: DATA FETCHING
+----------------------------------------------------
+
+Q17. What is TanStack Query (React Query) and what problems does it solve over plain useEffect fetching?
+Expected answer: It provides caching, background refetching, deduplication, loading/error states, pagination, and optimistic updates out of the box. Plain useEffect fetching requires re-implementing all of this manually. It also handles race conditions, stale-while-revalidate patterns, and window-focus refetching automatically.
+
+Q18. How do you handle race conditions when fetching data in useEffect?
+Expected answer: The cleanup function. If the component re-renders before the first fetch completes, you ignore the stale response: let cancelled = false; fetch(url).then(data => { if (!cancelled) setData(data); }); return () => { cancelled = true; }; TanStack Query handles this automatically.
+
+Q19. What is SWR and how does it compare to TanStack Query?
+Expected answer: SWR (stale-while-revalidate) by Vercel is a simpler data fetching library with a smaller API surface. TanStack Query is more feature-rich (mutations, pagination, devtools). SWR is great for simpler use cases and integrates tightly with Next.js. Both solve the same core caching problems.
+
+----------------------------------------------------
+SECTION 5: TYPESCRIPT IN REACT
+----------------------------------------------------
+
+Q20. How do you type component props in TypeScript?
+Expected answer: Define an interface or type alias: interface ButtonProps { label: string; onClick: () => void; disabled?: boolean; } then function Button({ label, onClick, disabled }: ButtonProps). Or use React.FC<ButtonProps> (though some teams avoid FC due to implicit children typing in older versions).
+
+Q21. How do you type useState when the initial value is null or undefined?
+Expected answer: Provide a generic: const [user, setUser] = useState<User | null>(null). Without the generic, TypeScript infers the type as null, which prevents setting it to a User later.
+
+Q22. What is the difference between type and interface in TypeScript? Which do you use for React props?
+Expected answer: Both work for props. interface is extendable (declaration merging). type is more flexible (unions, intersections, mapped types). Convention varies by team — both are valid. Prefer interface for object shapes that may be extended; type for complex unions.
+
+Q23. How do you type an event handler for an input onChange in React?
+Expected answer: (e: React.ChangeEvent<HTMLInputElement>) => void. For forms: React.FormEvent<HTMLFormElement>. TypeScript's lib.dom types provide all these. Getting them right avoids needing e.target.value as string casts.
+
+----------------------------------------------------
+SECTION 6: TESTING
+----------------------------------------------------
+
+Q24. What is React Testing Library (RTL) and what is its testing philosophy?
+Expected answer: RTL encourages testing components from the user's perspective — querying by visible text, roles, and labels rather than implementation details like class names or state. "Test what the user sees and does, not how the component is built." Pairs with Jest or Vitest.
+
+Q25. What is the difference between getBy, queryBy, and findBy in RTL?
+Expected answer:
+  - getBy: synchronous, throws if not found — use when element must exist.
+  - queryBy: synchronous, returns null if not found — use for asserting absence.
+  - findBy: returns a promise, waits for the element — use for async content.
+
+Q26. How do you mock an API call in a component test?
+Expected answer: Use jest.fn() or MSW (Mock Service Worker). MSW intercepts actual network requests at the service worker level — more realistic than mocking fetch or axios. For unit tests, mock the module directly: jest.mock('../api', () => ({ fetchUser: jest.fn() })).
+
+Q27. What is the difference between unit tests, integration tests, and E2E tests? Where do React component tests fall?
+Expected answer: Unit: one function/module in isolation. Integration: multiple units together (component + hooks + context). E2E: full browser automation (Cypress, Playwright). RTL component tests are integration tests — they render a component with its dependencies and test the interaction. Prefer the testing trophy: more integration, fewer unit, fewer E2E.
+
+----------------------------------------------------
+SECTION 7: ROUTING
+----------------------------------------------------
+
+Q28. How does React Router v6 differ from v5?
+Expected answer: v6 replaced Switch with Routes, uses element instead of component prop (<Route element={<Dashboard />}>), relative paths by default, nested routes with Outlet, and useNavigate instead of useHistory. Route ranking is automatic (most specific wins) — no order dependency.
+
+Q29. How do you implement protected routes in React Router?
+Expected answer: A wrapper component that checks auth state and either renders the child route or redirects: if (!isAuthenticated) return <Navigate to="/login" replace />;. Often wrapped in a ProtectedRoute component used around private routes.
+
+Q30. What is the difference between client-side routing and server-side routing?
+Expected answer: Client-side routing (React Router) intercepts navigation in the browser — no server round-trips, fast transitions, but the server needs to return the same HTML for all paths (catch-all route). Server-side routing serves different HTML for each URL from the server (Next.js pages). CSR is better for app-like experiences; SSR for SEO and initial load performance.
+
+----------------------------------------------------
+SECTION 8: FORMS
+----------------------------------------------------
+
+Q31. What is the difference between controlled and uncontrolled components?
+Expected answer: Controlled: form value is driven by React state (value + onChange). Uncontrolled: form manages its own state, accessed via ref (ref.current.value). Controlled is the React-preferred approach — easier to validate, reset, and derive values. React Hook Form can use uncontrolled inputs for performance.
+
+Q32. Why might you choose React Hook Form over Formik?
+Expected answer: React Hook Form uses uncontrolled inputs by default — fewer re-renders per keystroke, leading to better performance on large forms. Formik re-renders on every change by default. RHF also has a smaller bundle size. Both support Yup/Zod for validation. The choice is often team preference.
+
+----------------------------------------------------
+SECTION 9: ARCHITECTURE & PATTERNS
+----------------------------------------------------
+
+Q33. What is the compound component pattern? Give an example use case.
+Expected answer: A set of components that share implicit state through context — used together to form a cohesive UI. Example: <Select><Select.Trigger /><Select.Options /></Select>. The parent manages open/close state; children consume it via context without prop-drilling. Used in headless UI libraries like Radix.
+
+Q34. What are render props? Are they still common?
+Expected answer: A pattern where a component accepts a function as a prop and calls it to determine what to render: <DataFetcher render={(data) => <List items={data} />} />. They solved code-reuse before hooks. Today, custom hooks largely replace them — render props still appear in some libraries (Formik's Field, Downshift).
+
+Q35. How do you handle global error boundaries in React?
+Expected answer: Error boundaries are class components implementing componentDidCatch and getDerivedStateFromError. They catch rendering errors in their child tree. Since they must be class components, you wrap a functional fallback UI. Libraries like react-error-boundary provide a hook-friendly API. Place them strategically — at route level, around third-party widgets.
+
+----------------------------------------------------
+SECTION 10: PRACTICAL CHALLENGES
+----------------------------------------------------
+
+Q36. Implement a debounced search input that fetches results 300ms after the user stops typing.
+Expected answer: useState for query, useEffect with a setTimeout that fires after 300ms and clears on cleanup (return clearTimeout). Or use useDebounce custom hook + TanStack Query with the debounced value as the query key.
+
+Q37. Given a nested list of comments (each with replies), render them recursively.
+Expected answer: A Comment component that maps over its replies and renders <Comment> for each. Tests recursive component knowledge and proper key usage.
+
+Q38. Refactor this class component to a functional component with hooks (interviewer shows a simple class component with state and lifecycle methods).
+Expected answer: Replace this.state with useState, componentDidMount/componentDidUpdate with useEffect, this.setState with the setter function. Shows practical hooks understanding.
+
+====================================================
+END OF MID-LEVEL QUESTION BANK
+====================================================

@@ -1,0 +1,172 @@
+# Ahmed Hassan
+
+**Senior Frontend React Developer**
+
+📍 Cairo, Egypt
+📧 [ahmed.hassan.dev@gmail.com](mailto:ahmed.hassan.dev@gmail.com)
+📱 +20 10 9876 5432
+🔗 https://linkedin.com/in/ahmedhassandev
+💻 https://github.com/ahmedhassandev
+🌐 https://ahmedhassan.dev
+
+---
+
+# Professional Summary
+
+Senior Frontend React Developer with 3+ years of experience building scalable, responsive, and high-performance web applications using React.js, TypeScript, Next.js, and modern frontend architectures. Experienced in designing reusable component libraries, optimizing application performance, implementing secure authentication flows, and collaborating closely with backend, UI/UX, and DevOps teams. Passionate about writing clean, maintainable code and delivering excellent user experiences following modern engineering best practices and ATS-friendly standards.
+
+---
+
+# Professional Experience
+
+## Senior Frontend React Developer
+
+**TechNova Solutions – Cairo, Egypt**
+**Mar 2023 – Present**
+
+* Developed enterprise-level React applications serving over 100,000 monthly users.
+* Led frontend architecture decisions using React, TypeScript, Redux Toolkit, and Next.js.
+* Designed reusable UI components that reduced development time across multiple projects.
+* Improved application performance by implementing lazy loading, code splitting, memoization, and optimized rendering.
+* Collaborated with backend teams to integrate RESTful APIs and authentication using JWT.
+* Participated in Agile Scrum ceremonies including sprint planning, code reviews, and retrospectives.
+* Mentored junior frontend developers and reviewed pull requests.
+* Improved Lighthouse performance scores from 72 to 95+ across production applications.
+* Integrated charts, dashboards, and real-time notifications using SignalR and WebSockets.
+
+---
+
+## Frontend React Developer
+
+**Smart Solutions Egypt – Cairo, Egypt**
+**Jul 2022 – Feb 2023**
+
+* Built responsive dashboards using React.js and Material UI.
+* Developed reusable forms with React Hook Form and Yup validation.
+* Consumed REST APIs using Axios.
+* Worked closely with UI/UX designers to convert Figma designs into responsive interfaces.
+* Improved application responsiveness for mobile and tablet devices.
+
+---
+
+# Technical Skills
+
+### Frontend
+
+* React.js
+* Next.js
+* TypeScript
+* JavaScript (ES6+)
+* HTML5
+* CSS3
+* SCSS
+* Tailwind CSS
+* Bootstrap
+
+### State Management
+
+* Redux Toolkit
+* Context API
+* Zustand
+
+### UI Libraries
+
+* Material UI
+* Ant Design
+* Shadcn UI
+
+### API Integration
+
+* REST APIs
+* Axios
+* Fetch API
+* JWT Authentication
+
+### Tools
+
+* Git
+* GitHub
+* GitLab
+* Vite
+* Webpack
+* npm
+* Yarn
+* Figma
+
+### Testing
+
+* Jest
+* React Testing Library
+
+### Methodologies
+
+* Agile
+* Scrum
+
+---
+
+# Projects
+
+## Enterprise HR Management System
+
+**Technologies:** React.js, TypeScript, Redux Toolkit, Material UI
+
+* Built a complete HR management platform.
+* Implemented role-based authentication.
+* Created reusable dashboard widgets.
+* Integrated reporting and employee analytics.
+
+---
+
+## E-Commerce Platform
+
+**Technologies:** Next.js, React.js, Tailwind CSS
+
+* Developed responsive shopping experience.
+* Integrated payment workflow.
+* Added wishlist, filtering, search, and product reviews.
+* Improved SEO using Next.js Server Side Rendering.
+
+---
+
+## Real-Time Chat Application
+
+**Technologies:** React.js, SignalR, TypeScript
+
+* Implemented real-time messaging.
+* Built online/offline presence system.
+* Added typing indicators and notification system.
+
+---
+
+# Education
+
+**Bachelor of Computer Science**
+
+Ain Shams University — Cairo, Egypt
+
+Graduation Year: **2022**
+
+---
+
+# Certifications
+
+* Meta Front-End Developer Professional Certificate
+* React Advanced Patterns
+* JavaScript Algorithms and Data Structures
+
+---
+
+# Languages
+
+* Arabic — Native
+* English — Professional Working Proficiency
+
+---
+
+# Additional Information
+
+* Strong understanding of frontend architecture and scalable React applications.
+* Excellent communication and team collaboration skills.
+* Experience mentoring junior developers.
+* Passionate about performance optimization, accessibility, and clean code principles.

@@ -1,0 +1,104 @@
+.my-tickets-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  font-family: var(--font-body);
+}
+
+.my-tickets-card__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+}
+
+.my-tickets__loading,
+.my-tickets__empty {
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.my-tickets-card__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.my-ticket-item {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background-color: var(--surface2);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.my-ticket-item__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.my-ticket-item__id {
+  font-size: 12px;
+  color: var(--faint);
+  font-weight: 600;
+}
+
+.my-ticket-item__subject {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.my-ticket-item__footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.my-ticket-item__tag {
+  font-size: 11px;
+  background-color: var(--sunken);
+  color: var(--muted);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.my-ticket-item__date {
+  font-size: 12px;
+  color: var(--faint);
+}
+
+/* Status Badges */
+.status-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.status-badge--open {
+  background-color: var(--amberSoft);
+  color: var(--amber);
+}
+
+.status-badge--in-progress {
+  background-color: var(--tealSoft);
+  color: var(--onSoft);
+}
+
+.status-badge--closed {
+  background-color: var(--greenSoft);
+  color: var(--green);
+}

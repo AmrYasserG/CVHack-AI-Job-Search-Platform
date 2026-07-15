@@ -1,0 +1,157 @@
+# Ethan Brooks
+
+**Frontend React Developer**
+Melbourne, Australia
+
+📧 [ethan.brooks.dev@gmail.com](mailto:ethan.brooks.dev@gmail.com)
+📞 +61 412 678 935
+🔗 LinkedIn: linkedin.com/in/ethanbrooksdev
+🔗 GitHub: github.com/ethanbrooks
+🌐 Portfolio: ethanbrooks.dev
+
+---
+
+# PROFESSIONAL SUMMARY
+
+Frontend React Developer with **1 year of professional experience** building responsive, modern, and user-friendly web applications using React.js, JavaScript, and TypeScript. Experienced in developing reusable components, integrating RESTful APIs, managing application state, and creating responsive user interfaces. Passionate about writing clean, maintainable code and delivering seamless user experiences while collaborating effectively within Agile development teams.
+
+---
+
+# PROFESSIONAL EXPERIENCE
+
+## Frontend React Developer
+
+**BrightWave Technologies** — Melbourne, Australia
+
+**August 2025 – Present**
+
+* Developed responsive web applications using React.js, TypeScript, and modern JavaScript (ES6+).
+* Built reusable React components to improve consistency across multiple projects.
+* Integrated RESTful APIs developed with ASP.NET Core.
+* Managed application state using React Hooks and Context API.
+* Implemented responsive layouts using Bootstrap and CSS Flexbox.
+* Worked closely with UI/UX designers to convert Figma designs into production-ready interfaces.
+* Fixed frontend bugs and enhanced application usability.
+* Participated in Agile ceremonies including sprint planning, daily stand-ups, and code reviews.
+
+**Technologies:** React.js, TypeScript, JavaScript, HTML5, CSS3, Bootstrap, REST APIs, Git
+
+---
+
+# TECHNICAL SKILLS
+
+### Programming Languages
+
+* JavaScript (ES6+)
+* TypeScript
+* HTML5
+* CSS3
+
+### Frontend Frameworks & Libraries
+
+* React.js
+* React Router
+* React Hooks
+* Context API
+* Axios
+
+### UI Technologies
+
+* Bootstrap
+* Tailwind CSS
+* Responsive Design
+* CSS Grid
+* Flexbox
+
+### API Integration
+
+* REST APIs
+* JSON
+* Axios
+* Fetch API
+
+### Tools
+
+* Visual Studio Code
+* Git
+* GitHub
+* Postman
+* Figma
+* npm
+
+### Version Control
+
+* Git
+* GitHub
+
+---
+
+# PROJECTS
+
+## E-Commerce Store
+
+**Tech Stack:** React.js, Bootstrap, ASP.NET Core Web API
+
+* Developed responsive product catalog pages.
+* Integrated authentication and product APIs.
+* Built shopping cart functionality using Context API.
+* Implemented product search, filtering, and pagination.
+* Improved UI responsiveness across multiple devices.
+
+---
+
+## Personal Finance Tracker
+
+**Tech Stack:** React.js, Chart.js
+
+* Built dashboards for tracking income and expenses.
+* Implemented charts to visualize financial data.
+* Developed reusable components for transactions and reports.
+* Connected the application to REST APIs.
+
+---
+
+## Movie Explorer
+
+**Tech Stack:** React.js, TMDB API
+
+* Consumed third-party REST APIs to display movie information.
+* Implemented search functionality and category filtering.
+* Built responsive movie detail pages.
+* Added favorites management using Local Storage.
+
+---
+
+# EDUCATION
+
+**Bachelor of Information Technology**
+
+RMIT University
+
+Melbourne, Australia
+
+**Graduated: 2024**
+
+---
+
+# CERTIFICATIONS
+
+* React - The Complete Guide (Udemy)
+* JavaScript Algorithms and Data Structures (freeCodeCamp)
+* Responsive Web Design Certification (freeCodeCamp)
+
+---
+
+# LANGUAGES
+
+* English (Native)
+
+---
+
+# ADDITIONAL INFORMATION
+
+* Strong understanding of component-based development.
+* Familiar with modern React development practices.
+* Experience working in Agile/Scrum environments.
+* Passionate about building clean, responsive, and accessible web applications.
+* Continuously learning new frontend technologies and best practices.

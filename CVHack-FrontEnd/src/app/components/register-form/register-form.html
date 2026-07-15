@@ -1,0 +1,241 @@
+<form (ngSubmit)="onSubmit()">
+  <!-- First / Last name -->
+  <div class="grid grid-cols-2 gap-4 mb-4">
+    <div>
+      <label class="block text-sm font-semibold mb-1.5" style="color: var(--text)"
+        >First name</label
+      >
+      <div
+        class="rounded-xl px-4 py-3.5 border"
+        style="background: var(--surface2); border-color: var(--border2)"
+      >
+        <input
+          type="text"
+          [(ngModel)]="firstName"
+          name="firstName"
+          placeholder="First name"
+          class="bg-transparent text-sm outline-none w-full"
+          style="color: var(--text)"
+        />
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold mb-1.5" style="color: var(--text)">Last name</label>
+      <div
+        class="rounded-xl px-4 py-3.5 border"
+        style="background: var(--surface2); border-color: var(--border2)"
+      >
+        <input
+          type="text"
+          [(ngModel)]="lastName"
+          name="lastName"
+          placeholder="Last name"
+          class="bg-transparent text-sm outline-none w-full"
+          style="color: var(--text)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Email -->
+  <div class="mb-4">
+    <label class="block text-sm font-semibold mb-1.5" style="color: var(--text)">Email</label>
+    <div
+      class="flex items-center gap-2 rounded-xl px-5 py-3.5 border"
+      [style.border-color]="isEmailValid ? 'var(--border2)' : 'var(--red)'"
+      style="background: var(--surface2)"
+    >
+      <app-mail-icon></app-mail-icon>
+      <input
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        placeholder="you@example.com"
+        class="bg-transparent text-sm outline-none w-full"
+        style="color: var(--text)"
+      />
+    </div>
+    @if (!isEmailValid) {
+      <p class="text-xs mt-1.5" style="color: var(--red)">Enter a valid email address</p>
+    }
+  </div>
+
+  <!-- Title -->
+  <!-- <div class="mb-4">
+    <label class="block text-sm font-semibold mb-1.5" style="color: var(--text)"
+      >Current / desired title</label
+    >
+    <div
+      class="rounded-xl px-4 py-3.5 border"
+      style="background: var(--surface2); border-color: var(--border2)"
+    >
+      <input
+        type="text"
+        [(ngModel)]="title"
+        name="title"
+        placeholder="Frontend Engineer"
+        class="bg-transparent text-sm outline-none w-full"
+        style="color: var(--text)"
+      />
+    </div>
+  </div> -->
+
+  <!-- Seniority -->
+  <!-- <div class="mb-4">
+    <label class="block text-sm font-semibold mb-1.5" style="color: var(--text)">Seniority</label>
+    <select
+      [(ngModel)]="seniority"
+      name="seniority"
+      class="w-full rounded-xl px-4 py-3.5 text-sm border outline-none cursor-pointer"
+      style="background: var(--surface2); border-color: var(--border2); color: var(--text)"
+    >
+      <option value="" disabled selected>Select level</option>
+      @for (level of seniorityLevels; track level) {
+        <option [value]="level">{{ level }}</option>
+      }
+    </select>
+  </div> -->
+
+  <!-- Password -->
+  <div class="mb-2">
+    <label class="block text-sm font-semibold mb-1.5" style="color: var(--text)">Password</label>
+    <div
+      class="flex items-center gap-2 rounded-xl px-5 py-3.5 border"
+      style="background: var(--surface2); border-color: var(--border2)"
+    >
+      <app-lock-icon></app-lock-icon>
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        [(ngModel)]="password"
+        name="password"
+        placeholder="Create a password"
+        class="bg-transparent text-sm outline-none w-full"
+        style="color: var(--text)"
+      />
+      <button type="button" (click)="togglePassword()" class="shrink-0" style="color: var(--faint)">
+        <app-eye-icon></app-eye-icon>
+      </button>
+    </div>
+
+    @if (password.length > 0) {
+      <div class="flex gap-1.5 mt-2">
+        @for (segment of [1, 2, 3, 4]; track segment) {
+          <div
+            class="h-1 flex-1 rounded-full"
+            [style.background]="
+              segment <= passwordStrength ? passwordStrengthColor : 'var(--border2)'
+            "
+          ></div>
+        }
+      </div>
+      <p class="text-xs mt-1.5 font-medium" [style.color]="passwordStrengthColor">
+        {{ passwordStrengthLabel }}
+      </p>
+
+      @if (passwordSuggestions.length > 0) {
+        <ul class="mt-2 flex flex-col gap-1">
+          @for (tip of passwordSuggestions; track tip) {
+            <li class="flex items-center gap-1.5 text-xs" style="color: var(--muted)">
+              <app-pass-strength-icon></app-pass-strength-icon>
+              {{ tip }}
+            </li>
+          }
+        </ul>
+      }
+    }
+  </div>
+
+  <!-- Confirm Password -->
+  <div class="mb-2 mt-4">
+    <label class="block text-sm font-semibold mb-1.5" style="color: var(--text)"
+      >Confirm password</label
+    >
+    <div
+      class="flex items-center gap-2 rounded-xl px-5 py-3.5 border"
+      [style.border-color]="passwordsMatch ? 'var(--border2)' : 'var(--red)'"
+      style="background: var(--surface2)"
+    >
+      <app-lock-icon></app-lock-icon>
+      <input
+        [type]="showConfirmPassword ? 'text' : 'password'"
+        [(ngModel)]="confirmPassword"
+        name="confirmPassword"
+        placeholder="Repeat password"
+        class="bg-transparent text-sm outline-none w-full"
+        style="color: var(--text)"
+      />
+      <button
+        type="button"
+        (click)="toggleConfirmPassword()"
+        class="shrink-0"
+        style="color: var(--faint)"
+      >
+        <app-eye-icon></app-eye-icon>
+      </button>
+    </div>
+  </div>
+
+  @if (!passwordsMatch) {
+    <p class="text-xs mb-4" style="color: var(--red)">Passwords don't match</p>
+  } @else {
+    <div class="mb-6"></div>
+  }
+
+  <!-- Phone -->
+  <!-- <div class="mb-5">
+    <label class="block text-sm font-semibold mb-1.5" style="color: var(--text)">
+      Phone <span class="font-normal" style="color: var(--muted)">· optional</span>
+    </label>
+    <div
+      class="flex items-center gap-2 rounded-xl px-4 py-3.5 border"
+      style="background: var(--surface2); border-color: var(--border2)"
+    >
+      <span class="text-sm shrink-0" style="color: var(--muted)">+20</span>
+      <input
+        type="tel"
+        [(ngModel)]="phone"
+        name="phone"
+        placeholder="10 1234 5678"
+        class="bg-transparent text-sm outline-none w-full"
+        style="color: var(--text)"
+      />
+    </div>
+  </div> -->
+
+  <!-- Terms -->
+  <p class="text-xs mb-6 leading-relaxed" style="color: var(--muted)">
+    By creating an account you agree to CVHack's
+    <span class="font-medium no-underline" style="color: var(--copper)">Terms of Service</span>
+    and
+    <span class="font-medium no-underline" style="color: var(--copper)">Privacy Policy</span>.
+  </p>
+  @if (serverError()) {
+    <p class="text-sm mb-4" style="color: var(--red)">{{ serverError() }}</p>
+  }
+
+  <!-- Submit -->
+  <button
+    type="submit"
+    [disabled]="!canSubmit"
+    class="w-full py-3.5 rounded-xl text-sm font-semibold mb-5 disabled:opacity-50 disabled:cursor-not-allowed"
+    style="background: var(--teal); color: var(--white)"
+  >
+    {{ loading() ? 'Creating account...' : 'Create account' }}
+  </button>
+
+  <!-- Home -->
+  <a
+    routerLink="/home"
+    class="block w-full text-center py-3.5 rounded-xl text-sm font-semibold no-underline mb-5 border"
+    style="background: transparent; border-color: var(--border2); color: var(--text)"
+  >
+    Back to Home Page
+  </a>
+
+  <p class="text-center text-sm" style="color: var(--muted)">
+    Already have an account?
+    <a routerLink="/login" class="font-semibold no-underline" style="color: var(--copper)"
+      >Log in</a
+    >
+  </p>
+</form>

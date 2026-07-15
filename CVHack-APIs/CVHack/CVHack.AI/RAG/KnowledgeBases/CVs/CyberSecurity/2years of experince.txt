@@ -1,0 +1,167 @@
+# Daniel Brooks
+
+**Cybersecurity Analyst**
+
+📍 New York, NY, USA
+📧 [daniel.brooks.cyber@gmail.com](mailto:daniel.brooks.cyber@gmail.com)
+📱 +1 (917) 555-3841
+🔗 https://linkedin.com/in/danielbrookscyber
+💻 https://github.com/danielbrooks-security
+🌐 https://danielbrooks.dev
+
+---
+
+# Professional Summary
+
+Cybersecurity Analyst with 2 years of professional experience securing enterprise environments through continuous security monitoring, incident response, vulnerability management, and threat analysis. Experienced in working within Security Operations Center (SOC) environments, utilizing SIEM platforms, endpoint detection and response (EDR) solutions, and security assessment tools to identify and mitigate cyber threats. Passionate about improving organizational security posture through proactive defense strategies, security automation, and continuous learning.
+
+---
+
+# Professional Experience
+
+## Cybersecurity Analyst
+
+**CyberShield Technologies – New York, NY, USA**
+**June 2024 – Present**
+
+* Monitored enterprise infrastructure using Microsoft Sentinel and Splunk SIEM.
+* Investigated security alerts, malware detections, phishing attempts, and unauthorized access incidents.
+* Performed vulnerability assessments using Nessus and coordinated remediation with IT teams.
+* Conducted threat hunting activities to identify indicators of compromise across endpoints.
+* Assisted in incident response investigations and documented root cause analysis reports.
+* Managed endpoint protection using Microsoft Defender for Endpoint.
+* Implemented security hardening recommendations for Windows and Linux servers.
+* Supported identity security through Active Directory auditing and privilege reviews.
+* Participated in security awareness campaigns and phishing simulation exercises.
+* Collaborated with network administrators to improve firewall and VPN security configurations.
+
+---
+
+## Junior Cybersecurity Analyst
+
+**SecureNet Solutions – New York, NY, USA**
+**July 2023 – May 2024**
+
+* Monitored daily security events through SIEM dashboards.
+* Investigated suspicious login attempts and endpoint alerts.
+* Assisted with vulnerability scanning and remediation tracking.
+* Generated weekly security reports for management.
+* Supported compliance documentation and security audits.
+
+---
+
+# Technical Skills
+
+### Security
+
+* Security Operations Center (SOC)
+* Incident Response
+* Threat Hunting
+* Vulnerability Assessment
+* Risk Analysis
+* Security Monitoring
+* Endpoint Detection & Response (EDR)
+
+### Security Tools
+
+* Microsoft Sentinel
+* Splunk
+* Microsoft Defender for Endpoint
+* Nessus
+* Nmap
+* Wireshark
+* Burp Suite
+* OWASP ZAP
+
+### Operating Systems
+
+* Windows Server
+* Linux (Ubuntu, Kali Linux)
+
+### Networking
+
+* TCP/IP
+* DNS
+* VPN
+* Firewalls
+* IDS/IPS
+* Network Security
+
+### Scripting
+
+* PowerShell
+* Python
+* Bash
+
+### Frameworks & Standards
+
+* MITRE ATT&CK
+* NIST Cybersecurity Framework
+* OWASP Top 10
+* CIS Controls
+
+---
+
+# Projects
+
+## Enterprise Security Monitoring Platform
+
+**Technologies:** Microsoft Sentinel, Defender for Endpoint, Kusto Query Language (KQL)
+
+* Built custom SIEM dashboards for monitoring security events.
+* Developed alert rules for suspicious authentication activities.
+* Reduced incident investigation time through automated alert classification.
+
+---
+
+## Vulnerability Management Program
+
+**Technologies:** Nessus, PowerShell
+
+* Conducted organization-wide vulnerability scans.
+* Prioritized critical findings using CVSS scores.
+* Coordinated remediation with infrastructure teams and verified patch deployment.
+
+---
+
+## Active Directory Security Audit
+
+**Technologies:** PowerShell, Windows Server
+
+* Audited privileged accounts and inactive users.
+* Identified excessive permissions and recommended remediation.
+* Improved compliance with least-privilege security practices.
+
+---
+
+# Education
+
+**Bachelor of Science in Cybersecurity**
+
+New York Institute of Technology — New York, USA
+
+Graduation Year: **2023**
+
+---
+
+# Certifications
+
+* CompTIA Security+
+* CompTIA CySA+
+* Microsoft Certified: Security, Compliance, and Identity Fundamentals (SC-900)
+
+---
+
+# Languages
+
+* English — Native
+* Spanish — Professional Working Proficiency
+
+---
+
+# Additional Information
+
+* Experienced working in Security Operations Center (SOC) environments.
+* Strong analytical and incident investigation skills.
+* Familiar with cloud security fundamentals and Microsoft security ecosystem.
+* Passionate about cyber threat intelligence, digital forensics, and continuous security improvement.

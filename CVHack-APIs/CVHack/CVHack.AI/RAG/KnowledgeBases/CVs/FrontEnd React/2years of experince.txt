@@ -1,0 +1,184 @@
+# Olivia Turner
+
+**Frontend React Developer**
+Dublin, Ireland
+
+📧 [olivia.turner.dev@gmail.com](mailto:olivia.turner.dev@gmail.com)
+📞 +353 87 456 2198
+🔗 LinkedIn: linkedin.com/in/oliviaturnerdev
+🔗 GitHub: github.com/oliviaturner
+🌐 Portfolio: oliviaturner.dev
+
+---
+
+# PROFESSIONAL SUMMARY
+
+Frontend React Developer with **2 years of professional experience** building scalable, responsive, and high-performance web applications using React.js, TypeScript, and modern JavaScript. Experienced in developing reusable UI components, state management, authentication, API integration, and frontend performance optimization. Strong understanding of modern React development practices and passionate about delivering exceptional user experiences through clean, maintainable code.
+
+---
+
+# PROFESSIONAL EXPERIENCE
+
+## Frontend React Developer
+
+**NextWave Digital** — Dublin, Ireland
+
+**September 2024 – Present**
+
+* Developed enterprise web applications using React.js, TypeScript, and modern frontend technologies.
+* Built reusable UI components to improve development consistency across multiple projects.
+* Integrated RESTful APIs developed with ASP.NET Core.
+* Implemented protected routes and JWT authentication.
+* Optimized application performance using React.memo, lazy loading, and code splitting.
+* Collaborated with UI/UX designers to translate Figma designs into responsive interfaces.
+* Participated in code reviews and maintained high coding standards.
+* Worked closely with backend developers in Agile Scrum teams.
+
+**Technologies:** React.js, TypeScript, React Router, Axios, Tailwind CSS, REST APIs, Git
+
+---
+
+## Junior Frontend Developer
+
+**PixelCraft Solutions** — Cork, Ireland
+
+**July 2023 – August 2024**
+
+* Developed responsive user interfaces using React.js and Bootstrap.
+* Created reusable functional components using React Hooks.
+* Integrated REST APIs using Axios.
+* Implemented forms with validation and client-side error handling.
+* Fixed UI bugs and improved application accessibility.
+* Participated in sprint planning, daily stand-up meetings, and QA testing.
+
+**Technologies:** React.js, JavaScript, HTML5, CSS3, Bootstrap, Axios
+
+---
+
+# TECHNICAL SKILLS
+
+### Programming Languages
+
+* JavaScript (ES6+)
+* TypeScript
+* HTML5
+* CSS3
+
+### Frontend Frameworks & Libraries
+
+* React.js
+* React Router
+* React Hooks
+* Context API
+* Axios
+* React Query
+
+### State Management
+
+* Context API
+* Redux Toolkit
+* React Query
+
+### UI Technologies
+
+* Tailwind CSS
+* Bootstrap
+* Material UI
+* SCSS
+* CSS Grid
+* Flexbox
+* Responsive Web Design
+
+### API Integration
+
+* REST APIs
+* JWT Authentication
+* JSON
+* Fetch API
+* Axios
+
+### Tools
+
+* Visual Studio Code
+* Git
+* GitHub
+* Postman
+* Figma
+* npm
+* Vite
+
+### Testing
+
+* Jest
+* React Testing Library
+
+---
+
+# PROJECTS
+
+## E-Commerce Management Dashboard
+
+**Tech Stack:** React.js, Redux Toolkit, Tailwind CSS, ASP.NET Core Web API
+
+* Developed product, customer, and order management dashboards.
+* Implemented authentication and role-based navigation.
+* Built reusable data tables, filters, and pagination components.
+* Integrated backend APIs for real-time data management.
+
+---
+
+## Online Learning Platform
+
+**Tech Stack:** React.js, React Router, Axios
+
+* Built course catalog, enrollment, and student dashboard modules.
+* Implemented protected routes and authentication.
+* Developed responsive layouts for desktop and mobile devices.
+* Improved user experience through reusable UI components.
+
+---
+
+## Hotel Booking System
+
+**Tech Stack:** React.js, Material UI
+
+* Developed hotel search and reservation interfaces.
+* Integrated booking and payment APIs.
+* Implemented advanced search filters and date selection.
+* Built responsive booking confirmation workflows.
+
+---
+
+# EDUCATION
+
+**Bachelor of Science in Software Development**
+
+Technological University Dublin
+
+**Graduated: 2023**
+
+---
+
+# CERTIFICATIONS
+
+* React - Advanced Concepts (Udemy)
+* Modern JavaScript (ES6+) Professional Certificate
+* Responsive Web Design – freeCodeCamp
+* Git & GitHub Professional Certificate
+
+---
+
+# LANGUAGES
+
+* English (Native)
+* Irish (Intermediate)
+
+---
+
+# ADDITIONAL INFORMATION
+
+* Strong understanding of modern React architecture and reusable component design.
+* Experience working in Agile/Scrum software development teams.
+* Familiar with frontend performance optimization and state management best practices.
+* Passionate about creating responsive, accessible, and user-friendly web applications.
+* Excellent communication, collaboration, and problem-solving skills.

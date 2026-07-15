@@ -1,0 +1,86 @@
+<div class="cert-card">
+  <div class="cert-card__header">
+    <h3 class="cert-card__title">Certifications</h3>
+    <button class="cert-card__add-btn" (click)="openAddForm()">+ Add</button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" style="color: var(--muted); font-size: 14px; padding: 12px 0;">
+    Loading...
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!isLoading && certificationsList.length === 0 && !showForm"
+    style="color: var(--muted); font-size: 14px; padding: 12px 0;">
+    No certifications added yet.
+  </div>
+
+  <!-- List -->
+  <div class="cert-card__list" *ngIf="!isLoading && certificationsList.length > 0">
+    <div class="cert-item" *ngFor="let item of certificationsList">
+      <div class="cert-item__icon">🏆</div>
+
+      <div class="cert-item__info">
+        <h4 class="cert-item__name">{{ item.name }}</h4>
+        <p class="cert-item__meta">
+          {{ item.provider }}
+          <span *ngIf="item.certifiedAt"> · {{ item.certifiedAt | date:'MMM yyyy' }}</span>
+        </p>
+        <a *ngIf="item.credentialUrl" [href]="item.credentialUrl" target="_blank"
+          class="cert-item__link">View Credential →</a>
+      </div>
+
+      <div class="cert-item__actions">
+        <button class="cert-item__edit" (click)="openEditForm(item)">✏</button>
+        <button class="cert-item__delete" (click)="deleteCertification(item.id!)">🗑</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="cert-form" *ngIf="showForm">
+    <h4 class="cert-form__title">
+      {{ editingId ? 'Edit Certification' : 'Add Certification' }}
+    </h4>
+
+    <div class="cert-form__grid">
+      <div class="cert-form__field">
+  <label class="cert-form__label">Name *</label>
+  <input class="cert-form__input" type="text"
+    [(ngModel)]="formData.name" placeholder="AWS Certified Developer"
+    [class.cert-form__input--error]="errors.name" />
+  <span class="cert-form__error" *ngIf="errors.name">{{ errors.name }}</span>
+</div>
+
+<div class="cert-form__field">
+  <label class="cert-form__label">Provider</label>
+  <input class="cert-form__input" type="text"
+    [(ngModel)]="formData.provider" placeholder="Amazon Web Services" />
+</div>
+
+<div class="cert-form__field">
+  <label class="cert-form__label">Date</label>
+  <input class="cert-form__input" type="date"
+    [(ngModel)]="formData.certifiedAt"
+    [class.cert-form__input--error]="errors.certifiedAt" />
+  <span class="cert-form__error" *ngIf="errors.certifiedAt">{{ errors.certifiedAt }}</span>
+</div>
+
+<div class="cert-form__field">
+  <label class="cert-form__label">Credential URL</label>
+  <input class="cert-form__input" type="text"
+    [(ngModel)]="formData.credentialUrl" placeholder="https://..."
+    [class.cert-form__input--error]="errors.credentialUrl" />
+  <span class="cert-form__error" *ngIf="errors.credentialUrl">{{ errors.credentialUrl }}</span>
+</div>
+
+    <div class="cert-form__buttons">
+      <button class="cert-form__cancel" (click)="onCancel()">Cancel</button>
+      <button class="cert-form__save"
+        (click)="onSave()"
+        [disabled]="isSaving || !formData.name">
+        {{ isSaving ? 'Saving...' : 'Save' }}
+      </button>
+    </div>
+  </div>
+</div>

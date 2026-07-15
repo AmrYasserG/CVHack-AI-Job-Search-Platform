@@ -1,0 +1,79 @@
+<div
+  [routerLink]="['/jobs', job.id]"
+  class="flex rounded-2xl border transition-shadow hover:shadow-md cursor-pointer"
+  style="background: var(--surface); border-color: var(--border); box-shadow: var(--shadow)"
+>
+  <!-- Copper strip (only if score >= 80) -->
+  @if (isHighMatch) {
+    <div class="w-1 shrink-0" style="background: var(--copper)"></div>
+  }
+
+  <!-- Card Body -->
+  <div class="flex flex-1 items-start gap-4 p-4 min-w-0">
+    <!-- Company Initials -->
+    <div
+      class="w-11 h-11 rounded-xl flex items-center justify-center text-sm font-bold shrink-0"
+      style="background: var(--tealSoft); color: var(--onsoft); font-family: var(--font-display)"
+    >
+      {{ job.initials }}
+    </div>
+
+    <!-- Main Info -->
+    <div class="flex-1 min-w-0">
+      <!-- Title -->
+      <h3
+        class="text-base font-semibold mb-1"
+        style="color: var(--text); font-family: var(--font-display)"
+      >
+        {{ job.title }}
+      </h3>
+
+      <!-- Company + Location + Time -->
+      <div class="flex flex-wrap items-center gap-3 text-sm mb-3" style="color: var(--muted)">
+        <span class="font-medium" style="color: var(--text)">{{ job.company }}</span>
+
+        <span class="flex items-center gap-1">
+          <app-location-icon></app-location-icon>
+          {{ job.location }}
+        </span>
+
+        <span class="flex items-center gap-1">
+          <app-clock-icon></app-clock-icon>
+          {{ job.postedAgo }}
+        </span>
+      </div>
+
+      <!-- Tags -->
+      <div class="flex flex-wrap gap-2 mb-3">
+        @for (tag of job.tags; track tag) {
+          <span
+            class="px-2.5 py-0.5 rounded-full text-xs border"
+            style="background: var(--surface2); border-color: var(--border2); color: var(--muted)"
+          >
+            {{ tag }}
+          </span>
+        }
+        <!-- Salary tag -->
+        <!-- <span
+          class="px-2.5 py-0.5 rounded-full text-xs border font-medium"
+          style="background: var(--copperSoft); border-color: var(--copper); color: var(--copper)"
+        >
+          EGP {{ job.salaryMin }}k – {{ job.salaryMax }}k/mo
+        </span> -->
+      </div>
+
+      <!-- Description -->
+      <p class="text-sm leading-relaxed line-clamp-2" style="color: var(--muted)">
+        {{ job.briefDescription }}
+      </p>
+    </div>
+
+    <!-- Match Score -->
+    <!-- <div class="flex flex-col items-center shrink-0 ml-2">
+      <app-match-score [score]="job.matchScore" />
+      <span class="text-xs mt-1 tracking-widest uppercase font-semibold" style="color: var(--muted)"
+        >Match</span
+      >
+    </div> -->
+  </div>
+</div>

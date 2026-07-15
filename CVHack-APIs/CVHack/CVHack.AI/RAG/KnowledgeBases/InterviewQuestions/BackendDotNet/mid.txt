@@ -1,0 +1,160 @@
+================================================================================
+BACKEND .NET INTERVIEW QUESTIONS — MID-LEVEL
+================================================================================
+Target: 2–5 years of experience
+Focus: Design patterns, advanced C#, performance, security, testing, real-world problem solving
+================================================================================
+
+--------------------------------------------------------------------------------
+SECTION 1: ADVANCED C# & .NET RUNTIME
+--------------------------------------------------------------------------------
+
+Q1: What is the difference between `Task`, `Task<T>`, and `ValueTask<T>`? When would you use `ValueTask`?
+EXPECTED: `Task` represents an async operation with no return value. `Task<T>` returns a value. `ValueTask<T>` is a struct (avoids heap allocation) — use when the result is often available synchronously (e.g., cache hits) to reduce GC pressure.
+
+Q2: Explain `async`/`await` in C#. What happens under the hood?
+EXPECTED: `async` marks a method as asynchronous. `await` suspends execution without blocking the thread, resuming after the awaited task completes. The compiler transforms the method into a state machine. Continuation runs on a captured `SynchronizationContext` (or thread pool if none).
+
+Q3: What is `ConfigureAwait(false)` and when should you use it?
+EXPECTED: Tells the runtime not to marshal the continuation back to the original synchronization context. Use in library code to avoid deadlocks (especially in older ASP.NET or WPF) and improve performance. Not needed in ASP.NET Core (no sync context), but still a good habit in libraries.
+
+Q4: What are extension methods in C#? Give a practical example.
+EXPECTED: Static methods that add functionality to existing types without modifying them. Defined with `this` on first parameter. Example: `public static bool IsNullOrEmpty(this string s) => string.IsNullOrEmpty(s);`
+
+Q5: What is the difference between `IEnumerable<T>`, `IQueryable<T>`, and `IList<T>`?
+EXPECTED: `IEnumerable<T>` — in-memory iteration, deferred execution in LINQ. `IQueryable<T>` — builds expression trees, query executed on the data source (e.g., database) — crucial for EF Core performance. `IList<T>` — indexed in-memory collection supporting random access.
+
+Q6: What is expression trees in C#? Where are they used?
+EXPECTED: Code represented as data (tree of objects). Used by EF Core to translate LINQ queries to SQL. Also used in dynamic query building, mocking frameworks.
+
+Q7: What are delegates, `Func<>`, and `Action<>` in C#?
+EXPECTED: Delegates are type-safe function pointers. `Func<T, TResult>` is a built-in delegate for methods that return a value. `Action<T>` for methods returning void. Used for callbacks, LINQ, event handling.
+
+Q8: What is the difference between events and delegates?
+EXPECTED: Events are a wrapper around delegates that enforce the publisher/subscriber pattern — outside classes can only `+=` or `-=`, not invoke directly. Prevents external code from invoking or replacing the delegate.
+
+Q9: What are records in C# (introduced in C# 9)? When would you use them?
+EXPECTED: Reference types with value-based equality, immutability by default, and built-in `ToString`/`Equals`/`GetHashCode`. Ideal for DTOs, immutable data models, and use with pattern matching. `record struct` (C#10) is a value-type variant.
+
+Q10: What is pattern matching in C#? Give examples of switch expressions.
+EXPECTED: Allows testing expressions against patterns. Examples: type patterns (`is string s`), property patterns (`{ Age: > 18 }`), switch expressions with arms. Reduces verbose if/else chains.
+
+Q11: What is memory management in .NET? How does the GC work?
+EXPECTED: .NET uses a generational garbage collector (Gen 0, 1, 2 + Large Object Heap). Short-lived objects stay in Gen 0 (collected frequently). Long-lived objects promoted to higher generations. GC runs automatically; `IDisposable`/`using` handles unmanaged resources.
+
+Q12: What is boxing and unboxing? Why can it be a performance concern?
+EXPECTED: Boxing = converting value type to object (heap allocation). Unboxing = casting back. Frequent boxing (e.g., storing ints in `ArrayList`) causes GC pressure. Use generics (`List<int>`) to avoid.
+
+--------------------------------------------------------------------------------
+SECTION 2: DESIGN PATTERNS & ARCHITECTURE
+--------------------------------------------------------------------------------
+
+Q13: Explain the Repository pattern. What problem does it solve?
+EXPECTED: Abstracts data access logic behind an interface, decoupling business logic from persistence. Makes code testable (easy to mock). Centralizes query logic. Common criticism: can be redundant when using EF Core (DbContext is already a unit of work/repository).
+
+Q14: What is the Unit of Work pattern? How does it relate to EF Core's DbContext?
+EXPECTED: Maintains a list of objects affected in a business transaction and coordinates writing changes. EF Core's `DbContext` already implements UoW — `SaveChanges()` commits all tracked changes atomically.
+
+Q15: What is CQRS? When is it beneficial?
+EXPECTED: Command Query Responsibility Segregation — separates read (queries) and write (commands) models. Beneficial for complex domains where reads/writes have very different performance or scaling needs. Often paired with MediatR in .NET.
+
+Q16: What is MediatR? How does it help implement CQRS in ASP.NET Core?
+EXPECTED: A library implementing the Mediator pattern. Decouples request senders from handlers via `IRequest`/`IRequestHandler`. Used to separate commands/queries from controllers, keeping controllers thin.
+
+Q17: What are SOLID principles? Give a .NET example for each.
+EXPECTED:
+- S: Single Responsibility — each class has one reason to change (e.g., `OrderService` only handles orders, not emails)
+- O: Open/Closed — open for extension, closed for modification (e.g., use interfaces/abstract classes)
+- L: Liskov Substitution — subtypes must be substitutable for base types
+- I: Interface Segregation — prefer many small interfaces over one large one
+- D: Dependency Inversion — depend on abstractions, not concretions (DI container enforces this)
+
+Q18: What is the Decorator pattern? Give a real-world .NET example.
+EXPECTED: Wraps an object to add behavior without changing the original class. Example: wrapping a caching decorator around a repository: `CachingUserRepository : IUserRepository` that checks cache first before delegating to `SqlUserRepository`.
+
+Q19: What is the Options pattern in ASP.NET Core?
+EXPECTED: A way to bind configuration sections to strongly-typed POCO classes. Register with `services.Configure<MyOptions>(config.GetSection("MySection"))`, inject via `IOptions<MyOptions>`, `IOptionsSnapshot<MyOptions>` (per-request reload), or `IOptionsMonitor<MyOptions>` (real-time changes).
+
+Q20: What is the difference between `IOptions<T>`, `IOptionsSnapshot<T>`, and `IOptionsMonitor<T>`?
+EXPECTED: `IOptions<T>` — singleton, values set at startup. `IOptionsSnapshot<T>` — scoped, reloads per request. `IOptionsMonitor<T>` — singleton, supports real-time change notifications.
+
+--------------------------------------------------------------------------------
+SECTION 3: ENTITY FRAMEWORK CORE (ADVANCED)
+--------------------------------------------------------------------------------
+
+Q21: What is the N+1 query problem in EF Core? How do you fix it?
+EXPECTED: Occurs when querying a collection and then lazily loading related data for each item, causing 1 + N database queries. Fix with eager loading (`Include()`), explicit loading, or projections with `Select()`.
+
+Q22: What is the difference between eager loading, lazy loading, and explicit loading in EF Core?
+EXPECTED: Eager loading — `.Include()` loads related data in the same query. Lazy loading — related data loaded on first access (requires proxies, can cause N+1). Explicit loading — manually call `.Load()` on a navigation property.
+
+Q23: What are owned entities in EF Core? When would you use them?
+EXPECTED: Entities that belong to another entity and have no identity of their own (no separate table by default). Example: `Address` owned by `Customer`. Configured with `.OwnsOne()`.
+
+Q24: What is a compiled query in EF Core? When is it useful?
+EXPECTED: Pre-compiles the LINQ-to-SQL translation using `EF.CompileQuery()`. Avoids re-parsing the expression tree on every call. Useful for frequently executed queries in hot paths.
+
+Q25: How do you handle optimistic concurrency in EF Core?
+EXPECTED: Use a concurrency token (`[ConcurrencyCheck]` or `[Timestamp]`/`rowversion`). EF Core includes it in UPDATE WHERE clause. If no rows affected, throws `DbUpdateConcurrencyException`. Handle by retrying or showing conflict to user.
+
+Q26: What is the difference between `AsNoTracking()` and `AsTracking()` in EF Core?
+EXPECTED: `AsNoTracking()` skips change tracking for read-only queries — faster and less memory usage. Default is tracked, which allows EF to detect and save changes. Use `AsNoTracking()` for read-only data.
+
+--------------------------------------------------------------------------------
+SECTION 4: WEB API & SECURITY
+--------------------------------------------------------------------------------
+
+Q27: What is JWT authentication? How does it work in ASP.NET Core?
+EXPECTED: JSON Web Token — a compact, self-contained token with header, payload, signature. Server validates signature, no server-side session needed. In ASP.NET Core: configure with `AddAuthentication().AddJwtBearer(...)`, protect endpoints with `[Authorize]`.
+
+Q28: What is the difference between authentication and authorization?
+EXPECTED: Authentication = verifying identity (who you are). Authorization = verifying permissions (what you can do). In ASP.NET Core: `[Authorize]` checks both; `[Authorize(Roles = "Admin")]` adds role-based authorization.
+
+Q29: What are refresh tokens? Why are they needed alongside JWTs?
+EXPECTED: JWTs are short-lived (e.g., 15 min) for security. Refresh tokens are long-lived, stored securely, used to obtain new JWTs without re-login. Refresh tokens can be revoked server-side (stored in DB), JWTs cannot.
+
+Q30: What is CORS? How do you configure it in ASP.NET Core?
+EXPECTED: Cross-Origin Resource Sharing — browser security mechanism preventing requests from different origins. Configure with `services.AddCors()` and `app.UseCors()`, defining allowed origins, methods, and headers.
+
+Q31: What is the difference between `app.UseAuthentication()` and `app.UseAuthorization()` in middleware order?
+EXPECTED: `UseAuthentication()` must come before `UseAuthorization()`. Authentication identifies the user from the token; Authorization then checks if that user has permission. Wrong order = authorization always fails.
+
+Q32: How do you prevent SQL injection in ASP.NET Core with EF Core vs raw ADO.NET?
+EXPECTED: EF Core uses parameterized queries by default (safe). With raw SQL in EF Core, use `FromSqlInterpolated()` (parameterized), never `FromSqlRaw()` with user input. With ADO.NET, always use `SqlParameter` — never string concatenation.
+
+Q33: What is rate limiting in ASP.NET Core? How do you implement it?
+EXPECTED: Limits how many requests a client can make in a time window. In .NET 7+, built-in with `AddRateLimiter()` middleware. Policies: fixed window, sliding window, token bucket, concurrency. Apply with `[EnableRateLimiting("policyName")]`.
+
+--------------------------------------------------------------------------------
+SECTION 5: TESTING
+--------------------------------------------------------------------------------
+
+Q34: What is the difference between unit tests, integration tests, and end-to-end tests?
+EXPECTED: Unit tests — test a single class/method in isolation (mock dependencies). Integration tests — test how components work together (e.g., controller + DB). E2E tests — test the full system from user perspective. .NET: xUnit/NUnit for unit, `WebApplicationFactory` for integration.
+
+Q35: What mocking frameworks are common in .NET? How do you use Moq?
+EXPECTED: Moq, NSubstitute, FakeItEasy. With Moq: `var mock = new Mock<IService>(); mock.Setup(s => s.GetData()).Returns(fakeData); var sut = new MyClass(mock.Object);`
+
+Q36: What is `WebApplicationFactory<T>` in ASP.NET Core testing?
+EXPECTED: A test fixture that spins up an in-memory test server with the real app pipeline. Used for integration tests — allows sending real HTTP requests against the app with a test HTTP client.
+
+Q37: What is code coverage? What's a realistic target?
+EXPECTED: Percentage of code executed by tests. 100% isn't always the goal — aim for meaningful coverage of business logic (70-80%+). Use tools like Coverlet, ReportGenerator. Focus on critical paths over simple getters/setters.
+
+--------------------------------------------------------------------------------
+SECTION 6: PERFORMANCE & CACHING
+--------------------------------------------------------------------------------
+
+Q38: What caching strategies are available in ASP.NET Core?
+EXPECTED: In-memory caching (`IMemoryCache`), distributed caching (`IDistributedCache` with Redis/SQL Server), response caching (`[ResponseCache]`), output caching (.NET 7+). Choose based on whether multi-instance deployment is needed.
+
+Q39: What is IMemoryCache vs IDistributedCache?
+EXPECTED: `IMemoryCache` is per-process, lost on restart, fast. `IDistributedCache` is shared across app instances (Redis, SQL Server), needed for multi-server deployments, supports expiry and serialization.
+
+Q40: How do you use background services in ASP.NET Core?
+EXPECTED: Implement `IHostedService` or extend `BackgroundService` (easier). Register with `services.AddHostedService<MyService>()`. Used for polling, scheduled tasks, queue processing. For robust scheduling, consider Hangfire or Quartz.NET.
+
+================================================================================
+END OF FILE — MID-LEVEL
+Total Questions: 40
+================================================================================

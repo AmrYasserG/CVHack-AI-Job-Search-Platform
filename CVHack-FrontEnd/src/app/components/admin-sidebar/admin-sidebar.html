@@ -1,0 +1,85 @@
+<aside
+  class="sticky top-0 h-screen w-full flex flex-col shrink-0"
+  
+>
+  <!-- Logo + label -->
+  <div class="flex flex-col lg:flex-row justify-between items-center gap-3 px-2 lg:px-6 pt-6 pb-5">
+    <div class="flex flex-col items-center lg:items-start">
+      <app-logo class="flex justify-center lg:justify-start" href="/admin/dashboard"></app-logo>
+
+      <p
+        class="hidden lg:block text-xs mt-1 tracking-widest uppercase"
+        style="color: var(--faint); font-family: var(--font-mono)"
+      >
+        Admin Console
+      </p>
+    </div>
+  </div>
+
+  <!-- expand icon -->
+  <!-- <div
+    class="admin-link flex lg:hidden items-center justify-center cursor-pointer py-4 rounded-lg"
+    style="color: var(--faint)"
+  >
+    <app-admin-sidebar-expand-icon></app-admin-sidebar-expand-icon>
+  </div> -->
+
+  <!-- Nav links -->
+  <nav class="flex flex-col gap-2 px-2 lg:px-3 font-medium" style="color: var(--faint)">
+    <a
+      routerLink="/admin/dashboard"
+      routerLinkActive="admin-link-active"
+      class="admin-link no-underline flex items-center justify-center lg:justify-start gap-2 cursor-pointer py-4 px-0 lg:px-4 rounded-lg lg:rounded-r-lg"
+    >
+      <app-dashboard-icon routerLinkActive="admin-link-active-icon"></app-dashboard-icon>
+      <span class="hidden lg:inline">Dashboard</span>
+    </a>
+
+    <a
+      routerLink="/admin/tickets"
+      routerLinkActive="admin-link-active"
+      class="admin-link no-underline flex items-center justify-center lg:justify-start gap-2 cursor-pointer py-4 px-0 lg:px-4 rounded-lg lg:rounded-r-lg"
+    >
+      <app-ticket-icon routerLinkActive="admin-link-active-icon"></app-ticket-icon>
+      <span class="hidden lg:inline">Tickets</span>
+    </a>
+
+    <a
+      routerLink="/admin/users"
+      routerLinkActive="admin-link-active"
+      class="admin-link no-underline flex items-center justify-center lg:justify-start gap-2 cursor-pointer py-4 px-0 lg:px-4 rounded-lg lg:rounded-r-lg"
+    >
+      <app-users-icon routerLinkActive="admin-link-active-icon"></app-users-icon>
+      <span class="hidden lg:inline">Users</span>
+    </a>
+  </nav>
+
+  <!-- Spacer -->
+  <div class="flex-1"></div>
+
+  <!-- Footer -->
+  <div
+    class="px-2 lg:px-3 pb-6 pt-3 border-t flex flex-col gap-1"
+    style="border-color: rgba(255, 255, 255, 0.08)"
+  >
+    <app-admin-theme-toggle></app-admin-theme-toggle>
+    <a
+      routerLink="/jobs"
+      class="admin-link no-underline font-medium flex items-center justify-center lg:justify-start gap-2 cursor-pointer my-2 py-2"
+      style="color: var(--faint)"
+    >
+      <app-back-icon></app-back-icon>
+      <span class="hidden lg:inline">Back to app</span>
+    </a>
+
+    <button
+      type="button"
+      (click)="logout()"
+      class="admin-link no-underline font-medium flex items-center justify-center lg:justify-start gap-2 cursor-pointer bg-transparent border-0 py-2"
+      style="color: var(--faint)"
+    >
+      <app-logout-icon></app-logout-icon>
+      <span class="hidden lg:inline">Logout</span>
+    </button>
+  </div>
+</aside>

@@ -1,0 +1,145 @@
+================================================================================
+DEVOPS INTERVIEW QUESTIONS — JUNIOR LEVEL
+================================================================================
+Target: 0–2 years of experience
+Focus: Linux basics, Git, Docker fundamentals, CI/CD concepts, basic networking, cloud intro
+================================================================================
+
+--------------------------------------------------------------------------------
+SECTION 1: LINUX & COMMAND LINE
+--------------------------------------------------------------------------------
+
+Q1: What is the difference between Linux and Windows from a server perspective? Why is Linux preferred for servers?
+EXPECTED: Linux is open-source, lightweight, stable, and highly customizable. Better CLI tooling, no licensing costs, dominates cloud/server market. Most Docker images, cloud VMs, and CI/CD runners are Linux-based. Windows servers used mainly for .NET Framework or Active Directory workloads.
+
+Q2: What does the following command do? `ls -la /var/log`
+EXPECTED: Lists all files (including hidden ones starting with `.`) in `/var/log` in long format showing permissions, owner, size, and modification date. `-l` = long listing, `-a` = all files including hidden.
+
+Q3: What is the difference between `chmod` and `chown`?
+EXPECTED: `chmod` changes file permissions (read/write/execute for user/group/others). `chown` changes file ownership (user and group). Example: `chmod 755 script.sh`, `chown ubuntu:ubuntu file.txt`.
+
+Q4: How do you find a process using a specific port in Linux?
+EXPECTED: `ss -tulnp | grep :8080` or `lsof -i :8080` or `netstat -tulnp | grep 8080`. Shows which process/PID is listening on that port.
+
+Q5: What is the difference between `>` and `>>` in shell?
+EXPECTED: `>` redirects output and overwrites the file. `>>` appends to the file. Example: `echo "hello" > file.txt` (overwrites), `echo "hello" >> file.txt` (appends).
+
+Q6: What does `grep -r "error" /var/log/` do?
+EXPECTED: Recursively searches all files under `/var/log/` for the string "error" and prints matching lines with filenames. `-r` = recursive.
+
+Q7: What is `cron`? Write a cron expression that runs a script every day at 2:30 AM.
+EXPECTED: Cron is a time-based job scheduler in Linux. Expression: `30 2 * * * /path/to/script.sh`. Format: minute hour day-of-month month day-of-week.
+
+Q8: What is the difference between a hard link and a soft (symbolic) link?
+EXPECTED: Hard link — another name pointing to the same inode (same data on disk); deleting original doesn't remove data. Soft link — a pointer (shortcut) to the original file path; breaks if original is deleted. Soft links work across filesystems; hard links do not.
+
+Q9: How do you check disk usage and free memory on a Linux server?
+EXPECTED: Disk: `df -h` (filesystem usage), `du -sh /path` (directory size). Memory: `free -h` shows total/used/free RAM. Also `top` or `htop` for live system resource usage.
+
+Q10: What is SSH? How do you connect to a remote server?
+EXPECTED: Secure Shell — encrypted protocol for remote server access. Connect with: `ssh user@hostname` or `ssh -i key.pem user@ip`. Key-based auth (`.pem`/`.pub`) is more secure than password auth. SSH config lives in `~/.ssh/config`.
+
+--------------------------------------------------------------------------------
+SECTION 2: GIT & VERSION CONTROL
+--------------------------------------------------------------------------------
+
+Q11: What is the difference between `git merge` and `git rebase`?
+EXPECTED: `merge` combines branches by creating a merge commit — preserves full history. `rebase` replays commits on top of another branch — creates linear history, cleaner but rewrites commit SHAs. Never rebase shared/public branches.
+
+Q12: What is a `.gitignore` file? Give examples of what you'd put in it for a Node.js project.
+EXPECTED: Tells Git which files/folders to not track. For Node.js: `node_modules/`, `.env`, `dist/`, `*.log`, `.DS_Store`. Prevents secrets and build artifacts from being committed.
+
+Q13: What is the difference between `git pull` and `git fetch`?
+EXPECTED: `git fetch` downloads changes from remote but doesn't apply them to your working branch. `git pull` = `fetch` + `merge` (or rebase). Use `fetch` to inspect changes before applying; `pull` when you're ready to integrate.
+
+Q14: What is a Git branch strategy? Describe GitFlow or trunk-based development.
+EXPECTED: GitFlow: `main`, `develop`, `feature/*`, `release/*`, `hotfix/*` branches — structured, good for versioned releases. Trunk-based: all developers commit to `main` frequently (with short-lived feature branches) — favored in CI/CD environments for speed. Most modern DevOps teams prefer trunk-based.
+
+Q15: What does `git stash` do?
+EXPECTED: Temporarily saves uncommitted changes (both staged and unstaged) so you can switch branches or pull without losing work. Restore with `git stash pop` or `git stash apply`.
+
+Q16: How do you undo the last commit without losing your changes?
+EXPECTED: `git reset --soft HEAD~1` — undoes the commit but keeps changes staged. `git reset --mixed HEAD~1` — undoes commit and unstages changes (but keeps them in working dir). `git reset --hard HEAD~1` — discards everything (dangerous).
+
+--------------------------------------------------------------------------------
+SECTION 3: DOCKER & CONTAINERS
+--------------------------------------------------------------------------------
+
+Q17: What is Docker? What problem does it solve?
+EXPECTED: Docker is a platform for building and running containerized applications. Solves the "works on my machine" problem by packaging an app with all its dependencies into a container image. Containers are lightweight, portable, and consistent across environments.
+
+Q18: What is the difference between a Docker image and a Docker container?
+EXPECTED: Image = a read-only blueprint/snapshot (like a class). Container = a running instance of an image (like an object). Multiple containers can run from the same image. Images are built from Dockerfiles.
+
+Q19: What is a Dockerfile? Explain these instructions: `FROM`, `RUN`, `COPY`, `CMD`, `EXPOSE`.
+EXPECTED:
+- FROM: base image to build upon (e.g., `FROM node:20-alpine`)
+- RUN: executes a command during image build (e.g., `RUN npm install`)
+- COPY: copies files from host to image filesystem
+- CMD: default command to run when container starts
+- EXPOSE: documents which port the container listens on (doesn't actually publish it)
+
+Q20: What is the difference between `CMD` and `ENTRYPOINT` in a Dockerfile?
+EXPECTED: Both define what runs when the container starts. `CMD` provides default args that can be overridden at runtime. `ENTRYPOINT` sets the main executable — harder to override. Often combined: `ENTRYPOINT ["node"]` + `CMD ["app.js"]`.
+
+Q21: What does `docker-compose` do? Give a simple use case.
+EXPECTED: Defines and runs multi-container applications via a `docker-compose.yml` file. Example: a web app + PostgreSQL + Redis, all started with `docker compose up`. Handles networking, volumes, environment variables, and service dependencies.
+
+Q22: What is a Docker volume? Why is it important?
+EXPECTED: A volume persists data outside the container's lifecycle. Without volumes, data is lost when a container stops or is removed. Use for databases, logs, config files. Mount with `-v myvolume:/data` or defined in docker-compose.
+
+Q23: What is the difference between `docker stop` and `docker kill`?
+EXPECTED: `docker stop` sends SIGTERM giving the container time to gracefully shut down (default 10s timeout, then SIGKILL). `docker kill` sends SIGKILL immediately — no graceful shutdown. Use `stop` for clean shutdown; `kill` as last resort.
+
+Q24: How do you view logs of a running Docker container?
+EXPECTED: `docker logs <container_id>` or `docker logs -f <container_id>` (follow/stream). Add `--tail 100` to see last 100 lines. In production, logs should be forwarded to a centralized logging system (ELK, CloudWatch, etc.).
+
+Q25: What is the difference between `docker run -p 8080:80` and `EXPOSE 80` in a Dockerfile?
+EXPECTED: `EXPOSE 80` is documentation only — it doesn't publish the port. `-p 8080:80` actually maps host port 8080 to container port 80, making it accessible from outside. You need `-p` (or port mapping in docker-compose) for real access.
+
+--------------------------------------------------------------------------------
+SECTION 4: CI/CD CONCEPTS
+--------------------------------------------------------------------------------
+
+Q26: What is CI/CD? What's the difference between Continuous Integration, Continuous Delivery, and Continuous Deployment?
+EXPECTED:
+- CI (Continuous Integration): Automatically build and test code on every commit/PR
+- Continuous Delivery: Code is always in a deployable state; deployment is manual trigger
+- Continuous Deployment: Every passing build is automatically deployed to production
+CI/CD reduces manual errors and accelerates release cycles.
+
+Q27: What is a pipeline in CI/CD? Name some common stages.
+EXPECTED: A pipeline is an automated sequence of steps triggered by code changes. Common stages: Source (checkout code) → Build → Test → Security Scan → Docker Build → Push to Registry → Deploy to Staging → Deploy to Production.
+
+Q28: Have you used GitHub Actions, GitLab CI, or Jenkins? Describe a basic workflow.
+EXPECTED: GitHub Actions example: create `.github/workflows/ci.yml` with triggers on `push`/`pull_request`, define jobs (checkout, install deps, run tests, build Docker image). YAML-based, runs on GitHub-hosted runners. GitLab CI uses `.gitlab-ci.yml` with stages and jobs. Jenkins uses Jenkinsfiles (Groovy-based).
+
+Q29: What is a build artifact? Give examples.
+EXPECTED: The output of a build process that can be deployed or stored. Examples: compiled binary, JAR file, Docker image, ZIP of static assets, npm package. Artifacts are stored in registries (Docker Hub, ECR, Artifactory) or CI artifact stores.
+
+Q30: What is the purpose of a linter and static analysis tool in a CI pipeline?
+EXPECTED: Linters catch code style/syntax issues early (ESLint, Pylint, ReSharper). Static analysis finds potential bugs, security issues, and code smells without running the code (SonarQube, Semgrep, CodeQL). Running them in CI prevents bad code from reaching main branch.
+
+--------------------------------------------------------------------------------
+SECTION 5: BASIC NETWORKING & CLOUD
+--------------------------------------------------------------------------------
+
+Q31: What is the difference between TCP and UDP?
+EXPECTED: TCP — connection-oriented, reliable, ordered delivery, acknowledgments (HTTP, SSH, databases). UDP — connectionless, fast, no guaranteed delivery (DNS, video streaming, gaming). Use TCP when data integrity matters; UDP when speed matters more than reliability.
+
+Q32: What is DNS? What happens when you type a URL in a browser?
+EXPECTED: DNS (Domain Name System) translates domain names to IP addresses. Browser checks cache → OS cache → DNS resolver → root/TLD/authoritative nameservers → gets IP → browser connects to IP on port 80/443 → HTTP/HTTPS response.
+
+Q33: What is the difference between HTTP and HTTPS?
+EXPECTED: HTTPS = HTTP + TLS encryption. HTTPS encrypts data in transit (prevents eavesdropping/tampering), authenticates the server via SSL certificate. Port 80 vs 443. In 2026, all production traffic should use HTTPS.
+
+Q34: What is an environment variable? Why are they used in DevOps?
+EXPECTED: Key-value pairs set in the OS/container environment. Used to configure apps without hardcoding values in code (database URLs, API keys, feature flags). In Docker: `ENV` or `--env` flag. In CI/CD: stored as secrets in the pipeline. Follow 12-Factor App: config in environment, not code.
+
+Q35: What is the difference between IaaS, PaaS, and SaaS? Give cloud examples.
+EXPECTED: IaaS (Infrastructure as a Service) — raw compute/storage (AWS EC2, Azure VMs). PaaS (Platform as a Service) — managed platform to run apps (Azure App Service, Heroku, Google App Engine). SaaS (Software as a Service) — ready-to-use software (Gmail, Slack, GitHub). DevOps engineers mostly work with IaaS and PaaS.
+
+================================================================================
+END OF FILE — JUNIOR LEVEL
+Total Questions: 35
+================================================================================

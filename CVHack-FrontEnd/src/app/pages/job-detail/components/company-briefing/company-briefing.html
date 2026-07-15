@@ -1,0 +1,23 @@
+<div class="rounded-2xl p-6 border" style="background: var(--ai); border-color: var(--aiBorder); box-shadow: var(--shadow);">
+
+  <div class="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-wide" style="color: var(--copper); font-family: var(--font-display);">
+    <span>📖</span>
+    <span>Company briefing</span>
+  </div>
+
+  <div class="flex items-center gap-2 text-sm mb-4" style="font-family: var(--font-body);">
+    <span class="font-bold" style="color: var(--text);">{{ data.staffRange }}</span>
+    <span style="color: var(--muted);">staff</span>
+    <span class="ml-2" style="color: var(--muted);">Founded</span>
+    <span class="font-bold" style="color: var(--text);">{{ data.founded }}</span>
+  </div>
+
+  <ul class="m-0 p-0 flex flex-col gap-2">
+    @for (fact of data.facts; track fact) {
+      <li class="flex items-start gap-2 text-sm" style="color: var(--muted); font-family: var(--font-body);">
+        <span style="color: var(--copper);">•</span>
+        <span>{{ fact }}</span>
+      </li>
+    }
+  </ul>
+</div>

@@ -1,0 +1,21 @@
+<div class="flex flex-col items-center justify-center px-4 relative" style="background: var(--bg)">
+  <!-- Card -->
+  <div
+    class="w-full max-w-xl rounded-3xl p-14 border relative"
+    style="background: var(--surface); border-color: var(--border); box-shadow: var(--shadow)"
+  >
+    <!-- Theme toggle, top right -->
+    <div class="absolute top-6 right-6">
+      <app-theme-toggle />
+    </div>
+    <!-- Logo + tagline -->
+    <div class="flex flex-col items-center text-center mb-10">
+      <app-logo class="scale-200 my-4" cvColor="var(--text)" />
+      <div class="w-12 h-0.5 rounded-full my-4" style="background: var(--copper)"></div>
+      <p class="text-base" style="color: var(--muted)">Prepare smarter. Land the role faster.</p>
+    </div>
+
+    <!-- Form content goes here -->
+    <ng-content></ng-content>
+  </div>
+</div>

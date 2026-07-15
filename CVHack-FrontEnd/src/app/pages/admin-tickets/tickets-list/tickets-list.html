@@ -1,0 +1,57 @@
+<div class="tickets-page-header">
+  <h2 class="tickets-page-header__title">Support Tickets</h2>
+  <p class="tickets-page-header__subtitle">Manage and respond to user requests</p>
+</div>
+
+<div class="tickets-filters">
+  <button
+    *ngFor="let filter of filters"
+    class="filter-btn"
+    [class.filter-btn--active]="activeFilter === filter"
+    (click)="setFilter(filter)"
+  >
+    {{ filter }}
+  </button>
+</div>
+
+<!-- Loading -->
+<div class="tickets-loading" *ngIf="isLoading">
+  <p>Loading tickets...</p>
+</div>
+
+<!-- Empty -->
+<div class="tickets-empty" *ngIf="!isLoading && filteredTickets.length === 0">
+  <p>No tickets found.</p>
+</div>
+
+<!-- Table -->
+<div class="tickets-table-card" *ngIf="!isLoading && filteredTickets.length > 0">
+  <table class="tickets-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Subject</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let ticket of filteredTickets"
+        class="tickets-table__row"
+        [class.tickets-table__row--active]="ticket.id === selectedTicketId"
+        (click)="selectTicket(ticket)"
+      >
+      <td class="tickets-table__id">{{ ticket.id }}</td>
+<td>
+  <div class="tickets-table__subject">{{ ticket.subject }}</div>
+  <div class="tickets-table__meta">
+    {{ ticket.userName || ticket.email }} · {{ formatDate(ticket.createdAt || '') }}
+  </div>
+</td>
+        <td>
+          <span [ngClass]="statusClass(ticket.status)">{{ ticket.status }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,81 @@
+<div class="experience-card">
+  <div class="experience-card__header">
+    <h3 class="experience-card__title">Experience</h3>
+    <button class="experience-card__add-btn" (click)="openAddForm()">+ Add</button>
+  </div>
+
+  <div *ngIf="isLoading" style="color: var(--muted); font-size: 14px; padding: 12px 0;">
+    Loading...
+  </div>
+
+  <div *ngIf="!isLoading && experienceList.length === 0 && !showForm"
+    style="color: var(--muted); font-size: 14px; padding: 12px 0;">
+    No experience added yet.
+  </div>
+
+  <div class="experience-card__list" *ngIf="!isLoading && experienceList.length > 0">
+    <div class="experience-item" *ngFor="let item of experienceList">
+      <div class="experience-item__icon">💼</div>
+      <div class="experience-item__info">
+        <h4 class="experience-item__title">{{ item.jobTitle }}</h4>
+       <p class="experience-item__meta">
+  {{ item.companyName }} · 
+  {{ item.startDate | date:'MMM yyyy' }} — {{ item.endDate ? (item.endDate | date:'MMM yyyy') : 'Present' }}
+</p>
+      </div>
+      <div class="experience-item__actions">
+        <button class="experience-item__edit" (click)="openEditForm(item)">✏</button>
+        <button class="experience-item__delete" (click)="deleteExperience(item.id!)">🗑</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="experience-form" *ngIf="showForm">
+    <h4 class="experience-form__title">
+      {{ editingId ? 'Edit Experience' : 'Add Experience' }}
+    </h4>
+
+    <div class="experience-form__grid">
+      <div class="experience-form__field">
+        <label class="experience-form__label">Job Title *</label>
+        <input class="experience-form__input" type="text"
+          [(ngModel)]="formData.jobTitle" placeholder="Senior Developer" />
+        <span class="experience-form__error" *ngIf="errors.jobTitle">{{ errors.jobTitle }}</span>
+      </div>
+
+      <div class="experience-form__field">
+        <label class="experience-form__label">Company *</label>
+        <input class="experience-form__input" type="text"
+          [(ngModel)]="formData.companyName" placeholder="Company Name" />
+        <span class="experience-form__error" *ngIf="errors.companyName">{{ errors.companyName }}</span>
+      </div>
+
+    <!-- Start Date -->
+<div class="experience-form__field">
+  <label class="experience-form__label">Start Date *</label>
+  <input class="experience-form__input" type="date"
+    [(ngModel)]="formData.startDate"
+    [class.input--error]="errors.startDate" />
+  <span class="experience-form__error" *ngIf="errors.startDate">{{ errors.startDate }}</span>
+</div>
+
+<!-- End Date -->
+<div class="experience-form__field">
+  <label class="experience-form__label">End Date</label>
+  <input class="experience-form__input" type="date"
+    [(ngModel)]="formData.endDate"
+    [class.input--error]="errors.endDate" />
+  <span class="experience-form__error" *ngIf="errors.endDate">{{ errors.endDate }}</span>
+</div>
+    </div>
+
+    <div class="experience-form__buttons">
+      <button class="experience-form__cancel" (click)="onCancel()">Cancel</button>
+      <button class="experience-form__save"
+  (click)="onSave()"
+  [disabled]="isSaving || !formData.jobTitle || !formData.companyName || !formData.startDate">
+  {{ isSaving ? 'Saving...' : 'Save' }}
+</button>
+    </div>
+  </div>
+</div>

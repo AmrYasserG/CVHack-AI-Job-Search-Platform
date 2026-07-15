@@ -1,0 +1,201 @@
+# Alexander Novak
+
+**Senior Frontend Angular Developer**
+Prague, Czech Republic
+
+📧 [alexander.novak.dev@gmail.com](mailto:alexander.novak.dev@gmail.com)
+📞 +420 721 456 318
+🔗 LinkedIn: linkedin.com/in/alexandernovakdev
+🔗 GitHub: github.com/alexandernovak
+🌐 Portfolio: alexnovak.dev
+
+---
+
+# PROFESSIONAL SUMMARY
+
+Frontend Angular Developer with **3 years of professional experience** designing and developing enterprise-grade web applications using Angular, TypeScript, and modern frontend technologies. Experienced in scalable frontend architecture, reusable component development, state management, authentication, performance optimization, and collaborating with backend, UI/UX, and DevOps teams. Passionate about delivering clean, maintainable, and high-performance applications while following industry best practices and Agile methodologies.
+
+---
+
+# PROFESSIONAL EXPERIENCE
+
+## Frontend Angular Developer
+
+**VisionTech Software** — Prague, Czech Republic
+
+**February 2025 – Present**
+
+* Developed large-scale enterprise web applications using Angular 18 and TypeScript.
+* Designed reusable shared modules, directives, pipes, and UI libraries to improve development efficiency.
+* Built secure authentication and authorization workflows using JWT and Role-Based Access Control.
+* Optimized application performance using Lazy Loading, OnPush Change Detection, and code splitting.
+* Collaborated with backend developers to integrate ASP.NET Core RESTful APIs.
+* Implemented dynamic dashboards with charts, analytics, and reporting modules.
+* Participated in frontend architecture planning and peer code reviews.
+* Mentored junior frontend developers and provided technical guidance.
+
+**Technologies:** Angular, TypeScript, Angular Material, RxJS, Bootstrap, JWT, REST APIs, Git
+
+---
+
+## Frontend Angular Developer
+
+**BluePixel Solutions** — Brno, Czech Republic
+
+**July 2023 – January 2025**
+
+* Built responsive business applications using Angular and SCSS.
+* Developed reusable UI components following Angular Style Guide.
+* Implemented Reactive Forms with complex custom validation.
+* Integrated REST APIs and handled asynchronous data using RxJS.
+* Improved accessibility and responsive behavior across multiple devices.
+* Worked closely with designers to convert Figma prototypes into production-ready interfaces.
+
+**Technologies:** Angular, TypeScript, HTML5, SCSS, Bootstrap, RxJS
+
+---
+
+## Junior Frontend Developer
+
+**CodeBridge Technologies** — Prague, Czech Republic
+
+**June 2022 – June 2023**
+
+* Developed reusable Angular components for internal applications.
+* Fixed UI defects and improved cross-browser compatibility.
+* Assisted in API integration and frontend testing.
+* Participated in Agile ceremonies and sprint planning.
+* Maintained existing Angular applications and implemented new features.
+
+**Technologies:** Angular, JavaScript, HTML5, CSS3, Git
+
+---
+
+# TECHNICAL SKILLS
+
+### Programming Languages
+
+* TypeScript
+* JavaScript (ES6+)
+* HTML5
+* CSS3
+
+### Frontend Frameworks
+
+* Angular
+* RxJS
+* Angular CLI
+* Angular Router
+* Reactive Forms
+* Standalone Components
+
+### UI Technologies
+
+* Angular Material
+* Bootstrap
+* SCSS
+* Tailwind CSS
+* CSS Grid
+* Flexbox
+* Responsive Design
+
+### State Management
+
+* RxJS
+* NgRx
+* Angular Services
+
+### API Integration
+
+* REST APIs
+* JWT Authentication
+* JSON
+* HTTP Client
+
+### Build & Development Tools
+
+* Visual Studio Code
+* Git
+* GitHub
+* Postman
+* Figma
+* Jira
+* npm
+
+### Testing
+
+* Jasmine
+* Karma
+* Unit Testing
+
+---
+
+# PROJECTS
+
+## Enterprise Human Resources Platform
+
+**Tech Stack:** Angular, NgRx, ASP.NET Core Web API
+
+* Developed employee management, attendance, payroll, and reporting modules.
+* Implemented role-based navigation and authentication.
+* Built reusable dashboard components used across multiple modules.
+* Optimized application performance using lazy loading and state management.
+
+---
+
+## Banking Customer Portal
+
+**Tech Stack:** Angular, Angular Material, RxJS
+
+* Developed secure customer dashboards for account management.
+* Built transaction history, profile management, and notification modules.
+* Implemented responsive layouts for desktop and mobile devices.
+* Improved accessibility following WCAG guidelines.
+
+---
+
+## Project Management System
+
+**Tech Stack:** Angular, Bootstrap, Chart.js
+
+* Developed task management and project tracking modules.
+* Built interactive dashboards with real-time charts and analytics.
+* Integrated notification and reporting features.
+* Designed reusable UI components shared across the application.
+
+---
+
+# EDUCATION
+
+**Bachelor of Information Technology**
+
+Czech Technical University in Prague
+
+**Graduated: 2022**
+
+---
+
+# CERTIFICATIONS
+
+* Angular Advanced Architecture
+* Angular Performance Optimization
+* Microsoft Azure Fundamentals (AZ-900)
+* Responsive Web Design – freeCodeCamp
+
+---
+
+# LANGUAGES
+
+* Czech (Native)
+* English (Professional)
+* German (Intermediate)
+
+---
+
+# ADDITIONAL INFORMATION
+
+* Strong understanding of scalable Angular application architecture.
+* Experience working with enterprise-level frontend applications.
+* Familiar with Agile/Scrum software development practices.
+* Passionate about clean code, reusable component design, and frontend performance optimization.
+* Experience mentoring junior developers and participating in technical code reviews.

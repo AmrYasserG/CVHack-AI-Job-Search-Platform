@@ -1,0 +1,139 @@
+# Michael Carter
+
+**Backend .NET Developer**
+
+📍 Toronto, Canada
+📧 [michael.carter.dev@gmail.com](mailto:michael.carter.dev@gmail.com)
+📱 +1 647-555-8124
+🔗 https://linkedin.com/in/michaelcarterdev
+💻 https://github.com/michaelcarter
+🌐 https://michaelcarter.dev
+
+---
+
+# Professional Summary
+
+Backend .NET Developer with 1 year of professional experience building secure, scalable, and maintainable RESTful APIs using ASP.NET Core, C#, and SQL Server. Experienced in developing backend services, implementing authentication and authorization using JWT, designing relational databases with Entity Framework Core, and following SOLID principles and clean architecture practices. Passionate about writing high-quality code, improving application performance, and collaborating within Agile development teams.
+
+---
+
+# Professional Experience
+
+## Backend .NET Developer
+
+**TechNova Solutions – Toronto, Canada**
+**July 2025 – Present**
+
+* Developed scalable RESTful APIs using ASP.NET Core Web API and C#.
+* Implemented JWT Authentication and Role-Based Authorization.
+* Designed and maintained SQL Server databases using Entity Framework Core.
+* Built reusable service and repository layers following clean architecture principles.
+* Developed CRUD modules for users, products, orders, and categories.
+* Optimized LINQ queries to improve API performance and database efficiency.
+* Integrated REST APIs with frontend applications.
+* Validated requests using FluentValidation.
+* Documented APIs using Swagger/OpenAPI.
+* Participated in code reviews, bug fixing, sprint planning, and Agile Scrum ceremonies.
+
+---
+
+# Technical Skills
+
+### Programming Languages
+
+* C#
+* SQL
+* JavaScript
+
+### Backend Frameworks
+
+* ASP.NET Core Web API
+* Entity Framework Core
+* LINQ
+
+### Databases
+
+* SQL Server
+
+### Cloud
+
+* Microsoft Azure (Basic Knowledge)
+
+### Tools
+
+* Visual Studio
+* Visual Studio Code
+* Git
+* GitHub
+* Postman
+* Swagger / OpenAPI
+
+### Testing
+
+* xUnit
+
+### Methodologies
+
+* Agile Scrum
+* REST API Design
+* SOLID Principles
+* Dependency Injection
+* Repository Pattern
+
+---
+
+# Projects
+
+## E-Commerce REST API
+
+**Technologies:** ASP.NET Core, Entity Framework Core, SQL Server, JWT, Swagger
+
+* Developed secure authentication and authorization modules.
+* Built product, category, shopping cart, and order management APIs.
+* Applied Repository Pattern and Dependency Injection.
+* Added request validation using FluentValidation.
+* Generated interactive API documentation using Swagger.
+
+---
+
+## Task Management API
+
+**Technologies:** ASP.NET Core, SQL Server, Entity Framework Core
+
+* Developed task management REST APIs.
+* Implemented filtering, sorting, and pagination.
+* Added role-based authorization.
+* Built reusable service layer architecture.
+* Applied centralized exception handling.
+
+---
+
+# Education
+
+**Bachelor of Computer Science**
+
+University of Toronto — Toronto, Canada
+
+Graduation Year: **2025**
+
+---
+
+# Certifications
+
+* Microsoft Certified: Azure Fundamentals (AZ-900)
+
+---
+
+# Languages
+
+* English — Native
+* French — Professional Working Proficiency
+
+---
+
+# Additional Information
+
+* Strong understanding of RESTful API design and backend architecture.
+* Familiar with Clean Architecture and scalable application development.
+* Excellent problem-solving and debugging skills.
+* Passionate about continuous learning and modern .NET technologies.

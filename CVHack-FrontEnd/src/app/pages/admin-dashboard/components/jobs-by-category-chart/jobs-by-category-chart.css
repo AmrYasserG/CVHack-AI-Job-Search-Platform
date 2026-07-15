@@ -1,0 +1,100 @@
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  height: 100%;
+}
+
+.chart-header { margin-bottom: 8px; }
+.chart-title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text); }
+.chart-sub { font-family: var(--font-body); font-size: .8rem; color: var(--muted); margin-top: 2px; }
+
+.bar-values {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.bar-val {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+.bars-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 180px;
+}
+
+.bar-col {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bar {
+  width: 100%;
+  background: var(--chartBar);
+  border-radius: 6px 6px 0 0;
+  animation: growBar .5s ease both;
+  transform-origin: bottom;
+}
+
+.bar--accent { background: var(--copper); }
+
+/* Labels sit in their own row so they can wrap downward
+   without changing the height of any bar. */
+.bar-labels {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.bar-label {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: .7rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.25;
+}
+
+/* Responsive: تصغير المسافات والخط عشان كل الأعمدة تبان في عرض الشاشة */
+@media (max-width: 900px) {
+  .chart-card {
+    padding: 16px;
+  }
+
+  .bars-row {
+    gap: 4px;
+    height: 140px;
+  }
+
+  .bar-label {
+    font-size: .6rem;
+    margin-top: 4px;
+  }
+
+  .bar-val {
+    font-size: .65rem;
+    }
+}
+
+@media (max-width: 480px) {
+  .bars-row {
+    height: 110px;
+  }
+
+  .bar-label {
+    font-size: .55rem;
+  }
+}

@@ -1,0 +1,45 @@
+<app-navbar></app-navbar>
+
+<div class="profile-page">
+
+  <!-- Loading State -->
+  <div class="profile-loading" *ngIf="isLoading">
+    <div class="profile-loading__spinner"></div>
+    <p>Loading profile...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="profile-error" *ngIf="!isLoading && errorMessage">
+    <p>{{ errorMessage }}</p>
+    <button (click)="loadProfile()">Try again</button>
+  </div>
+
+  <!-- Content -->
+  <ng-container *ngIf="!isLoading && !errorMessage">
+    <app-profile-header
+      [fullName]="fullName"
+      [jobTitle]="jobTitle"
+      [location]="location"
+      [initials]="initials"
+    ></app-profile-header>
+
+    <app-profile-tabs
+      [activeTab]="activeTab"
+      (tabChange)="onTabChange($event)"
+    ></app-profile-tabs>
+
+    <app-personal-info
+      *ngIf="activeTab === 'personal-info'"
+      [fullName]="fullName"
+      [email]="email"
+      [profileData]="rawProfileData"
+      ></app-personal-info>
+
+    <app-skills *ngIf="activeTab === 'skills'"></app-skills>
+    <app-experience *ngIf="activeTab === 'experience'"></app-experience>
+    <app-education *ngIf="activeTab === 'education'"></app-education>
+    <app-certifications *ngIf="activeTab === 'certifications'"></app-certifications>
+    <app-projects *ngIf="activeTab === 'projects'"></app-projects>
+  </ng-container>
+
+</div>

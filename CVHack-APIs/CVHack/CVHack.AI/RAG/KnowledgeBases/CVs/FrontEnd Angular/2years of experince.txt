@@ -1,0 +1,184 @@
+# Sophia Martinez
+
+**Frontend Angular Developer**
+Barcelona, Spain
+
+📧 [sophia.martinez.dev@gmail.com](mailto:sophia.martinez.dev@gmail.com)
+📞 +34 612 345 789
+🔗 LinkedIn: linkedin.com/in/sophiamartinezdev
+🔗 GitHub: github.com/sophiamartinez
+🌐 Portfolio: sophiamartinez.dev
+
+---
+
+# PROFESSIONAL SUMMARY
+
+Frontend Angular Developer with **2 years of professional experience** developing scalable, responsive, and user-centric web applications using Angular and TypeScript. Experienced in building reusable UI components, state management, REST API integration, authentication, performance optimization, and collaborating with cross-functional teams throughout the software development lifecycle. Passionate about creating maintainable applications following modern frontend best practices and clean architecture principles.
+
+---
+
+# PROFESSIONAL EXPERIENCE
+
+## Frontend Angular Developer
+
+**Digital Horizon Solutions** — Barcelona, Spain
+
+**September 2024 – Present**
+
+* Developed enterprise web applications using Angular 18 and TypeScript.
+* Designed reusable shared modules and UI components used across multiple projects.
+* Integrated RESTful APIs developed with ASP.NET Core.
+* Implemented authentication and authorization using JWT.
+* Built dynamic dashboards with charts and data visualization.
+* Optimized application performance using Lazy Loading and Route Preloading.
+* Improved application responsiveness across desktop, tablet, and mobile devices.
+* Collaborated with backend developers and UI/UX designers in Agile Scrum teams.
+* Participated in peer code reviews and frontend architecture discussions.
+
+**Technologies:** Angular, TypeScript, RxJS, Angular Material, Bootstrap, REST APIs, JWT, Git
+
+---
+
+## Junior Frontend Developer
+
+**PixelSoft Technologies** — Barcelona, Spain
+
+**July 2023 – August 2024**
+
+* Developed responsive user interfaces using Angular and Bootstrap.
+* Converted Figma designs into pixel-perfect web pages.
+* Built reusable Angular components.
+* Consumed REST APIs using Angular HttpClient.
+* Implemented Reactive Forms with custom validation.
+* Fixed UI bugs and enhanced accessibility.
+* Participated in sprint planning and daily Scrum meetings.
+
+**Technologies:** Angular, HTML5, CSS3, SCSS, Bootstrap, RxJS
+
+---
+
+# TECHNICAL SKILLS
+
+### Programming Languages
+
+* TypeScript
+* JavaScript (ES6+)
+* HTML5
+* CSS3
+
+### Frontend Frameworks
+
+* Angular
+* RxJS
+* Angular CLI
+* Angular Router
+* Reactive Forms
+
+### UI Technologies
+
+* Angular Material
+* Bootstrap
+* SCSS
+* CSS Grid
+* Flexbox
+* Responsive Design
+
+### API Integration
+
+* REST APIs
+* JSON
+* JWT Authentication
+* HTTP Client
+
+### State Management
+
+* RxJS
+* Angular Services
+
+### Tools
+
+* Visual Studio Code
+* Git
+* GitHub
+* Postman
+* Figma
+* Jira
+
+### Testing
+
+* Jasmine
+* Karma
+
+---
+
+# PROJECTS
+
+## Hospital Management System
+
+**Tech Stack:** Angular, Angular Material, ASP.NET Core Web API
+
+* Developed dashboards for doctors, patients, and administrators.
+* Built appointment scheduling and patient management interfaces.
+* Implemented secure authentication using JWT.
+* Added advanced filtering, searching, and pagination.
+
+---
+
+## E-Commerce Administration Dashboard
+
+**Tech Stack:** Angular, Bootstrap, Chart.js
+
+* Developed product, order, and customer management modules.
+* Built sales analytics dashboards with interactive charts.
+* Optimized page loading using Lazy Loading.
+* Implemented reusable shared components across the application.
+
+---
+
+## Online Learning Platform
+
+**Tech Stack:** Angular, RxJS, REST APIs
+
+* Built course browsing and enrollment interfaces.
+* Developed profile management and progress tracking pages.
+* Implemented role-based navigation.
+* Integrated backend APIs for course and student management.
+
+---
+
+# EDUCATION
+
+**Bachelor of Software Engineering**
+
+Universitat Politècnica de Catalunya
+
+Barcelona, Spain
+
+**Graduated: 2023**
+
+---
+
+# CERTIFICATIONS
+
+* Angular Advanced Development – Udemy
+* Responsive Web Design – freeCodeCamp
+* JavaScript Algorithms and Data Structures – freeCodeCamp
+* Git & GitHub Professional Certificate
+
+---
+
+# LANGUAGES
+
+* Spanish (Native)
+* English (Professional)
+* Catalan (Native)
+
+---
+
+# ADDITIONAL INFORMATION
+
+* Strong understanding of component-based architecture and reusable UI design.
+* Experience working in Agile/Scrum environments.
+* Familiar with frontend performance optimization techniques.
+* Excellent communication and collaboration skills.
+* Passionate about building clean, maintainable, and scalable Angular applications.

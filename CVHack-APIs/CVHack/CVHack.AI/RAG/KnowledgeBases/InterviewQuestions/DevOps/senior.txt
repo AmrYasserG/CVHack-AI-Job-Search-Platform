@@ -1,0 +1,132 @@
+================================================================================
+DEVOPS INTERVIEW QUESTIONS — SENIOR LEVEL
+================================================================================
+Target: 5+ years of experience
+Focus: Platform engineering, multi-cloud, GitOps, SRE practices, security at scale,
+       architectural decisions, FinOps, team leadership, large-scale incident response
+================================================================================
+
+--------------------------------------------------------------------------------
+SECTION 1: PLATFORM ENGINEERING & KUBERNETES AT SCALE
+--------------------------------------------------------------------------------
+
+Q1: What is Platform Engineering? How does it differ from traditional DevOps?
+EXPECTED: Platform Engineering builds internal developer platforms (IDPs) — self-service tools, golden paths, and abstractions that let dev teams deploy and operate without deep infrastructure expertise. DevOps = cultural practice of breaking silos. Platform Engineering = the team/product that operationalizes DevOps at scale. Tools: Backstage (developer portal), Crossplane, Port, ArgoCD, Tekton. Goal: reduce cognitive load on developers, enforce standards via paved roads.
+
+Q2: What is GitOps? How does it differ from traditional push-based CI/CD?
+EXPECTED: GitOps treats Git as the single source of truth for cluster/infrastructure state. A GitOps agent (ArgoCD, Flux) continuously reconciles the cluster to match what's in Git. Push-based CI/CD: pipeline pushes changes to cluster (CI has cluster credentials, potential security risk). Pull-based GitOps: cluster pulls desired state from Git (cluster credentials stay in-cluster). Benefits: audit trail in Git, self-healing, easier rollback (git revert), separation of CI and CD.
+
+Q3: Compare ArgoCD and Flux. When would you choose one over the other?
+EXPECTED: Both are GitOps tools for K8s. ArgoCD: richer UI, app-of-apps pattern, multi-cluster management, ApplicationSet for scaling, RBAC UI. Flux: lighter, more modular (separate controllers), better Helm controller, strong Terraform integration via tf-controller, preferred for GitOps purists. Choose ArgoCD for teams needing visual insight and multi-cluster management; Flux for lightweight/flexible GitOps pipelines.
+
+Q4: How do you manage multi-tenancy in a Kubernetes cluster? What are the trade-offs vs. multi-cluster?
+EXPECTED: Multi-tenancy in single cluster: Namespaces + RBAC + NetworkPolicies + ResourceQuotas + LimitRanges + admission webhooks (OPA/Gatekeeper). Trade-offs: blast radius (cluster-wide outage affects all tenants), noisy neighbor problem, K8s API server is a shared resource. Multi-cluster: stronger isolation, independent upgrade cycles, geo-distribution, but more operational overhead. Decision factors: security requirements, team size, cost, compliance.
+
+Q5: What is Kustomize? How does it compare to Helm for managing K8s manifests?
+EXPECTED: Kustomize — built into `kubectl`, overlay-based (base + patches per environment), no templating language, pure YAML. Helm — template-based, full package management (versioning, dependencies, rollback), Helm Chart ecosystem. Kustomize better for simple environment-specific overrides; Helm better for distributing reusable packages and complex apps. Many teams use both: Helm charts as base, Kustomize overlays for environment config.
+
+Q6: What is an Admission Controller in Kubernetes? Give examples.
+EXPECTED: Admission controllers intercept API server requests before resources are persisted. Mutating: can modify requests (e.g., inject sidecar containers — Istio, auto-add labels). Validating: allow/deny requests based on policy. Examples: OPA/Gatekeeper (policy enforcement), Kyverno (K8s-native policy engine), ImagePolicyWebhook (image signing enforcement). Critical for security — prevent privileged containers, enforce resource limits, require labels.
+
+Q7: How would you design a multi-cluster Kubernetes strategy for a global application?
+EXPECTED: Discuss: active-active vs active-passive, global load balancing (AWS Global Accelerator, Cloudflare, GKE Multi-Cluster Ingress), cluster federation vs independent clusters with shared GitOps config, data residency/compliance per region, cross-cluster service mesh (Istio multi-cluster, Linkerd), cluster autoscaling per region, unified observability (single Grafana with multi-cluster Prometheus), ArgoCD ApplicationSets for deploying to multiple clusters from one config.
+
+Q8: What is a Service Mesh? What problems does Istio/Linkerd solve?
+EXPECTED: Service mesh adds a network layer (typically sidecar proxies — Envoy) to handle service-to-service communication: mTLS (mutual TLS for encryption + identity), traffic management (canary, circuit breaking, retries), observability (metrics, traces per connection), policy enforcement — all without changing app code. Istio: feature-rich, complex, high resource overhead. Linkerd: lighter, simpler, Rust-based proxies. Use when: security requirements for in-cluster encryption, complex traffic routing needs, need per-service observability.
+
+--------------------------------------------------------------------------------
+SECTION 2: INFRASTRUCTURE AS CODE — ADVANCED
+--------------------------------------------------------------------------------
+
+Q9: How do you structure a large-scale Terraform codebase for multiple teams and environments?
+EXPECTED: Module-based structure: shared modules in a central registry (Terraform Registry or internal), environment-specific root modules consuming them. Directory structure: `modules/` (reusable) + `environments/dev/`, `environments/prod/`. Separate state per environment (S3 bucket with workspace-aware paths). Remote module versioning (tag releases). Terragrunt for DRY environment configs. Policy as Code with Sentinel (Terraform Enterprise) or OPA for governance.
+
+Q10: What is Terragrunt? When does it add value over vanilla Terraform?
+EXPECTED: A thin wrapper around Terraform that adds: DRY configuration (define backend/provider once, inherit in child modules), dependency management between modules (`dependency` blocks with mocked outputs), before/after hooks, `run-all` for applying multiple modules. Adds value when managing 10+ environments/modules where Terraform alone leads to massive config duplication. Trade-off: another tool to learn, sometimes obscures what Terraform is doing.
+
+Q11: What is Crossplane? How does it relate to Terraform?
+EXPECTED: Crossplane is a K8s-native IaC tool — provisions cloud resources (RDS, S3, GKE) via K8s custom resources. Reconciliation loop continuously ensures cloud state matches desired state (like GitOps for infra). Terraform is push-based with state files. Crossplane: better for K8s-first platform teams, self-healing, native RBAC. Terraform: broader ecosystem, better for large/complex infra, more mature. Not mutually exclusive — use Terraform for foundational infra, Crossplane for developer self-service resources.
+
+Q12: How do you enforce policy and compliance in IaC pipelines?
+EXPECTED: Policy as Code tools: OPA (Open Policy Agent) with Conftest for validating Terraform plans/K8s manifests, HashiCorp Sentinel (Terraform Enterprise), Checkov (static analysis for Terraform/K8s YAML — finds misconfigs like open security groups, missing encryption). Run in CI: block merges if policies fail. Treat compliance rules as code — version-controlled, testable, auditable. Integrate with SIEM for runtime compliance monitoring.
+
+--------------------------------------------------------------------------------
+SECTION 3: SECURITY (DEVSECOPS)
+--------------------------------------------------------------------------------
+
+Q13: What is DevSecOps? How do you shift security left?
+EXPECTED: DevSecOps integrates security into every stage of the SDLC rather than a gate at the end. Shift left: SAST (Static Application Security Testing — Semgrep, SonarQube, CodeQL) in CI on every PR, dependency scanning (Snyk, Dependabot, OWASP Dependency-Check), secret detection (truffleHog, git-secrets, GitGuardian) pre-commit and in CI, container image scanning (Trivy, Grype, Snyk Container) before push to registry, IaC scanning (Checkov, tfsec), DAST in staging. Security is everyone's responsibility.
+
+Q14: What is image scanning? What vulnerabilities does it detect?
+EXPECTED: Scanning container images for known CVEs (Common Vulnerabilities and Exposures) in OS packages and language dependencies. Tools: Trivy (most popular, fast), Grype, Snyk, AWS ECR native scanning, Docker Scout. Detects: outdated base images with known exploits, vulnerable npm/pip/Maven packages. Best practices: use minimal base images (distroless, Alpine), scan in CI before push, enforce severity thresholds (fail on CRITICAL), regularly rebuild images even without code changes.
+
+Q15: What is RBAC in Kubernetes? How do you design a least-privilege model for a multi-team cluster?
+EXPECTED: RBAC (Role-Based Access Control): Roles/ClusterRoles define permissions (verbs on resources), RoleBindings/ClusterRoleBindings bind them to subjects (users, groups, ServiceAccounts). Least-privilege design: namespace-scoped Roles (not ClusterRoles) for dev teams, no `get secrets` for most users, ServiceAccounts for pods (not human user credentials), separate namespaces per team with ResourceQuotas, audit logging enabled, tool like `kubectl-who-can` to audit permissions. Use groups (OIDC SSO) rather than individual user bindings.
+
+Q16: What is a supply chain attack? How do you protect your CI/CD pipeline against it?
+EXPECTED: Attackers compromise a dependency, tool, or pipeline step to inject malicious code (SolarWinds, Log4Shell, XZ Utils). Mitigations: pin dependency versions (lock files, digest-pinned Docker images `image@sha256:...`), verify package signatures (Sigstore/cosign for container signing, SLSA framework), minimal CI runner permissions, separate read/write tokens, audit third-party GitHub Actions (pin to commit SHA not tag), SBOM (Software Bill of Materials) generation (Syft, Docker SBOM), private artifact mirrors.
+
+Q17: What is Vault (HashiCorp)? How do you integrate it with Kubernetes workloads?
+EXPECTED: Vault is a secrets management tool — dynamic secrets, PKI, encryption as a service, secret leasing/rotation. K8s integration: Vault Agent Injector (sidecar injects secrets as files/env vars via annotations), External Secrets Operator (syncs Vault secrets to K8s Secrets), Vault CSI Provider. Dynamic secrets: Vault generates short-lived DB credentials on demand — no static passwords. Auth: K8s auth method (ServiceAccount JWT). Reduces secret sprawl and eliminates long-lived credentials.
+
+--------------------------------------------------------------------------------
+SECTION 4: SRE & RELIABILITY ENGINEERING
+--------------------------------------------------------------------------------
+
+Q18: How do you design a disaster recovery (DR) strategy? What are RTO and RPO?
+EXPECTED: RTO (Recovery Time Objective) — max acceptable downtime after an incident. RPO (Recovery Point Objective) — max acceptable data loss (how old can restored data be?). Strategies by tier: Backup/Restore (high RTO/RPO, cheapest), Pilot Light (minimal infra always running, scale on disaster), Warm Standby (reduced-capacity replica always running), Multi-Site Active/Active (near-zero RTO/RPO, most expensive). For K8s: Velero for cluster/PV backup. Test DR regularly — untested DR is not DR.
+
+Q19: What is chaos engineering? How would you implement it?
+EXPECTED: Deliberately injecting failures to test system resilience and find weaknesses before they cause real incidents. Principles: define steady state, hypothesize behavior, run experiments in production (or staging first), minimize blast radius, learn. Tools: Chaos Monkey (Netflix, kills instances), LitmusChaos (K8s-native), Gremlin, AWS Fault Injection Simulator. Start small: kill a pod, introduce network latency. Graduate to AZ failures. Build a gameday culture. Document every experiment.
+
+Q20: Walk me through your incident response process for a P1 production outage.
+EXPECTED: 1) Alert fires — on-call acknowledges in < N minutes (per SLA). 2) Declare incident, create war room (Slack/Teams channel, Zoom). 3) Assign roles: Incident Commander (coordinates), Technical Lead (investigates), Comms Lead (updates stakeholders). 4) Mitigate first — rollback, feature flag, scale up, failover. Don't fix root cause during P1. 5) Communicate to stakeholders (status page update). 6) Root cause analysis after mitigation. 7) Post-mortem (blameless): timeline, contributing factors, action items with owners and due dates. 8) Track action items to completion.
+
+Q21: What are toil and toil reduction in SRE? How do you identify and eliminate it?
+EXPECTED: Toil = manual, repetitive, automatable operational work that scales with service growth and provides no lasting value. Examples: manually restarting services, applying patches one-by-one, running the same runbook repeatedly. SRE teams cap toil at 50% of time — rest on engineering work that eliminates toil. Identify: track time spent per activity, look for tickets that recur. Eliminate: automate runbooks, self-healing (K8s restarts pods), better alerting to prevent the need for manual intervention.
+
+Q22: What is a post-mortem? What makes a good one vs. a bad one?
+EXPECTED: A structured analysis of an incident to understand root cause and prevent recurrence. Good: blameless (focuses on systems/processes, not people), clear timeline, true root cause (5 Whys), concrete action items with owners/due dates, shared widely for organizational learning. Bad: blame-focused, surface-level root cause ("human error"), action items that never get done, not shared. The goal is organizational learning, not accountability theater.
+
+--------------------------------------------------------------------------------
+SECTION 5: FINOPS & COST OPTIMIZATION
+--------------------------------------------------------------------------------
+
+Q23: What is FinOps? What are the main levers for reducing cloud costs?
+EXPECTED: FinOps = financial accountability for cloud spend — collaboration between engineering, finance, and business. Cost levers: right-sizing (instances too large), reserved instances/savings plans (commit to 1-3 years for 30-70% savings), spot instances for non-critical workloads, delete unused resources (old snapshots, idle LBs, unattached EBS volumes), S3 lifecycle policies, data transfer optimization (same-region, same-AZ), auto-scaling to zero when idle. Tools: AWS Cost Explorer, Azure Cost Management, Kubecost (K8s cost allocation), Infracost (cost estimation in Terraform PRs).
+
+Q24: How do you implement cost allocation in a multi-team Kubernetes cluster?
+EXPECTED: Tag resources consistently (team, environment, service labels on K8s resources). Kubecost or OpenCost allocates K8s spend to namespaces/labels. Cloud provider tags (AWS Cost Allocation Tags) for node groups, LBs, EBS volumes. Show-back (show teams their costs) vs charge-back (bill internally). Regular cost reviews per team. Set budget alerts. Encourage teams to own their costs.
+
+Q25: What is the difference between Reserved Instances, Savings Plans, and Spot Instances in AWS?
+EXPECTED: Reserved Instances (RI) — commit to specific instance type/region/AZ for 1-3 years, up to 72% savings. Savings Plans — commit to $/hour compute spend (more flexible, applies across instance types). Spot Instances — spare EC2 capacity at up to 90% discount; can be interrupted with 2-min warning. Use Spot for: batch jobs, CI runners, stateless web tiers with interruption handling. Never Spot for: databases, stateful workloads without interruption tolerance.
+
+--------------------------------------------------------------------------------
+SECTION 6: ARCHITECTURE, LEADERSHIP & STRATEGY
+--------------------------------------------------------------------------------
+
+Q26: How would you design a self-service developer platform for 200+ engineers?
+EXPECTED: Core principles: golden paths (opinionated defaults, not mandates), reduce cognitive load, automate compliance. Components: developer portal (Backstage — service catalog, docs, scaffolding), GitOps-based deployment (ArgoCD), pre-configured CI templates (reusable GitHub Actions workflows), infrastructure self-service (Crossplane or Terraform modules via service catalog), unified observability (Grafana stack), onboarding automation. Measure: DORA metrics (deployment frequency, lead time, MTTR, change failure rate). Start with most painful friction points, not everything at once.
+
+Q27: What are DORA metrics? How do you use them to measure DevOps performance?
+EXPECTED: Four key metrics from the DORA research program: Deployment Frequency (how often you deploy — daily/multiple times daily is elite), Lead Time for Changes (time from commit to production — under 1 hour is elite), Change Failure Rate (% of deployments causing production incidents — under 5% is elite), Mean Time to Restore (MTTR — how quickly you recover from incidents — under 1 hour is elite). Use to benchmark current state, identify bottlenecks, and track improvement over time. Not a stick to blame teams — a diagnostic tool.
+
+Q28: How do you manage a major Kubernetes version upgrade with zero downtime?
+EXPECTED: 1) Read release notes — identify deprecated APIs (use `pluto` to scan manifests). 2) Upgrade non-prod clusters first. 3) Control plane upgrade first (AWS EKS: managed, rolling). 4) Node group upgrade: add new nodes (new version), cordon+drain old nodes, let K8s reschedule workloads, terminate old nodes — rolling with PodDisruptionBudgets to ensure min replicas stay available. 5) Test add-ons (Ingress controller, Cert-manager, Cluster Autoscaler) — often need version bumps too. 6) Update Helm charts and manifests for deprecated API versions. Test, validate, rollback plan ready.
+
+Q29: How do you evaluate and introduce a new tool into your DevOps stack?
+EXPECTED: Framework: 1) Define the problem clearly — is it a real gap or tool FOMO? 2) Evaluate alternatives (at least 3). 3) Proof of Concept in non-prod. 4) Assess: community/support maturity, learning curve, integration with existing stack, licensing/cost, operational overhead. 5) Internal RFC/ADR (Architecture Decision Record) for team input. 6) Pilot with one team before org-wide rollout. 7) Write runbooks, train team, create internal docs. 8) Set evaluation checkpoint (3 months) — drop it if it's not delivering value. Avoid tool sprawl.
+
+Q30: How do you build a culture of reliability and DevOps in an organization resistant to change?
+EXPECTED: Start with wins: find a team that's already motivated, help them succeed visibly, let results speak. Show metrics: DORA data, incident frequency, deployment anxiety. Make the alternative (manual deploys, no monitoring) feel more risky than change. Embed, don't dictate — sit with dev teams, understand their pain, solve it. Create communities of practice (internal meetups, guilds). Executive sponsorship matters for organizational change but grassroots adoption is more durable. Blameless post-mortems build psychological safety. Celebrate improvements, not just the end state.
+
+Q31: A senior engineer on your team wants to introduce a technology you think is the wrong choice. How do you handle it?
+EXPECTED: Start by genuinely understanding their reasoning — they may know something you don't. Ask for an RFC/ADR to formally document the proposal: problem, alternatives considered, trade-offs. Bring in other perspectives (team, architecture review). If the concern is valid, articulate it clearly with evidence, not opinion. If the decision goes differently than you'd choose, commit fully and make it work ("disagree and commit"). If it's a high-risk decision, propose a time-boxed proof-of-concept. Avoid blocking progress with pure seniority — technical authority should be earned through reasoning.
+
+Q32: What is your approach to on-call sustainability and preventing engineer burnout?
+EXPECTED: Burnout signals: high alert volume, frequent 3AM pages, same recurring issues. Solutions: toil reduction (automate common fixes, runbooks for known issues), alert fatigue reduction (tune alerts to be actionable — if it fires and you do nothing, it shouldn't fire), distribute on-call across team (no single point of knowledge), compensate fairly, post-mortem every P1 to prevent recurrence, time-boxing on-call rotations (1 week max), business-hours on-call for non-critical services. Measure: MTTA (mean time to acknowledge), alert counts per on-call shift. Make on-call boring — that's the goal.
+
+================================================================================
+END OF FILE — SENIOR LEVEL
+Total Questions: 32
+================================================================================

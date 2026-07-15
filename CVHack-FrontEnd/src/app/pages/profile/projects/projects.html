@@ -1,0 +1,83 @@
+<div class="projects-card">
+  <div class="projects-card__header">
+    <h3 class="projects-card__title">Projects</h3>
+    <button class="projects-card__add-btn" (click)="openAddForm()">+ Add</button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" style="color: var(--muted); font-size: 14px; padding: 12px 0;">
+    Loading...
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!isLoading && projectsList.length === 0 && !showForm"
+    style="color: var(--muted); font-size: 14px; padding: 12px 0;">
+    No projects added yet.
+  </div>
+
+  <!-- List -->
+  <div class="projects-card__list" *ngIf="!isLoading && projectsList.length > 0">
+    <div class="project-item" *ngFor="let item of projectsList">
+      <div class="project-item__header">
+        <h4 class="project-item__name">{{ item.title }}</h4>
+        <div class="project-item__actions">
+          <button class="project-item__edit" (click)="openEditForm(item)">✏</button>
+          <button class="project-item__delete" (click)="deleteProject(item.id!)">🗑</button>
+        </div>
+      </div>
+
+      <p class="project-item__description" *ngIf="item.description">
+        {{ item.description }}
+      </p>
+
+      <a *ngIf="item.githubUrl" [href]="item.githubUrl" target="_blank"
+        class="project-item__link">
+        🔗 View on GitHub
+      </a>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="project-form" *ngIf="showForm">
+    <h4 class="project-form__title">
+      {{ editingId ? 'Edit Project' : 'Add Project' }}
+    </h4>
+
+    <div class="project-form__field">
+      <label class="project-form__label">Title *</label>
+      <input class="project-form__input" type="text"
+        [(ngModel)]="formData.title" placeholder="My Awesome Project"
+        [class.input--error]="errors.title" />
+      <span class="project-form__error" *ngIf="errors.title">{{ errors.title }}</span>
+    </div>
+
+   <div class="project-form__field">
+  <label class="project-form__label">Description</label>
+  <textarea class="project-form__textarea"
+    [(ngModel)]="formData.description"
+    placeholder="Describe your project..."
+    maxlength="2000"></textarea>
+  <div class="project-form__field-footer">
+    <span class="project-form__error" *ngIf="errors.description">{{ errors.description }}</span>
+    <span class="project-form__char-count">{{ formData.description?.length || 0 }}/2000</span>
+  </div>
+</div>
+
+    <div class="project-form__field">
+      <label class="project-form__label">GitHub URL</label>
+      <input class="project-form__input" type="text"
+        [(ngModel)]="formData.githubUrl" placeholder="https://github.com/..."
+        [class.input--error]="errors.githubUrl" />
+      <span class="project-form__error" *ngIf="errors.githubUrl">{{ errors.githubUrl }}</span>
+    </div>
+
+    <div class="project-form__buttons">
+      <button class="project-form__cancel" (click)="onCancel()">Cancel</button>
+      <button class="project-form__save"
+        (click)="onSave()"
+        [disabled]="isSaving">
+        {{ isSaving ? 'Saving...' : 'Save' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+.loading-state {
+  padding: 60px;
+  text-align: center;
+  font-family: var(--font-body);
+  color: var(--muted);
+}
+
+.error-state {
+  padding: 20px;
+  margin: 20px;
+  background: var(--redSoft);
+  color: var(--red);
+  border-radius: 12px;
+  font-family: var(--font-body);
+}

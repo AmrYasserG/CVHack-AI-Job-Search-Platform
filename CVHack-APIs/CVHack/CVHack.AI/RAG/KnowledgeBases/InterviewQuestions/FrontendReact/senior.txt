@@ -1,0 +1,185 @@
+====================================================
+REACT FRONTEND INTERVIEW QUESTIONS — SENIOR LEVEL
+====================================================
+Target: 5+ years of experience
+Focus: Architecture, advanced patterns, rendering internals, performance at scale, system design,
+       leadership, Next.js/SSR, security, accessibility, and real-world tradeoffs
+
+----------------------------------------------------
+SECTION 1: REACT INTERNALS & RENDERING
+----------------------------------------------------
+
+Q1. Explain the React reconciliation algorithm (Fiber). How does it improve on the original stack reconciler?
+Expected answer: Fiber is a reimplementation of React's core that makes rendering interruptible. The original stack reconciler was synchronous — a deep tree diff would block the main thread. Fiber breaks work into units, allowing React to pause, prioritize, and resume. This enables Concurrent Features (Suspense, transitions, streaming SSR). Each fiber node is a linked list representing a component — React performs two phases: render (pure, interruptible) and commit (synchronous DOM mutations).
+
+Q2. What is Concurrent Mode / Concurrent Features? Name specific APIs it enables.
+Expected answer: Concurrent Features let React prepare multiple versions of the UI simultaneously without blocking the main thread. Enabled APIs: useTransition (mark updates as non-urgent — keep UI responsive during expensive state transitions), useDeferredValue (defer re-rendering a non-critical part), Suspense for data (stream content as it becomes ready), startTransition. Requires React 18+ and concurrent-compatible libraries.
+
+Q3. What are React Server Components (RSC) and how do they fundamentally differ from SSR?
+Expected answer: RSC run exclusively on the server and never ship their JS to the client — they produce a serialized component tree (RSC Payload), not HTML. Unlike SSR (which renders HTML server-side but still hydrates the full component tree client-side), RSC components have zero client-side bundle cost. They can access databases/filesystems directly. Client components (marked "use client") are the boundary. RSC enables the server/client component split in Next.js App Router.
+
+Q4. Explain React's batching behavior. How did it change in React 18?
+Expected answer: Before React 18, batching only happened inside React event handlers — setState calls in setTimeout, Promises, or native events each triggered separate renders. React 18 introduced automatic batching everywhere: multiple state updates in any async context are batched into a single re-render. Use flushSync() to opt out when you need immediate DOM updates.
+
+Q5. What is hydration and what is "hydration mismatch"? How do you debug it?
+Expected answer: Hydration attaches React event listeners and state to server-rendered HTML without rebuilding the DOM from scratch. A mismatch occurs when the server-rendered HTML differs from what React expects to render client-side — often caused by date/time differences, random values, browser-only APIs (window), or conditional rendering based on client state. React 18 logs a warning. Fix: use suppressHydrationWarning sparingly, use useEffect for client-only content, or use dynamic with ssr: false in Next.js.
+
+Q6. What is the React Context propagation model and how does it relate to performance?
+Expected answer: Context uses a push model — when the Provider value changes, React traverses the entire subtree and re-renders every component consuming that context, even if the component only uses a part of the value. This can cause widespread re-renders. Mitigations: split contexts by concern, memoize the context value (useMemo), use external stores (Zustand, Jotai) which use subscriptions for fine-grained updates.
+
+Q7. Explain the commit phase in React's rendering pipeline. What happens in each sub-phase?
+Expected answer: After the render phase (pure, interruptible), the commit phase is synchronous and has three sub-phases:
+  1. Before mutation: snapshot DOM state, call getSnapshotBeforeUpdate.
+  2. Mutation: apply DOM changes (insertions, updates, deletions).
+  3. Layout: run useLayoutEffect and componentDidMount/Update synchronously after DOM mutations but before the browser paints.
+  useEffect fires asynchronously after the browser paint.
+
+----------------------------------------------------
+SECTION 2: ADVANCED PATTERNS & ARCHITECTURE
+----------------------------------------------------
+
+Q8. What is the "server/client component boundary" in Next.js App Router and how do you design around it?
+Expected answer: In App Router, all components are Server Components by default. Adding "use client" marks a subtree as client-rendered. The boundary is one-way: a Server Component can import Client Components, but a Client Component cannot import a Server Component. Pass Server Component output as children/props to Client Components to keep interactive wrappers thin. Design principle: push interactivity to the leaves, keep data-fetching at the root.
+
+Q9. Describe the islands architecture pattern. How does Astro implement it vs. Next.js?
+Expected answer: Islands hydrate only interactive components ("islands") in an otherwise static HTML page — reducing JS shipped to the browser. Astro implements it natively: static by default, components marked with client:load / client:visible hydrate individually. Next.js with RSC approaches this differently — Server Components never hydrate, Client Components do. Astro has zero JS overhead per static island; Next.js still hydrates the React runtime.
+
+Q10. How do you architect a micro-frontend in React? What are the tradeoffs?
+Expected answer: Approaches: Module Federation (Webpack/Vite) — runtime sharing of components/libraries across separately deployed apps. iframes — true isolation, easy deployment, but poor UX integration. Web Components — framework-agnostic but awkward React integration. Single-SPA — lifecycle-based orchestration. Tradeoffs: shared dependencies (bundle duplication vs. version conflicts), routing coordination, shared state across apps, performance overhead of multiple React runtimes, testing complexity.
+
+Q11. What is the Zustand + Immer pattern and when would you reach for it in a large app?
+Expected answer: Zustand manages state with a simple store API. Immer lets you write "mutating" logic that's actually immutable under the hood. Combined: set(produce(state => { state.user.name = 'Alice'; })) — useful for deeply nested state updates without spread explosion. Reach for it when state is deeply nested and spread syntax becomes unreadable.
+
+Q12. Explain the "lifting state up vs. pushing state down" principle. How do you make this decision in a large codebase?
+Expected answer: Lift state up when multiple components need the same data and must stay in sync. Push state down when state is purely local and doesn't need to be shared — over-lifting causes unnecessary re-renders and tight coupling. In large codebases: use co-location as a default, lift only when needed, and reach for a store when lifting becomes multi-level prop drilling. Ask: "Who actually needs this state?" and place it there.
+
+Q13. How do you implement a plugin or extension system in a React app?
+Expected answer: Common approaches: registry pattern (a map of named components registered at app startup), dynamic imports (lazy load plugin modules by name), slot/portal-based rendering (plugins render into defined slots), Context-based injection (plugins register into a context consumers read). Used in CMS platforms, dashboards, and design systems. Key challenges: isolation, security (if third-party), type safety with plugin contracts.
+
+----------------------------------------------------
+SECTION 3: PERFORMANCE AT SCALE
+----------------------------------------------------
+
+Q14. Walk me through your process for diagnosing and fixing a slow React app.
+Expected answer: Systematic approach:
+  1. Measure first — React DevTools Profiler, Lighthouse, Web Vitals (LCP, CLS, INP).
+  2. Identify the bottleneck — is it render time, bundle size, network, hydration?
+  3. Unnecessary re-renders → memoization, stable references.
+  4. Large bundle → code splitting, tree shaking, dynamic imports.
+  5. Slow list rendering → virtualization (TanStack Virtual).
+  6. Slow initial load → SSR/SSG, route-level splitting, prefetching.
+  7. Validate improvement — re-measure.
+
+Q15. What is INP (Interaction to Next Paint) and how do you optimize React apps for it?
+Expected answer: INP measures the delay between user input and the next visual update — a Core Web Vital replacing FID in 2024. Optimize by: using useTransition to keep UI responsive during expensive state updates, avoiding long synchronous JS tasks (> 50ms), deferring non-critical work with scheduler API or setTimeout, code splitting to reduce main thread parse time, using web workers for CPU-heavy tasks.
+
+Q16. What is speculative rendering / prefetching in Next.js and how does it improve perceived performance?
+Expected answer: Next.js prefetches linked pages in the viewport (<Link> components) so when the user navigates, the JS bundle and data are already cached. In App Router, the RSC Payload is prefetched. Speculative rendering pre-renders routes before the user navigates. This makes navigation feel instant. On mobile or low-bandwidth, prefetching can be controlled with prefetch={false}.
+
+Q17. How do you optimize font loading in a Next.js/React app?
+Expected answer: Use next/font which automatically self-hosts Google Fonts, eliminates external network requests, adds font-display: swap, generates CSS variables, and prevents layout shift. Subset fonts to only needed characters. Preconnect to font origins when using external fonts. Avoid FOIT (flash of invisible text) with font-display: optional for critical text.
+
+----------------------------------------------------
+SECTION 4: NEXT.JS & RENDERING STRATEGIES
+----------------------------------------------------
+
+Q18. Compare SSG, SSR, ISR, and PPR (Partial Prerendering) in Next.js. When do you use each?
+Expected answer:
+  - SSG: HTML generated at build time. Best for content that rarely changes (blogs, docs, marketing). Zero server cost at runtime.
+  - SSR: HTML generated per request. Best for personalized, frequently changing content. Higher TTFB.
+  - ISR: SSG with on-demand revalidation (revalidate: 60 seconds or on-demand). Good for content that changes but can be stale briefly (e-commerce, news).
+  - PPR (Next.js 15+): Static shell served instantly, dynamic holes streamed in via Suspense. Combines SSG speed with SSR freshness.
+
+Q19. What is the difference between generateStaticParams and getStaticPaths?
+Expected answer: Both pre-generate dynamic routes at build time. getStaticPaths is the Pages Router API. generateStaticParams is the App Router equivalent — it's simpler, supports parallel data fetching, and integrates with React's cache. Returns an array of param objects: [{ slug: 'post-1' }, { slug: 'post-2' }].
+
+Q20. How do Server Actions work in Next.js App Router? What are the security implications?
+Expected answer: Server Actions are async functions marked with "use server" that run on the server and can be called directly from Client Components (form actions, event handlers). They eliminate the need for separate API routes for mutations. Security: Server Actions are publicly callable HTTP endpoints — never trust inputs, always validate/sanitize, check authorization inside the action. CSRF is handled by Next.js automatically via origin header validation.
+
+----------------------------------------------------
+SECTION 5: ACCESSIBILITY (A11Y)
+----------------------------------------------------
+
+Q21. What ARIA attributes do you commonly use in React components and when?
+Expected answer:
+  - aria-label / aria-labelledby: name elements without visible text (icon buttons).
+  - aria-expanded, aria-haspopup: for dropdowns/accordions.
+  - aria-live (polite/assertive): announce dynamic content updates to screen readers.
+  - aria-invalid, aria-describedby: form validation errors.
+  - role: only when semantic HTML can't express the pattern.
+  Rule: prefer semantic HTML over ARIA — ARIA fixes HTML, not replaces it.
+
+Q22. How do you manage focus in a React SPA after route changes or modal open/close?
+Expected answer: On route change: move focus to the main heading or a skip-to-content landmark. On modal open: trap focus inside the modal (focus-trap-react or Radix Dialog handles this). On modal close: return focus to the trigger that opened it (store a ref to the trigger before opening). Without this, keyboard/screen reader users lose their place.
+
+Q23. What is the accessibility tree and how does React affect it?
+Expected answer: The browser builds an accessibility tree from the DOM — screen readers consume this, not the DOM directly. React's virtual DOM renders to the real DOM, which then maps to the accessibility tree. Dynamic React updates (state changes, portals, conditional rendering) can disrupt the tree. Always use semantic HTML, proper ARIA, and test with actual screen readers (VoiceOver, NVDA) and axe DevTools — not just Lighthouse.
+
+----------------------------------------------------
+SECTION 6: SECURITY
+----------------------------------------------------
+
+Q24. What is XSS in a React context? Does React protect you automatically?
+Expected answer: React escapes all values in JSX by default — {userInput} is safe. XSS is still possible via: dangerouslySetInnerHTML (sanitize with DOMPurify first), javascript: URLs in href/src props (validate/whitelist), and third-party libraries that inject HTML. Also: avoid eval, new Function, and dynamic script injection.
+
+Q25. What are the security risks of using eval() or dynamic imports based on user input in React?
+Expected answer: eval() executes arbitrary code — never use it with user input. Dynamic imports (import(userInput)) could load malicious modules or exfiltrate data if input isn't strictly controlled. In Next.js, Server Actions using dynamic imports based on user input can be a server-side code injection vector. Always validate and whitelist values before using them in dynamic module paths.
+
+Q26. How do you handle authentication tokens securely in a React SPA?
+Expected answer: Avoid localStorage for sensitive tokens — vulnerable to XSS. Prefer httpOnly, Secure, SameSite=Strict cookies — inaccessible to JavaScript. For SPAs using JWT: short-lived access tokens in memory (React state), refresh tokens in httpOnly cookies. BFF (Backend for Frontend) pattern moves token handling entirely server-side. Libraries like Auth.js (NextAuth) manage this correctly.
+
+----------------------------------------------------
+SECTION 7: TESTING AT SCALE
+----------------------------------------------------
+
+Q27. How do you structure tests in a large React codebase? What's your testing strategy?
+Expected answer: Follow the testing trophy (Kent C. Dodds): minimal unit tests for pure logic, broad integration tests (RTL) for component behavior, a few critical E2E tests (Playwright/Cypress) for key user flows. Co-locate tests with components (__tests__ folder or .test.tsx beside the file). Use MSW for consistent API mocking across tests and Storybook. Avoid testing implementation details — test user behavior.
+
+Q28. What is visual regression testing and when is it worth implementing?
+Expected answer: Screenshots of components/pages are compared against baselines — pixel diffs catch unintended style changes. Tools: Chromatic (for Storybook), Percy, Playwright screenshot assertions. Worth it for design systems and high-visibility UI. Overhead: flakiness from anti-aliasing/fonts, storage of screenshots, slower CI. Automate on Storybook stories where possible.
+
+Q29. How do you test a custom hook in isolation?
+Expected answer: Use renderHook from @testing-library/react. Example: const { result } = renderHook(() => useCounter(0)); act(() => { result.current.increment(); }); expect(result.current.count).toBe(1); Wrap in act() for state updates. For hooks with side effects, provide necessary context or mock dependencies.
+
+----------------------------------------------------
+SECTION 8: SYSTEM DESIGN (FRONTEND)
+----------------------------------------------------
+
+Q30. Design a real-time collaborative text editor (like Google Docs) in React. Walk through your architecture.
+Expected answer should cover: WebSocket connection management (useWebSocket or Socket.io), Operational Transformation (OT) or CRDT (Yjs, Automerge) for conflict-free concurrent edits, rich text library (Slate.js, TipTap/ProseMirror), cursor/presence indicators via broadcast channels, optimistic local updates with server reconciliation, autosave with debounce, offline support (IndexedDB), and permission/auth model.
+
+Q31. Design a large-scale design system in React. How do you structure it for multiple consuming teams?
+Expected answer should cover: monorepo (Turborepo/Nx), component library published to npm, semantic versioning and changelogs, Storybook as the living documentation/development environment, TypeScript contracts exported with components, CSS variables/design tokens for theming, peer dependencies (React/ReactDOM not bundled), visual regression tests in CI, contribution guidelines, and versioning strategy for breaking changes.
+
+Q32. You're building a dashboard that must load 50+ widgets. How do you architect it for performance?
+Expected answer: Route-level code splitting (each dashboard page lazy-loaded), widget-level lazy loading with Suspense + React.lazy, data fetching per widget (TanStack Query, parallel queries with independent loading states), virtualization for large lists within widgets, memoize widget components, stagger or prioritize above-the-fold widgets, use RSC for read-only widgets to eliminate JS overhead, Web Workers for heavy data transformations.
+
+----------------------------------------------------
+SECTION 9: LEADERSHIP & PROCESS
+----------------------------------------------------
+
+Q33. How do you approach code review for React pull requests? What do you look for?
+Expected answer: Correctness and behavior, not just style. Look for: missing dependency arrays in useEffect, direct state mutation, missing error handling, accessibility regressions (missing alt, labels), unnecessary re-renders (new object literals as props), missing loading/error states, tests for new behavior, security issues (dangerouslySetInnerHTML, XSS vectors), consistency with team patterns. Give constructive feedback — explain why, not just what.
+
+Q34. A junior developer on your team keeps writing spaghetti components (500+ line files, mixed concerns). How do you address it?
+Expected answer: First understand — is it a knowledge gap or time pressure? Have a pairing session to refactor one component together — teach the single responsibility principle, custom hooks for logic extraction, smaller sub-components. Document the pattern as a team standard. Review future PRs proactively. Avoid gatekeeping — make the path to good code easy and well-explained.
+
+Q35. How do you evaluate whether to adopt a new library/framework into your React project?
+Expected answer: Questions to ask: Does it solve a real problem we have? What's the bundle size impact? Is it actively maintained (release cadence, issue responsiveness)? Does it work with our TypeScript setup? License compatibility? How does it affect our test strategy? What's the migration cost if we need to remove it later? Spike it in an isolated branch first. Get team buy-in before adopting.
+
+----------------------------------------------------
+SECTION 10: ADVANCED PRACTICAL CHALLENGES
+----------------------------------------------------
+
+Q36. You notice your app's LCP is 4.2 seconds. Walk me through a complete investigation and remediation plan.
+Expected answer: Check if LCP element is an image, video, or text block. Image: ensure it's not lazy-loaded (add loading="eager" or fetchpriority="high"), use next/image for automatic optimization, serve WebP/AVIF, preload critical images. Text: check if blocked by render-blocking CSS/JS, font loading strategy. All: reduce TTFB (SSR/SSG, CDN caching), reduce blocking resources, check server response times. Validate with PageSpeed Insights real-world data, not just lab.
+
+Q37. Implement a fully accessible, keyboard-navigable dropdown menu from scratch (no library).
+Expected answer: Uses <button> as trigger (not div), aria-haspopup="menu", aria-expanded state, opens/closes with Enter/Space/Escape, menu items with role="menuitem", arrow key navigation between items (roving tabindex or aria-activedescendant pattern), focus trapping within open menu, closes on outside click, click on item fires action and closes menu. Tests real a11y understanding.
+
+Q38. Describe a technically complex React problem you've solved in production. What went wrong, what did you try, and what was the final fix?
+(Open-ended — senior signal: clarity of diagnosis, awareness of tradeoffs, humility about what didn't work, and whether they measured impact)
+
+====================================================
+END OF SENIOR QUESTION BANK
+====================================================

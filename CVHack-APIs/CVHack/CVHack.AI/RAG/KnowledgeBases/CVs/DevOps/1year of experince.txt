@@ -1,0 +1,152 @@
+# Ethan Walker
+
+**DevOps Engineer**
+
+📍 Austin, Texas, USA
+📧 ethan.walker.devops@gmail.com
+📱 +1 (512) 555-6184
+🔗 https://linkedin.com/in/ethanwalkerdevops
+💻 https://github.com/ethanwalker-devops
+🌐 https://ethanwalker.dev
+
+---
+
+# Professional Summary
+
+DevOps Engineer with 1 year of professional experience building and maintaining CI/CD pipelines, automating deployment processes, and managing cloud infrastructure. Experienced in containerization, Infrastructure as Code (IaC), monitoring, and Linux system administration. Passionate about improving software delivery, system reliability, and operational efficiency through automation and DevOps best practices.
+
+---
+
+# Professional Experience
+
+## DevOps Engineer
+
+**CloudBridge Solutions — Austin, Texas, USA**  
+**July 2025 – Present**
+
+* Built and maintained CI/CD pipelines using GitHub Actions.
+* Automated application deployments for ASP.NET Core and Node.js applications.
+* Managed Docker containers and Docker Compose environments.
+* Provisioned cloud infrastructure on Microsoft Azure.
+* Created Infrastructure as Code templates using Terraform.
+* Configured Nginx as a reverse proxy for production environments.
+* Monitored application performance using Grafana and Prometheus.
+* Assisted developers in troubleshooting deployment and infrastructure issues.
+* Managed Linux servers and performed routine maintenance tasks.
+* Participated in Agile ceremonies and infrastructure planning.
+
+---
+
+# Technical Skills
+
+### Cloud Platforms
+
+* Microsoft Azure
+* Azure App Service
+* Azure Virtual Machines
+* Azure Storage
+
+### DevOps & CI/CD
+
+* GitHub Actions
+* Azure DevOps
+* CI/CD Pipelines
+
+### Containers & Orchestration
+
+* Docker
+* Docker Compose
+* Kubernetes (Basic Knowledge)
+
+### Infrastructure as Code
+
+* Terraform
+
+### Operating Systems
+
+* Linux (Ubuntu)
+* Windows Server
+
+### Web Servers
+
+* Nginx
+* IIS
+
+### Monitoring & Logging
+
+* Grafana
+* Prometheus
+
+### Version Control
+
+* Git
+* GitHub
+
+### Scripting
+
+* Bash
+* PowerShell
+
+---
+
+# Projects
+
+## CI/CD Pipeline for E-Commerce Application
+
+**Technologies:** GitHub Actions, Docker, Azure
+
+* Built automated pipelines for build, testing, and deployment.
+* Reduced deployment time through workflow automation.
+* Configured deployment to Azure App Service.
+
+---
+
+## Dockerized Web Application
+
+**Technologies:** Docker, Docker Compose
+
+* Containerized a multi-service web application.
+* Managed environment configurations using Docker Compose.
+* Simplified local development and deployment workflows.
+
+---
+
+## Infrastructure Automation
+
+**Technologies:** Terraform, Azure
+
+* Provisioned Azure infrastructure using Infrastructure as Code.
+* Automated creation of virtual machines, networking, and storage resources.
+* Improved deployment consistency across development environments.
+
+---
+
+# Education
+
+**Bachelor of Science in Information Technology**
+
+The University of Texas at Austin — Austin, USA
+
+Graduation Year: **2025**
+
+---
+
+# Certifications
+
+* Microsoft Certified: Azure Fundamentals (AZ-900)
+* HashiCorp Certified: Terraform Associate
+
+---
+
+# Languages
+
+* English — Native
+
+---
+
+# Additional Information
+
+* Experienced in cloud infrastructure deployment and automation.
+* Strong understanding of CI/CD pipelines and DevOps workflows.
+* Familiar with containerization, Infrastructure as Code, and monitoring solutions.
+* Passionate about automation, cloud technologies, and continuous learning.

@@ -1,0 +1,161 @@
+================================================================================
+CYBERSECURITY INTERVIEW QUESTIONS — MID-LEVEL
+================================================================================
+Target: 2–5 years of experience
+Focus: Threat detection, SIEM, incident response, penetration testing, cloud security,
+       identity management, secure development, advanced attacks
+================================================================================
+
+--------------------------------------------------------------------------------
+SECTION 1: THREAT DETECTION & SIEM
+--------------------------------------------------------------------------------
+
+Q1: What is a SIEM? How does it differ from a log management system?
+EXPECTED: SIEM (Security Information and Event Management) collects, aggregates, normalizes, and correlates logs/events from across the environment to detect threats in real time. Provides alerting, dashboards, and compliance reporting. Log management (Splunk, ELK in basic form) stores and searches logs. SIEM adds: correlation rules, threat intelligence integration, behavioral analytics (UEBA), automated alerting. Examples: Splunk SIEM, Microsoft Sentinel, IBM QRadar, Elastic Security.
+
+Q2: What are IOCs? Give examples across different categories.
+EXPECTED: Indicators of Compromise — forensic artifacts suggesting a system has been breached or targeted. Categories:
+- Network: suspicious IPs/domains, unusual outbound ports, beaconing patterns, large DNS queries
+- File: malicious file hashes (MD5/SHA-256), unusual file paths, executable in temp directories
+- Host: new user accounts, disabled AV, modified registry keys (persistence), scheduled tasks
+- Behavioral: lateral movement, privilege escalation, mass file access (ransomware precursor)
+Shared via STIX/TAXII, threat intel feeds (MISP, VirusTotal, AlienVault OTX).
+
+Q3: What is the MITRE ATT&CK framework? How do you use it operationally?
+EXPECTED: A knowledge base of adversary tactics, techniques, and procedures (TTPs) observed in real attacks, organized by: Tactics (the "why" — Initial Access, Execution, Persistence, Privilege Escalation, Defense Evasion, Credential Access, Discovery, Lateral Movement, Collection, Exfiltration, C2, Impact) and Techniques (the "how"). Operational uses: map detection rules to ATT&CK techniques to find coverage gaps, structure threat hunting, report on incident TTPs, purple team exercises, measure SOC detection maturity.
+
+Q4: What is threat hunting? How does it differ from passive monitoring?
+EXPECTED: Threat hunting is proactive — analysts actively search for hidden threats that have evaded existing controls, rather than waiting for alerts. Hypothesis-driven: "I believe attackers are using living-off-the-land binaries to evade AV — let me look for unusual PowerShell activity." Uses: EDR telemetry, SIEM queries, threat intel, MITRE ATT&CK. Passive monitoring = reacting to alerts. Threat hunting finds attackers already inside (dwell time reduction).
+
+Q5: What is alert fatigue? How do you address it in a SOC?
+EXPECTED: Alert fatigue occurs when analysts are overwhelmed by too many low-quality/false-positive alerts, causing real threats to be missed. Address: tune detection rules (reduce false positives), prioritize by severity and asset criticality, implement SOAR for automatic triage of low-level alerts, track false positive rate per rule, kill or fix rules with >80% FP rate, use threat intel to contextualize alerts, risk-score assets so alerts on critical systems bubble up.
+
+Q6: What is SOAR? How does it complement a SIEM?
+EXPECTED: Security Orchestration, Automation, and Response — automates repetitive SOC tasks and coordinates responses across tools. SIEM detects (generates alerts); SOAR responds (enriches, triages, auto-remediates). Example playbook: phishing alert → SOAR automatically extracts URL → checks VirusTotal → if malicious, blocks URL in proxy, quarantines email, opens ticket, notifies analyst. Reduces MTTR and analyst workload. Tools: Splunk SOAR, Palo Alto XSOAR, Microsoft Sentinel (has built-in automation).
+
+Q7: What is a correlation rule? Write a simple example.
+EXPECTED: A logic rule in a SIEM that detects a pattern of events indicating a threat. Example: "If the same source IP has 5+ failed SSH logins followed by 1 successful login within 10 minutes, generate a HIGH alert for possible brute force success." Rule logic: `event_type=ssh_fail COUNT >= 5 THEN event_type=ssh_success WITHIN 10min FROM same src_ip → ALERT`. Good rules are specific, low false-positive, mapped to ATT&CK technique T1110 (Brute Force).
+
+Q8: What is log normalization? Why is it important for a SIEM?
+EXPECTED: Different devices/apps log events in different formats (Windows Event Log, Syslog, JSON, CEF). Normalization maps these to a common schema (e.g., CIM — Common Information Model in Splunk, ECS — Elastic Common Schema) so correlation rules work across all log sources. Without normalization: you'd need separate rules per log format. With normalization: one rule for "failed login" works across Windows, Linux, cloud, and app logs.
+
+--------------------------------------------------------------------------------
+SECTION 2: INCIDENT RESPONSE
+--------------------------------------------------------------------------------
+
+Q9: What are the six phases of the NIST incident response lifecycle?
+EXPECTED: NIST SP 800-61: 1) Preparation (policies, tools, training, runbooks), 2) Detection & Analysis (identify and validate the incident, scope it), 3) Containment (short-term and long-term — stop the spread), 4) Eradication (remove root cause — malware, backdoors, compromised accounts), 5) Recovery (restore systems, verify no re-infection, monitor), 6) Post-Incident Activity (lessons learned, update runbooks, metrics). Sometimes simplified to: Prepare → Detect → Contain → Eradicate → Recover → Learn.
+
+Q10: What is the difference between short-term and long-term containment?
+EXPECTED: Short-term containment — immediate actions to stop the threat from spreading, accepting some disruption. Examples: isolate infected host from network, disable compromised account, block malicious IP at firewall. Long-term containment — allows business to continue while eradication is in progress. Examples: patch the vulnerability being exploited, rebuild host to known-good state in parallel, deploy additional monitoring on similar systems.
+
+Q11: What is a forensic image? When and why do you take one?
+EXPECTED: A bit-for-bit copy of a storage device (disk, memory) preserving all data including deleted files, metadata, and file system artifacts. Take before any analysis to avoid modifying evidence (write blocker is used). Tools: `dd`, FTK Imager, Magnet AXIOM. Why: legal proceedings require untouched evidence, forensic analysis may uncover artifacts not visible in live system, allows repeated analysis without risk. Chain of custody must be documented.
+
+Q12: What is memory forensics? What can you find in memory that you can't find on disk?
+EXPECTED: Analysis of a captured RAM dump to find evidence of running processes, network connections, and code that leaves no disk artifacts. Tools: Volatility (most common), Rekall. Find: running malware processes (injected code), encryption keys in memory, command history, network connections at time of capture, fileless malware (lives only in memory), recently deleted files still in RAM, credentials cached in LSASS.
+
+Q13: What is a playbook in incident response? What should one cover for a ransomware incident?
+EXPECTED: Documented step-by-step procedures for responding to a specific incident type. Ransomware playbook: 1) Detect (alert on mass file encryption, ransom note creation). 2) Isolate infected systems immediately (network quarantine). 3) Identify patient zero and initial entry point. 4) Determine scope — other infected hosts, lateral movement paths. 5) Notify stakeholders/legal/insurance. 6) Assess backup integrity (check for backup deletion attempts). 7) Do NOT pay ransom without legal/leadership approval. 8) Eradicate — rebuild from clean backups. 9) Root cause analysis. 10) Post-mortem.
+
+Q14: What is lateral movement? What are common techniques an attacker uses?
+EXPECTED: After gaining initial access, attacker moves to other systems in the network to reach their objective. Techniques (MITRE ATT&CK): Pass-the-Hash (use stolen NTLM hash without knowing plaintext password), Pass-the-Ticket (Kerberos ticket reuse), Remote Service exploitation (SMB, RDP, WMI, PsExec), Living off the Land (use built-in tools — PowerShell, WMI, certutil — to avoid detection). Detection: unusual admin tool usage, new connections between workstations, abnormal service account activity.
+
+Q15: What is DFIR? What skills does it require?
+EXPECTED: Digital Forensics and Incident Response — combines forensic investigation techniques with incident response to understand what happened, how, and the extent of compromise. Skills: OS internals (Windows/Linux artifacts — registry, event logs, prefetch, MFT), memory forensics, network forensics (pcap analysis), malware analysis (static/dynamic), scripting (Python, PowerShell), log analysis, legal/chain-of-custody procedures, SIEM/EDR proficiency.
+
+--------------------------------------------------------------------------------
+SECTION 3: PENETRATION TESTING
+--------------------------------------------------------------------------------
+
+Q16: What are the phases of a penetration test?
+EXPECTED: 1) Scoping & Rules of Engagement (what systems, time window, allowed techniques, emergency contacts). 2) Reconnaissance — OSINT, passive/active recon (Shodan, theHarvester, nmap). 3) Scanning & Enumeration — identify services, versions, vulnerabilities (Nessus, nmap scripts). 4) Exploitation — attempt to exploit findings (Metasploit, manual exploits). 5) Post-exploitation — privilege escalation, lateral movement, data access, persistence (demonstrates impact). 6) Reporting — findings, evidence, risk rating, remediation recommendations. 7) Remediation verification (retest).
+
+Q17: What is the difference between black box, grey box, and white box testing?
+EXPECTED: Black box — tester has no prior knowledge of the target (simulates external attacker). Most realistic but slowest/most expensive. Grey box — partial knowledge (e.g., credentials for a regular user account, network diagram). Simulates insider threat or attacker with stolen credentials. White box — full knowledge (source code, architecture docs, all credentials). Most thorough, most efficient, less realistic. Most engagements are grey box.
+
+Q18: What is Metasploit? How is it used in a penetration test?
+EXPECTED: An open-source penetration testing framework with a database of known exploits, payloads, and post-exploitation modules. Workflow: `search <cve>` → `use exploit/...` → `set RHOSTS <target>` → `set PAYLOAD windows/x64/meterpreter/reverse_tcp` → `exploit`. Meterpreter is a post-exploitation shell with modules for: privilege escalation (`getsystem`), credential dumping (`hashdump`), pivoting. Used ethically only with written authorization.
+
+Q19: What is privilege escalation? Give two examples for Linux and Windows.
+EXPECTED: Gaining higher privileges than initially obtained. Linux: SUID binaries (`find / -perm -4000` — execute as owner, often root), sudo misconfigurations (`sudo -l`, writable scripts run as root), kernel exploits (Dirty COW, Dirty Pipe), writable cron jobs, PATH hijacking. Windows: unquoted service paths, weak service permissions, DLL hijacking, token impersonation (Potato attacks), AlwaysInstallElevated registry, unpatched local privilege escalation CVEs.
+
+Q20: What is OSINT? Name five tools used in reconnaissance.
+EXPECTED: Open Source Intelligence — gathering information from publicly available sources without touching the target systems. Tools: Shodan (internet-connected device search engine — find exposed services), theHarvester (email/subdomain/employee enumeration), Maltego (relationship mapping/visualization), recon-ng (web reconnaissance framework), Google Dorking (advanced search operators: `site:`, `filetype:`, `inurl:`), LinkedIn (employee names/roles), WHOIS/DNS records, Wayback Machine (historical site snapshots), Certificate Transparency logs (find subdomains).
+
+Q21: What is Burp Suite? What are its core components?
+EXPECTED: The industry-standard web application security testing tool. Core components: Proxy (intercepts browser traffic for inspection/modification), Repeater (manually resend and modify requests), Scanner (automated vulnerability detection — Pro feature), Intruder (automated fuzzing and brute force), Decoder (encode/decode data), Comparer (diff responses). Used for: testing authentication, finding injection vulnerabilities, parameter tampering, session management testing.
+
+Q22: What is a CVE? How do CVSS scores work?
+EXPECTED: CVE (Common Vulnerabilities and Exposures) — a standardized identifier for publicly known vulnerabilities (e.g., CVE-2021-44228 = Log4Shell). CVSS (Common Vulnerability Scoring System) — 0-10 score measuring severity. Factors: Attack Vector (network/adjacent/local/physical), Attack Complexity, Privileges Required, User Interaction, Scope, Confidentiality/Integrity/Availability impact. Scores: 0-3.9 Low, 4-6.9 Medium, 7-8.9 High, 9-10 Critical. CVSS base score + environmental/temporal modifiers for context.
+
+--------------------------------------------------------------------------------
+SECTION 4: CLOUD SECURITY
+--------------------------------------------------------------------------------
+
+Q23: What are the shared responsibility models in cloud security? How does it differ across IaaS, PaaS, and SaaS?
+EXPECTED: Cloud provider and customer share responsibility — the split depends on service type. IaaS (EC2): provider secures physical/network/hypervisor; customer secures OS, middleware, apps, data, IAM. PaaS (App Service): provider adds OS/runtime; customer secures app code, data, IAM. SaaS (Office 365): provider secures nearly everything; customer manages user access, data governance, endpoint security. Common mistake: assuming cloud provider handles everything — customer always owns data classification and IAM.
+
+Q24: What are common cloud security misconfigurations? Give AWS examples.
+EXPECTED: Most cloud breaches stem from misconfigurations, not zero-days. Examples: Public S3 buckets with sensitive data (Capital One breach), overly permissive IAM roles (`AdministratorAccess` for Lambda functions), security groups allowing `0.0.0.0/0` on port 22/3389, unencrypted EBS volumes/RDS snapshots, CloudTrail logging disabled, no MFA for root/admin accounts, exposed metadata service (SSRF → IMDSv1 credential theft → enforce IMDSv2), unrestricted outbound traffic from instances.
+
+Q25: What is AWS CloudTrail? How is it used for security?
+EXPECTED: CloudTrail logs all API calls made in an AWS account (who did what, when, from where). Critical for security: detect unusual API activity (new IAM user created, security group modified, S3 bucket made public), investigate incidents, meet compliance requirements (90-day trail, archive to S3 + Glacier for longer retention). Integrate with CloudWatch Alarms or SIEM for real-time alerting on suspicious actions. Enable in all regions, protect trail with MFA delete.
+
+Q26: What is CSPM? What tools provide it?
+EXPECTED: Cloud Security Posture Management — continuously monitors cloud environments for misconfigurations, compliance violations, and security risks. Compares against benchmarks (CIS AWS Foundations, NIST, PCI-DSS). Tools: AWS Security Hub (native, aggregates findings), Microsoft Defender for Cloud, Wiz (agentless, very popular), Prisma Cloud, Lacework, Orca Security. Key capability: visualize blast radius — if this misconfigured resource is compromised, what can an attacker reach?
+
+Q27: What is IAM privilege escalation in AWS? Give an example.
+EXPECTED: Using existing permissions to gain additional permissions beyond what was intended. Example: a user with `iam:CreateAccessKey` can create access keys for other IAM users (including admins) and escalate to full admin. Other escalation paths: `iam:AttachUserPolicy` (attach AdministratorAccess to self), `lambda:CreateFunction` + `iam:PassRole` (create Lambda with a highly privileged role and invoke it). Tools like Pacu (AWS exploitation framework) and PMapper map escalation paths. Defense: strict least privilege, SCPs (Service Control Policies), permission boundaries.
+
+--------------------------------------------------------------------------------
+SECTION 5: IDENTITY & ACCESS MANAGEMENT
+--------------------------------------------------------------------------------
+
+Q28: What is Active Directory (AD)? Why is it a prime target for attackers?
+EXPECTED: AD is Microsoft's directory service managing users, computers, and policies in a Windows domain. It's the "keys to the kingdom" — compromise AD and you own the entire organization. Attack targets: Domain Controllers (DC), Kerberos (authentication), LDAP (directory queries), Group Policy Objects (lateral movement, persistence), privileged groups (Domain Admins, Enterprise Admins). Most ransomware groups target AD to maximize impact.
+
+Q29: What is Kerberoasting? How does it work and how do you defend against it?
+EXPECTED: An attack where any domain user can request a Kerberos service ticket (TGS) for any service account's SPN, and the ticket is encrypted with the service account's password hash. Attacker extracts the ticket and cracks it offline. If the service account has a weak password — compromised. Defense: use strong, long, random passwords for service accounts (MSAs/gMSAs handle this automatically), disable old SPNs, monitor for TGS requests for sensitive SPNs, use AES encryption instead of RC4 for Kerberos.
+
+Q30: What is Pass-the-Hash (PtH)? How is it different from Pass-the-Ticket (PtT)?
+EXPECTED: PtH (NTLM): attacker captures NTLM hash (from LSASS dump — Mimikatz) and uses it to authenticate to other systems without knowing the plaintext password. Exploits NTLM authentication. PtT (Kerberos): attacker steals a Kerberos ticket (TGT or TGS) from memory and uses it to authenticate as the ticket's owner. Golden Ticket = forged TGT using krbtgt hash (persists even after password changes). Defense: PtH — Credential Guard, disable NTLMv1, network segmentation. PtT — Credential Guard, monitor unusual ticket usage.
+
+Q31: What is Zero Trust Architecture? What are its core principles?
+EXPECTED: "Never trust, always verify" — no implicit trust based on network location (inside the perimeter is not automatically trusted). Core principles: Verify explicitly (always authenticate and authorize using all available data — identity, location, device health, service, workload), Use least privilege access (JIT/JEA — just-in-time/just-enough-access), Assume breach (design as if attackers are already inside — minimize blast radius, segment everything). Implementation: strong identity (MFA, passwordless), device compliance checks, microsegmentation, continuous monitoring. Tools: Microsoft Entra ID Conditional Access, Zscaler, Cloudflare Access.
+
+Q32: What is the difference between SSO and federation? What is SAML vs OAuth 2.0 vs OIDC?
+EXPECTED: SSO — one login grants access to multiple apps. Federation — trust between different identity domains (e.g., company A trusts company B's identity provider). SAML (Security Assertion Markup Language) — XML-based, used for enterprise SSO (Okta, ADFS → web apps). OAuth 2.0 — authorization framework (delegated access), not authentication — "allow this app to access your Google Drive." OIDC (OpenID Connect) — authentication layer on top of OAuth 2.0 (adds ID token, user info endpoint). Modern apps: OIDC for authn, OAuth for authz.
+
+--------------------------------------------------------------------------------
+SECTION 6: SECURE DEVELOPMENT & APPLICATION SECURITY
+--------------------------------------------------------------------------------
+
+Q33: What is SAST vs DAST vs IAST? When do you use each?
+EXPECTED: SAST (Static Application Security Testing) — analyzes source code/bytecode without running the app. Catches: injection flaws, hardcoded secrets, insecure functions. Tools: Semgrep, SonarQube, Checkmarx. Run in CI on every PR. DAST (Dynamic Application Security Testing) — tests the running application from outside by sending inputs and analyzing responses. Catches: runtime issues, auth bypass, XSS, business logic flaws. Tools: OWASP ZAP, Burp Suite Pro. Run in staging. IAST — instruments the running app from inside during testing. Most accurate, but requires agent integration. Use SAST earliest; DAST for deeper testing; IAST for high-assurance apps.
+
+Q34: What is a WAF? What are its limitations?
+EXPECTED: Web Application Firewall — filters/monitors HTTP traffic between clients and web app. Protects against: SQLi, XSS, CSRF, path traversal, bots. Modes: detection (logging only) and prevention (block). Cloud WAFs: AWS WAF, Cloudflare WAF, Azure WAF. Limitations: can be bypassed with obfuscation, doesn't fix underlying code vulnerabilities, application logic flaws invisible to WAF, requires tuning to avoid blocking legitimate traffic, not a replacement for secure coding.
+
+Q35: What is secrets management in application development? What tools and practices do you recommend?
+EXPECTED: Secrets (API keys, DB passwords, certificates) must never be hardcoded in code or committed to Git. Practices: use secret managers (HashiCorp Vault, AWS Secrets Manager, Azure Key Vault), inject at runtime via environment variables or mounted files, scan repos for secrets pre-commit (truffleHog, git-secrets, Gitleaks), rotate secrets regularly, use short-lived dynamic credentials (Vault generates DB creds on demand), different secrets per environment, audit secret access.
+
+Q36: What is a security code review? What do you look for?
+EXPECTED: A manual or tool-assisted review of source code for security vulnerabilities. Look for: hardcoded secrets/credentials, SQL/command injection (string concatenation in queries), insecure deserialization, missing authentication/authorization checks, missing input validation, insecure direct object references (IDOR), use of deprecated/weak crypto (MD5, DES, SHA-1), exposed stack traces in error responses, missing logging of security events, insecure dependencies (check against NVD/Snyk). Part of secure SDLC.
+
+Q37: What is CSRF? How does it differ from XSS, and how do you prevent it?
+EXPECTED: Cross-Site Request Forgery — tricks an authenticated user's browser into sending a forged request to a site they're logged into (e.g., transfer money, change email). Exploits the browser's automatic cookie sending. XSS injects scripts into the target site; CSRF exploits the user's authenticated session from another site. Prevention: CSRF tokens (unique per-session token validated server-side), SameSite cookie attribute (Lax or Strict), verify Origin/Referer headers, require re-authentication for sensitive actions.
+
+Q38: What is dependency confusion / supply chain attack in software development?
+EXPECTED: Attacker publishes a malicious package to a public registry (npm, PyPI) with the same name as an internal private package but a higher version number. Package managers may prefer the public (malicious) version. Defense: use private registry with upstream proxying (Artifactory, Nexus), explicitly scope internal packages (`@company/package`), dependency integrity checking (package lock files, hash verification), allowlist-only dependency policies, scan dependencies with Snyk/OWASP Dependency-Check in CI.
+
+Q39: What is SSRF? Give a real-world impact example.
+EXPECTED: Server-Side Request Forgery — attacker makes the server perform requests to internal resources the attacker can't access directly. Example: input `http://169.254.169.254/latest/meta-data/iam/security-credentials/` makes an AWS server fetch its own EC2 metadata, returning temporary IAM credentials — the attacker can then access AWS resources with those credentials (Capital One breach mechanism). Defense: allowlist outbound destinations, use IMDSv2 (requires session token), disable SSRF-prone features, network egress controls.
+
+Q40: What is the difference between a penetration test and a red team exercise?
+EXPECTED: Penetration test — defined scope, finds and exploits as many vulnerabilities as possible, typically 1-4 weeks, reports all findings for remediation. Red team — simulates a realistic, targeted threat actor campaign to test the entire security program (people, processes, technology), stealthy, specific objective (exfiltrate crown jewels, achieve domain admin), tests detection and response (blue team), longer duration (weeks-months), findings focus on detection gaps and response effectiveness, not just vulnerabilities.
+
+================================================================================
+END OF FILE — MID-LEVEL
+Total Questions: 40
+================================================================================

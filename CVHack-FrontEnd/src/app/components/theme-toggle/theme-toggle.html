@@ -1,0 +1,15 @@
+<button class="p-2 rounded-xl transition-colors"
+        style="color: var(--white); background: var(--tealHover);"
+        (click)="toggleTheme()">
+  
+  <!-- Moon: shown in light mode -->
+  @if (!isDark()) {
+    <app-moon-icon></app-moon-icon>
+  }
+
+  <!-- Sun: shown in dark mode -->
+  @if (isDark()) {
+    <app-sun-icon></app-sun-icon>
+  }
+
+</button>

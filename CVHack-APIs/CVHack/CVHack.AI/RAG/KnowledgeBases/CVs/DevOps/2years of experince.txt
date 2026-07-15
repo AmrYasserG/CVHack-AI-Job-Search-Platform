@@ -1,0 +1,166 @@
+# Lucas Bennett
+
+**DevOps Engineer**
+
+📍 Berlin, Germany  
+📧 lucas.bennett.devops@gmail.com  
+📱 +49 157 8456 2198  
+🔗 https://linkedin.com/in/lucasbennett-devops  
+💻 https://github.com/lucasbennett-devops  
+🌐 https://lucasbennett.dev  
+
+---
+
+# Professional Summary
+
+DevOps Engineer with 2 years of professional experience building and maintaining CI/CD pipelines, automating cloud infrastructure, managing containerized applications, and improving software delivery processes. Experienced in Docker, Kubernetes, Azure, GitHub Actions, Terraform, and Linux administration. Passionate about Infrastructure as Code, cloud-native technologies, automation, and enhancing deployment reliability.
+
+---
+
+# Professional Experience
+
+## DevOps Engineer
+
+**CloudStack Solutions – Berlin, Germany**  
+**June 2024 – Present**
+
+* Designed and maintained CI/CD pipelines using GitHub Actions and Azure DevOps.
+* Automated infrastructure provisioning using Terraform.
+* Managed Kubernetes clusters for production and staging environments.
+* Containerized backend services using Docker.
+* Configured Azure App Services and Azure Container Registry.
+* Implemented monitoring using Prometheus and Grafana.
+* Automated deployment processes, reducing release time significantly.
+* Managed Linux servers and deployment scripts.
+* Collaborated with developers to optimize application performance.
+* Improved system reliability through infrastructure automation and monitoring.
+
+---
+
+## Junior DevOps Engineer
+
+**NextWave Technologies – Berlin, Germany**  
+**July 2023 – May 2024**
+
+* Assisted in maintaining CI/CD pipelines.
+* Built Docker images for backend applications.
+* Supported cloud deployments on Microsoft Azure.
+* Configured Linux servers and deployment environments.
+* Assisted in monitoring application performance.
+* Worked with Git branching strategies and deployment automation.
+* Participated in infrastructure documentation and system maintenance.
+
+---
+
+# Technical Skills
+
+### Cloud Platforms
+
+* Microsoft Azure
+* Azure App Service
+* Azure Container Registry
+* Azure Virtual Machines
+
+### DevOps Tools
+
+* Docker
+* Kubernetes
+* Terraform
+* GitHub Actions
+* Azure DevOps
+
+### Operating Systems
+
+* Linux (Ubuntu)
+* Windows Server
+
+### Infrastructure
+
+* Infrastructure as Code (IaC)
+* CI/CD
+* Containerization
+* Virtual Machines
+* Networking Fundamentals
+
+### Monitoring & Logging
+
+* Prometheus
+* Grafana
+* Azure Monitor
+
+### Scripting
+
+* Bash
+* PowerShell
+
+### Version Control
+
+* Git
+* GitHub
+
+---
+
+# Projects
+
+## Kubernetes Microservices Deployment
+
+**Technologies:** Kubernetes, Docker, Azure, GitHub Actions
+
+* Containerized multiple .NET microservices.
+* Configured Kubernetes deployments and services.
+* Automated deployment pipeline using GitHub Actions.
+* Improved deployment consistency across environments.
+
+---
+
+## Infrastructure Automation Platform
+
+**Technologies:** Terraform, Azure
+
+* Provisioned Azure infrastructure using Infrastructure as Code.
+* Automated networking, storage, and compute resource creation.
+* Reduced manual deployment effort through reusable Terraform modules.
+
+---
+
+## CI/CD Automation Pipeline
+
+**Technologies:** GitHub Actions, Docker
+
+* Built automated pipelines for build, testing, and deployment.
+* Integrated Docker image publishing.
+* Automated deployments to Azure environments.
+
+---
+
+# Education
+
+**Bachelor of Science in Computer Science**
+
+Technical University of Berlin — Berlin, Germany
+
+Graduation Year: **2023**
+
+---
+
+# Certifications
+
+* Microsoft Certified: Azure Administrator Associate (AZ-104)
+* Microsoft Certified: Azure Fundamentals (AZ-900)
+* Docker Certified Associate (DCA)
+
+---
+
+# Languages
+
+* English — Fluent
+* German — Professional Working Proficiency
+
+---
+
+# Additional Information
+
+* Strong understanding of DevOps culture and Agile workflows.
+* Experienced in cloud infrastructure automation and deployment optimization.
+* Passionate about Kubernetes, cloud-native applications, and Infrastructure as Code.
+* Continuously learning modern DevOps practices and platform engineering.

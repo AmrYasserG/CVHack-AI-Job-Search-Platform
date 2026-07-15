@@ -1,0 +1,201 @@
+# David Richardson
+
+**Senior Backend .NET Developer**
+Amsterdam, Netherlands
+📧 [david.richardson.dev@email.com](mailto:david.richardson.dev@email.com) | 📞 +31 6 1234 5678
+🔗 LinkedIn: linkedin.com/in/davidrichardsondev
+🔗 GitHub: github.com/davidrichardson
+🔗 Portfolio: davidrichardson.dev
+
+---
+
+# Professional Summary
+
+Backend .NET Developer with **3 years of professional experience** designing, developing, and deploying scalable enterprise applications using ASP.NET Core and C#. Experienced in Clean Architecture, microservice-based applications, cloud deployment, secure authentication, performance optimization, and distributed systems. Strong background in designing RESTful APIs, integrating third-party services, improving database performance, and collaborating within Agile development teams. Passionate about building reliable, maintainable, and high-performance backend solutions following industry best practices.
+
+---
+
+# Professional Experience
+
+## Backend .NET Developer
+
+**CloudSphere Technologies** — Amsterdam, Netherlands
+
+**March 2024 – Present**
+
+* Designed and developed scalable RESTful APIs using ASP.NET Core following Clean Architecture principles.
+* Built secure authentication and authorization using ASP.NET Identity, JWT, and Role-Based Access Control.
+* Improved API performance by implementing Redis caching, reducing response time by approximately **40%**.
+* Optimized SQL Server queries and indexing strategies for high-volume transactional systems.
+* Integrated third-party services including Stripe, SendGrid, and Azure Blob Storage.
+* Containerized backend services using Docker and participated in CI/CD deployments with GitHub Actions.
+* Mentored junior developers through code reviews and technical guidance.
+* Worked closely with frontend developers, QA engineers, and DevOps teams during Agile sprints.
+
+**Technologies:** ASP.NET Core, C#, SQL Server, Entity Framework Core, Redis, Docker, Azure, GitHub Actions, JWT
+
+---
+
+## Backend .NET Developer
+
+**ByteWorks Solutions** — Rotterdam, Netherlands
+
+**June 2023 – February 2024**
+
+* Developed enterprise APIs supporting HR and financial management systems.
+* Implemented Repository Pattern, Unit of Work, and Dependency Injection.
+* Created reusable middleware for exception handling and request logging.
+* Added pagination, filtering, sorting, and search capabilities across multiple APIs.
+* Wrote unit tests with xUnit and improved code coverage.
+* Participated in sprint planning, backlog refinement, and peer code reviews.
+
+**Technologies:** ASP.NET Core, EF Core, SQL Server, AutoMapper, FluentValidation
+
+---
+
+## Junior Backend .NET Developer
+
+**NextGen Software** — Utrecht, Netherlands
+
+**July 2022 – May 2023**
+
+* Developed CRUD APIs for internal business applications.
+* Implemented Entity Framework Core migrations and database updates.
+* Assisted in debugging production issues and maintaining existing systems.
+* Created API documentation using Swagger/OpenAPI.
+* Collaborated with senior developers to implement new business requirements.
+
+**Technologies:** ASP.NET Core, SQL Server, EF Core, Swagger
+
+---
+
+# Technical Skills
+
+### Programming Languages
+
+* C#
+* SQL
+* JavaScript
+* TypeScript
+
+### Backend Technologies
+
+* ASP.NET Core Web API
+* Entity Framework Core
+* LINQ
+* ASP.NET Identity
+* JWT Authentication
+* RESTful APIs
+* SignalR
+* Background Services
+
+### Databases
+
+* SQL Server
+* PostgreSQL
+* Redis
+* Database Optimization
+* Stored Procedures
+
+### Architecture
+
+* Clean Architecture
+* Repository Pattern
+* Unit of Work
+* SOLID Principles
+* Dependency Injection
+* Design Patterns
+* Microservices Fundamentals
+
+### Cloud & DevOps
+
+* Microsoft Azure
+* Azure App Service
+* Azure Blob Storage
+* Docker
+* GitHub Actions
+* CI/CD
+
+### Tools
+
+* Visual Studio
+* Visual Studio Code
+* Git
+* GitHub
+* Azure DevOps
+* Postman
+* Swagger
+
+### Testing
+
+* xUnit
+* Integration Testing
+
+---
+
+# Projects
+
+## Enterprise HR Management API
+
+**Tech Stack:** ASP.NET Core, SQL Server, Entity Framework Core, Redis, Docker
+
+* Developed scalable APIs for employee, payroll, attendance, and leave management.
+* Implemented JWT authentication and role-based authorization.
+* Added Redis caching for frequently accessed resources.
+* Improved SQL query performance and reduced API latency.
+
+---
+
+## E-Commerce Platform Backend
+
+**Tech Stack:** ASP.NET Core, SQL Server, Azure Blob Storage, Stripe API
+
+* Designed APIs for products, orders, payments, inventory, and customers.
+* Integrated Stripe payment gateway.
+* Implemented image uploads using Azure Blob Storage.
+* Added global exception handling and centralized logging.
+
+---
+
+## Project Management System
+
+**Tech Stack:** ASP.NET Core, SignalR, SQL Server
+
+* Developed collaboration APIs for projects and tasks.
+* Implemented real-time notifications using SignalR.
+* Added activity tracking and audit logging.
+* Designed scalable architecture supporting multiple organizations.
+
+---
+
+# Education
+
+**Bachelor of Science in Software Engineering**
+
+University of Amsterdam
+
+Graduated: 2022
+
+---
+
+# Certifications
+
+* Microsoft Certified: Azure Developer Associate (AZ-204)
+* Microsoft Certified: Azure Fundamentals (AZ-900)
+* Docker Foundations Professional Certificate
+
+---
+
+# Languages
+
+* English (Professional)
+* Dutch (Native)
+
+---
+
+# Achievements
+
+* Reduced average API response time by **40%** through caching and database optimization.
+* Successfully delivered multiple production systems serving thousands of users.
+* Mentored junior developers and participated in technical interviews.
+* Contributed to CI/CD improvements that reduced deployment time by **50%**.

@@ -1,0 +1,165 @@
+================================================================================
+CYBERSECURITY INTERVIEW QUESTIONS — JUNIOR LEVEL
+================================================================================
+Target: 0–2 years of experience
+Focus: Networking fundamentals, core security concepts, basic threats, cryptography intro,
+       security tools, compliance basics, Linux security
+================================================================================
+
+--------------------------------------------------------------------------------
+SECTION 1: NETWORKING FUNDAMENTALS FOR SECURITY
+--------------------------------------------------------------------------------
+
+Q1: What is the OSI model? Name all 7 layers and give a security-relevant example for each.
+EXPECTED:
+- Layer 1 Physical: cables, switches — physical security, eavesdropping on cables
+- Layer 2 Data Link: MAC addresses, switches — MAC spoofing, ARP poisoning
+- Layer 3 Network: IP routing — IP spoofing, DDoS, firewall rules
+- Layer 4 Transport: TCP/UDP, ports — port scanning, SYN flood attacks
+- Layer 5 Session: sessions — session hijacking
+- Layer 6 Presentation: encryption, encoding — SSL/TLS stripping
+- Layer 7 Application: HTTP, DNS, FTP — SQLi, XSS, phishing, DNS poisoning
+
+Q2: What is the difference between TCP and UDP from a security perspective?
+EXPECTED: TCP is connection-oriented (3-way handshake: SYN/SYN-ACK/ACK) — easier to track and filter but vulnerable to SYN floods. UDP is connectionless — harder to filter, used in amplification DDoS attacks (DNS, NTP reflection). TCP's state tracking allows stateful firewalls; UDP requires other controls.
+
+Q3: What is a firewall? What is the difference between a stateful and stateless firewall?
+EXPECTED: A firewall filters network traffic based on rules. Stateless — filters each packet independently based on source/destination IP and port (fast but limited). Stateful — tracks connection state (SYN, established, closing), only allows packets that belong to a known connection. Stateful is far more secure — blocks packets that arrive out of sequence (e.g., ACK without prior SYN).
+
+Q4: What is a VPN? How does it work?
+EXPECTED: Virtual Private Network creates an encrypted tunnel between client and VPN server, protecting data in transit and masking the client's IP. Protocols: OpenVPN, WireGuard (modern, fast), IPSec, IKEv2. Used for: remote access, site-to-site connectivity, bypassing geo-restrictions. In enterprise: split tunneling routes only corporate traffic through VPN.
+
+Q5: What is DNS? What are common DNS-based attacks?
+EXPECTED: DNS translates domain names to IP addresses. Common attacks: DNS spoofing/cache poisoning (inject false records into resolver cache), DNS hijacking (redirect queries to attacker-controlled server), DNS tunneling (exfiltrate data encoded in DNS queries), DDoS amplification (small query, large response sent to victim). Defense: DNSSEC (sign records), DNS over HTTPS (DoH), monitoring for anomalous DNS query patterns.
+
+Q6: What is the difference between HTTP and HTTPS? What does SSL/TLS actually do?
+EXPECTED: HTTP is plaintext — anyone on the network can read/modify it. HTTPS adds TLS encryption. TLS provides: confidentiality (encrypts data), integrity (prevents tampering via MAC), authentication (server identity via certificate). TLS handshake: negotiate cipher suite, exchange certificates, generate session keys. Protects against eavesdropping and MITM attacks.
+
+Q7: What are common port numbers a security analyst should know?
+EXPECTED:
+- 21: FTP (insecure file transfer)
+- 22: SSH (secure remote access)
+- 23: Telnet (insecure, never use)
+- 25/465/587: SMTP (email)
+- 53: DNS
+- 80: HTTP
+- 443: HTTPS
+- 389/636: LDAP/LDAPS (directory services)
+- 445: SMB (Windows file sharing — EternalBlue exploit target)
+- 3306: MySQL, 5432: PostgreSQL, 1433: MSSQL
+- 3389: RDP (Remote Desktop — frequent brute force target)
+
+Q8: What is a proxy? What is the difference between a forward proxy and a reverse proxy?
+EXPECTED: Forward proxy sits between clients and the internet — clients route traffic through it (anonymization, content filtering, caching). Reverse proxy sits in front of servers — clients connect to it, it forwards to backend servers (load balancing, WAF, SSL termination, hiding server IPs). Security use: forward proxies enforce browsing policies; reverse proxies (with WAF) protect web apps.
+
+--------------------------------------------------------------------------------
+SECTION 2: CORE SECURITY CONCEPTS
+--------------------------------------------------------------------------------
+
+Q9: What is the CIA Triad? Give a real-world example of a breach of each.
+EXPECTED:
+- Confidentiality: unauthorized access to data (data breach — attacker reads customer PII). Controls: encryption, access control.
+- Integrity: unauthorized modification of data (attacker alters transaction amounts). Controls: checksums, digital signatures, audit logs.
+- Availability: making systems inaccessible (DDoS attack takes down a service). Controls: redundancy, rate limiting, DDoS protection.
+
+Q10: What is the principle of least privilege? Give an example.
+EXPECTED: Users, processes, and systems should have only the minimum access needed to perform their function. Example: a customer service rep needs read access to orders but not the ability to delete records or access financial data. A web server process should not run as root. Reduces blast radius of compromises.
+
+Q11: What is defense in depth?
+EXPECTED: A security strategy using multiple layers of controls so that if one fails, others still protect the asset. Like an onion: perimeter firewall → network segmentation → host-based firewall → EDR on endpoints → application-level authentication → data encryption. No single control is relied upon completely.
+
+Q12: What is the difference between authentication, authorization, and accounting (AAA)?
+EXPECTED: Authentication — verifying identity (who are you? — passwords, MFA, certificates). Authorization — verifying permissions (what can you do? — RBAC, ACLs). Accounting — tracking what was done (audit logs, SIEM events). All three are required for secure access control.
+
+Q13: What is Multi-Factor Authentication (MFA)? What are the three authentication factors?
+EXPECTED: MFA requires two or more factors from different categories: Something you know (password, PIN), Something you have (hardware token, phone/TOTP app, smart card), Something you are (biometrics — fingerprint, face). Combining factors dramatically reduces account compromise risk — even if a password is stolen, the attacker still needs the second factor.
+
+Q14: What is the difference between symmetric and asymmetric encryption? Give examples of each.
+EXPECTED: Symmetric — same key for encryption and decryption (fast, good for bulk data). Examples: AES-256, ChaCha20. Challenge: key distribution. Asymmetric — key pair (public key encrypts, private key decrypts). Examples: RSA, ECC. Slower but solves key distribution. Used in TLS handshake to exchange a symmetric session key. Both used together in practice (hybrid encryption).
+
+Q15: What is hashing? How is it different from encryption?
+EXPECTED: Hashing is a one-way function — input → fixed-length digest, cannot be reversed. Encryption is two-way — can be decrypted with the key. Hashing used for: password storage (bcrypt, Argon2, scrypt), file integrity verification (SHA-256 checksums), digital signatures. Never store passwords with MD5/SHA-1 (broken) or unsalted hashes (rainbow table attacks).
+
+Q16: What is a salt in password hashing? Why is it important?
+EXPECTED: A random value appended to the password before hashing. Ensures two users with the same password have different hashes. Defeats pre-computed rainbow table attacks. Each password should have a unique salt stored alongside the hash. Modern algorithms (bcrypt, Argon2) handle salting automatically.
+
+Q17: What is social engineering? Name three techniques.
+EXPECTED: Manipulating people into revealing information or performing actions that compromise security. Techniques: Phishing (deceptive emails tricking users into clicking links/entering credentials), Vishing (voice phishing — phone calls impersonating IT/bank), Pretexting (fabricating a scenario — "I'm from IT, I need your password to fix your account"), Baiting (leaving infected USB drives), Tailgating (following someone through a secure door).
+
+--------------------------------------------------------------------------------
+SECTION 3: COMMON THREATS & VULNERABILITIES
+--------------------------------------------------------------------------------
+
+Q18: What is malware? Name and describe five types.
+EXPECTED:
+- Virus: attaches to legitimate files, spreads when executed
+- Worm: self-replicating, spreads across networks without human interaction
+- Trojan: disguises as legitimate software, opens backdoor
+- Ransomware: encrypts victim's files, demands payment (e.g., WannaCry, LockBit)
+- Spyware: secretly monitors user activity, steals credentials
+- Rootkit: hides deep in OS, hard to detect, persists across reboots
+- Keylogger: records keystrokes to steal passwords
+
+Q19: What is a phishing attack? What is the difference between phishing, spear phishing, and whaling?
+EXPECTED: Phishing — mass generic emails impersonating trusted entities to steal credentials. Spear phishing — targeted phishing personalized to specific individual/org (uses OSINT). Whaling — spear phishing targeting executives (CEO, CFO). Business Email Compromise (BEC) is a form of whaling. Defense: MFA, email filtering, security awareness training, DMARC/DKIM/SPF.
+
+Q20: What is a Man-in-the-Middle (MITM) attack? How do you defend against it?
+EXPECTED: Attacker secretly intercepts and potentially alters communication between two parties who think they're communicating directly. Examples: ARP poisoning on LAN, rogue Wi-Fi hotspot, SSL stripping. Defense: HTTPS everywhere (HSTS), certificate pinning, mutual TLS, VPN on public networks, monitoring for ARP anomalies.
+
+Q21: What is SQL Injection? Give an example and explain how to prevent it.
+EXPECTED: Attacker inserts SQL code into input fields to manipulate the database query. Example: username field input `' OR '1'='1` bypasses login. Attack can dump databases, modify data, or execute OS commands (with `xp_cmdshell`). Prevention: parameterized queries / prepared statements (primary), input validation, least privilege DB accounts, WAF.
+
+Q22: What is Cross-Site Scripting (XSS)? What are the three types?
+EXPECTED: Attacker injects malicious JavaScript into a web page viewed by other users. Types: Stored (persisted in DB, served to all visitors), Reflected (payload in URL, reflected back in response — requires tricking victim to click link), DOM-based (manipulation of the DOM client-side). Impact: session theft, credential harvesting, defacement. Prevention: output encoding, Content Security Policy (CSP), HttpOnly cookies.
+
+Q23: What is a DDoS attack? What are common types?
+EXPECTED: Distributed Denial of Service — overwhelming a target with traffic from many sources (botnet). Types: Volumetric (flood bandwidth — UDP flood, ICMP flood), Protocol (exploit protocol weaknesses — SYN flood, ping of death), Application Layer (Layer 7 — HTTP flood, Slowloris — harder to filter). Defense: rate limiting, CDN/DDoS scrubbing (Cloudflare, AWS Shield), anycast, traffic analysis.
+
+Q24: What is a zero-day vulnerability?
+EXPECTED: A software vulnerability unknown to the vendor (or for which no patch exists yet). "Zero days" because defenders have zero days to patch before it can be exploited. High value in underground markets and nation-state operations. Defense is harder — rely on behavioral detection, network segmentation, least privilege rather than signature-based AV.
+
+Q25: What is the OWASP Top 10? Name at least five from the current list.
+EXPECTED: OWASP Top 10 (2021): 1) Broken Access Control, 2) Cryptographic Failures, 3) Injection (SQLi, LDAP, etc.), 4) Insecure Design, 5) Security Misconfiguration, 6) Vulnerable and Outdated Components, 7) Identification and Authentication Failures, 8) Software and Data Integrity Failures, 9) Security Logging and Monitoring Failures, 10) Server-Side Request Forgery (SSRF). Essential knowledge for any security or developer role.
+
+--------------------------------------------------------------------------------
+SECTION 4: SECURITY TOOLS & LINUX SECURITY
+--------------------------------------------------------------------------------
+
+Q26: What is nmap? Give an example command and explain what it does.
+EXPECTED: Network mapper — used for host discovery and port scanning. Example: `nmap -sV -p 1-1000 192.168.1.1` — scans ports 1-1000 on the target, detects service versions (`-sV`). `-sS` = SYN scan (stealth), `-A` = aggressive (OS detection, scripts, traceroute). Used by attackers for reconnaissance and by defenders for network inventory/auditing.
+
+Q27: What is Wireshark? What can you find with it?
+EXPECTED: A packet capture and protocol analysis tool. Captures raw network traffic and lets you inspect each packet. Useful for: analyzing malware C2 traffic, finding plaintext credentials in HTTP/FTP/Telnet, diagnosing network issues, detecting ARP poisoning. Use display filters (e.g., `http`, `tcp.port == 443`, `ip.addr == x.x.x.x`) to narrow analysis.
+
+Q28: What is the purpose of `iptables` or `nftables` on Linux?
+EXPECTED: `iptables` (and its modern replacement `nftables`) is the Linux kernel's packet filtering framework — the foundation of most Linux-based firewalls. Controls: INPUT (incoming), OUTPUT (outgoing), FORWARD (routed packets) chains. Rules specify: source/dest IP, port, protocol, action (ACCEPT/DROP/REJECT). UFW and firewalld are higher-level wrappers around iptables.
+
+Q29: What are Linux file permissions? What does `-rwxr-xr--` mean?
+EXPECTED: `-rwxr-xr--`: file type `-` (regular file), owner can read/write/execute (`rwx`), group can read/execute (`r-x`), others can read only (`r--`). Represented numerically: rwx=7, r-x=5, r--=4 → 754. `chmod 754 file`. Security: sensitive files (keys, configs) should be 600 (owner read/write only), never world-writable (777).
+
+Q30: What is `sudo`? What are the risks of misconfigured sudo?
+EXPECTED: `sudo` allows permitted users to run commands as another user (usually root). Configured in `/etc/sudoers`. Risks: `NOPASSWD` entries let attackers escalate without a password, overly broad rules (`ALL=(ALL) ALL`), writable sudoers file, programs that can break out of restricted shells (vi, less, find with `-exec`, Python). Audit with `sudo -l` to list allowed commands.
+
+--------------------------------------------------------------------------------
+SECTION 5: COMPLIANCE & SECURITY FRAMEWORKS
+--------------------------------------------------------------------------------
+
+Q31: What is the NIST Cybersecurity Framework (CSF)? Name its five core functions.
+EXPECTED: A voluntary framework for managing cybersecurity risk. Five functions: Identify (understand assets, risks), Protect (implement safeguards), Detect (identify cybersecurity events), Respond (take action on detected events), Recover (restore capabilities). Updated to CSF 2.0 in 2024, adding Govern as a sixth function. Widely adopted across industries.
+
+Q32: What is the difference between a vulnerability, a threat, and a risk?
+EXPECTED: Vulnerability — a weakness in a system (unpatched software, misconfiguration). Threat — a potential cause of harm (attacker, malware, natural disaster). Risk = Threat × Vulnerability × Impact — the likelihood and consequence of a threat exploiting a vulnerability. Risk assessment drives prioritization: a critical vulnerability with no known threat actor targeting it may be lower risk than a moderate vulnerability being actively exploited.
+
+Q33: What is PCI-DSS? Who must comply with it?
+EXPECTED: Payment Card Industry Data Security Standard — requirements for organizations that store, process, or transmit cardholder data (credit/debit card info). 12 core requirements covering network security, access control, encryption, monitoring, vulnerability management. Non-compliance risks: fines, loss of ability to process card payments. Assessments: SAQ (self-assessment) or QSA (qualified security assessor) audit.
+
+Q34: What is GDPR? What are the key security obligations it imposes?
+EXPECTED: General Data Protection Regulation — EU law protecting personal data of EU residents. Key security obligations: data protection by design and default, appropriate technical/organizational security measures, breach notification (72 hours to supervisory authority, without undue delay to affected individuals if high risk), data minimization, right to erasure. Fines: up to €20M or 4% of global annual turnover.
+
+Q35: What is a security audit vs. a penetration test vs. a vulnerability scan?
+EXPECTED: Vulnerability scan — automated tool (Nessus, Qualys) identifies known vulnerabilities in systems. Low effort, broad coverage, many false positives. Penetration test — simulated attack by skilled tester trying to actually exploit vulnerabilities and achieve objectives (data access, privilege escalation). Deeper, fewer false positives. Security audit — systematic review of policies, procedures, and controls against a standard (ISO 27001, SOC 2). Not just technical — includes people and processes.
+
+================================================================================
+END OF FILE — JUNIOR LEVEL
+Total Questions: 35
+================================================================================

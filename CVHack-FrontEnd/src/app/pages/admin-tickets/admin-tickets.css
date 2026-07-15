@@ -1,0 +1,22 @@
+.admin-tickets-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px;
+  width: 100%;          
+  max-width: 100%;      
+  margin: 0;           
+  height: 100%;
+  min-width: 0;
+  overflow-y: auto;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@media (min-width: 1024px) {
+  .admin-tickets-page {
+    width: 80%;
+    max-width: 80%;
+    margin: 0 auto;
+    padding: 24px;
+  }
+}

@@ -1,0 +1,151 @@
+# Sarah Mitchell
+
+**Cybersecurity Analyst**
+
+📍 Vancouver, Canada
+📧 [sarah.mitchell.cyber@gmail.com](mailto:sarah.mitchell.cyber@gmail.com)
+📱 +1 604 555 2478
+🔗 https://linkedin.com/in/sarahmitchellsec
+💻 https://github.com/sarahmitchell-security
+🌐 https://sarahmitchell.dev
+
+---
+
+# Professional Summary
+
+Cybersecurity Analyst with 1 year of professional experience protecting enterprise systems, monitoring security events, and responding to cybersecurity incidents. Experienced in vulnerability assessment, SIEM monitoring, endpoint security, and implementing security best practices. Skilled in identifying threats, investigating incidents, and supporting compliance with cybersecurity standards. Passionate about strengthening organizational security through proactive monitoring and continuous learning.
+
+---
+
+# Professional Experience
+
+## Cybersecurity Analyst
+
+**SecureTech Solutions – Vancouver, Canada**
+**July 2025 – Present**
+
+* Monitored security alerts using SIEM platforms and investigated suspicious activities.
+* Performed vulnerability assessments and assisted in remediation planning.
+* Supported endpoint protection using Microsoft Defender for Endpoint.
+* Assisted in incident response and documented security investigations.
+* Performed log analysis across Windows and Linux environments.
+* Conducted basic penetration testing using industry-standard tools.
+* Collaborated with IT teams to resolve security vulnerabilities.
+* Assisted with security awareness initiatives and phishing simulations.
+* Maintained documentation for security procedures and incident reports.
+* Participated in vulnerability management and patch verification.
+
+---
+
+# Technical Skills
+
+### Security
+
+* Security Monitoring
+* Incident Response
+* Vulnerability Assessment
+* Threat Analysis
+* Security Hardening
+* Endpoint Protection
+
+### Tools
+
+* Microsoft Defender
+* Microsoft Sentinel
+* Wireshark
+* Burp Suite
+* Nmap
+* Nessus
+* Splunk
+* OWASP ZAP
+
+### Operating Systems
+
+* Windows Server
+* Linux (Ubuntu, Kali Linux)
+
+### Networking
+
+* TCP/IP
+* DNS
+* HTTP/HTTPS
+* Firewalls
+* VPN
+* Network Security Fundamentals
+
+### Scripting
+
+* PowerShell
+* Bash
+* Python (Basic)
+
+### Methodologies
+
+* OWASP Top 10
+* MITRE ATT&CK Framework
+* NIST Cybersecurity Framework
+
+---
+
+# Projects
+
+## Internal Vulnerability Assessment
+
+**Technologies:** Nessus, Nmap, Microsoft Defender
+
+* Performed vulnerability scans on internal infrastructure.
+* Identified high-risk vulnerabilities and documented remediation recommendations.
+* Verified security patches after remediation.
+
+---
+
+## Security Log Monitoring Dashboard
+
+**Technologies:** Microsoft Sentinel, Splunk
+
+* Configured security monitoring dashboards.
+* Investigated authentication failures and suspicious login attempts.
+* Generated daily security reports for the IT security team.
+
+---
+
+## Web Application Security Assessment
+
+**Technologies:** Burp Suite, OWASP ZAP
+
+* Tested web applications for common security vulnerabilities.
+* Identified OWASP Top 10 issues.
+* Documented findings and recommended mitigation strategies.
+
+---
+
+# Education
+
+**Bachelor of Information Technology**
+
+University of British Columbia — Vancouver, Canada
+
+Graduation Year: **2025**
+
+---
+
+# Certifications
+
+* CompTIA Security+
+* Microsoft Certified: Security, Compliance, and Identity Fundamentals (SC-900)
+
+---
+
+# Languages
+
+* English — Native
+* French — Professional Working Proficiency
+
+---
+
+# Additional Information
+
+* Strong analytical and problem-solving skills.
+* Familiar with Security Operations Center (SOC) workflows.
+* Passionate about ethical hacking and cybersecurity research.
+* Continuously learning modern cybersecurity tools and defensive techniques.

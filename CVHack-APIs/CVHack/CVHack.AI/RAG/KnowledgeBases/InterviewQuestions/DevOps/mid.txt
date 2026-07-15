@@ -1,0 +1,167 @@
+================================================================================
+DEVOPS INTERVIEW QUESTIONS — MID-LEVEL
+================================================================================
+Target: 2–5 years of experience
+Focus: Kubernetes, Terraform, advanced CI/CD, monitoring, security, cloud services, scripting
+================================================================================
+
+--------------------------------------------------------------------------------
+SECTION 1: KUBERNETES
+--------------------------------------------------------------------------------
+
+Q1: What is Kubernetes? What problems does it solve beyond Docker?
+EXPECTED: Kubernetes (K8s) is a container orchestration platform. Docker alone doesn't handle: automatic restarts on failure, scaling, load balancing across containers, rolling updates, secrets management, service discovery. K8s provides all of this. Key components: control plane (API server, scheduler, etcd, controller manager) and worker nodes (kubelet, kube-proxy, container runtime).
+
+Q2: What is the difference between a Pod, Deployment, and StatefulSet?
+EXPECTED: Pod — smallest deployable unit, one or more containers sharing network/storage. Deployment — manages stateless pods, handles rolling updates, scaling, self-healing. StatefulSet — for stateful apps (databases), provides stable network IDs and persistent storage per pod, ordered deployment/scaling.
+
+Q3: What is a Kubernetes Service? What are the types?
+EXPECTED: Services provide stable network endpoints for pods (pods are ephemeral with changing IPs). Types: ClusterIP (internal only, default), NodePort (exposes on node IP+port), LoadBalancer (provisions cloud LB), ExternalName (DNS alias). Ingress handles HTTP routing and is not a Service type but works with Services.
+
+Q4: What is an Ingress in Kubernetes? How does it differ from a LoadBalancer service?
+EXPECTED: Ingress is an API object that manages external HTTP/HTTPS routing to services based on rules (host/path). One Ingress can route to many services (cost-effective). LoadBalancer service creates a cloud LB per service (expensive at scale). Ingress requires an Ingress Controller (Nginx, Traefik, AWS ALB Ingress Controller).
+
+Q5: What are Kubernetes Namespaces? When would you use them?
+EXPECTED: Virtual clusters within a cluster — isolate resources by team, environment, or app. Example: `dev`, `staging`, `prod` namespaces, or `frontend`, `backend`, `monitoring`. Resource quotas and RBAC can be applied per namespace. Default namespace used if not specified.
+
+Q6: What is a ConfigMap and a Secret in Kubernetes? What's the difference?
+EXPECTED: ConfigMap — stores non-sensitive configuration (env vars, config files) as key-value pairs. Secret — stores sensitive data (passwords, tokens, certs) base64-encoded (not encrypted by default — use Sealed Secrets or external secret managers in production). Both can be mounted as volumes or injected as env vars.
+
+Q7: How does Kubernetes handle rolling updates? What is a rollback?
+EXPECTED: Deployments use `RollingUpdate` strategy by default — gradually replaces old pods with new ones (controlled by `maxUnavailable` and `maxSurge`). Rollback: `kubectl rollout undo deployment/<name>`. Kubernetes keeps revision history. `Recreate` strategy terminates all old pods before starting new ones (causes downtime).
+
+Q8: What are liveness and readiness probes in Kubernetes?
+EXPECTED: Liveness probe — checks if the container is alive; restarts it if it fails (detects deadlocks, crashed processes). Readiness probe — checks if the container is ready to receive traffic; removes it from Service endpoints if it fails (during startup or temporary overload). Startup probe — for slow-starting containers, disables liveness until ready.
+
+Q9: What is a HorizontalPodAutoscaler (HPA)?
+EXPECTED: Automatically scales the number of pod replicas based on observed metrics (CPU, memory, custom metrics). Requires metrics-server. Example: scale between 2–10 replicas when CPU > 70%. For scaling the cluster nodes themselves, use Cluster Autoscaler.
+
+Q10: What is a PersistentVolume (PV) and PersistentVolumeClaim (PVC)?
+EXPECTED: PV — a piece of storage provisioned in the cluster (static or dynamic via StorageClass). PVC — a request for storage by a user/pod (size, access mode). K8s binds PVCs to matching PVs. StatefulSets use `volumeClaimTemplates` to auto-create PVCs per pod. StorageClasses enable dynamic provisioning (EBS, Azure Disk, GCP PD).
+
+Q11: How do you debug a pod that is stuck in `CrashLoopBackOff`?
+EXPECTED: 1) `kubectl describe pod <name>` — check Events section for error reasons. 2) `kubectl logs <pod> --previous` — logs from the crashed container. 3) Check liveness probe config — may be too aggressive. 4) Check resource limits — OOMKilled means memory exceeded. 5) `kubectl exec -it <pod> -- /bin/sh` if it can start briefly. 6) Check image pull errors, ConfigMap/Secret references.
+
+Q12: What is Helm? Why is it used?
+EXPECTED: Helm is the package manager for Kubernetes — templates K8s YAML manifests using Go templates. Charts are reusable packages (e.g., Helm chart for PostgreSQL, Nginx). Manages versioning, upgrades, and rollbacks of K8s resources. Reduces YAML duplication. Helm 3 removed Tiller; runs client-side only.
+
+--------------------------------------------------------------------------------
+SECTION 2: INFRASTRUCTURE AS CODE (TERRAFORM)
+--------------------------------------------------------------------------------
+
+Q13: What is Infrastructure as Code (IaC)? What are its benefits?
+EXPECTED: Managing infrastructure (servers, networks, databases) through code files rather than manual clicks. Benefits: version control, reproducibility, automation, peer review, disaster recovery (recreate infra from code), consistency across environments. Tools: Terraform (multi-cloud), AWS CloudFormation, Pulumi, Azure Bicep.
+
+Q14: What is Terraform? Explain the core workflow.
+EXPECTED: HashiCorp's open-source IaC tool supporting multiple cloud providers. Core workflow: `terraform init` (download providers/modules) → `terraform plan` (preview changes) → `terraform apply` (create/update resources) → `terraform destroy` (remove resources). Declarative — you define desired state, Terraform figures out how to get there.
+
+Q15: What is Terraform state? Why is remote state important?
+EXPECTED: State file (`terraform.tfstate`) tracks the real-world resources Terraform manages — maps config to actual cloud resources. Remote state (S3 + DynamoDB for AWS, Azure Blob, Terraform Cloud) is essential for teams: prevents conflicts, enables locking, keeps sensitive data out of Git. Never commit `terraform.tfstate` to version control.
+
+Q16: What is the difference between a Terraform resource, data source, and module?
+EXPECTED: Resource — creates/manages a cloud resource (`resource "aws_instance" "web" {...}`). Data source — reads existing infrastructure without managing it (`data "aws_ami" "ubuntu" {...}`). Module — reusable group of resources; promotes DRY principles. Modules can be local or from Terraform Registry.
+
+Q17: What is `terraform plan` and why is it important in a CI/CD pipeline?
+EXPECTED: Shows what changes Terraform will make (create/update/destroy) before applying them. In CI/CD: run `plan` on PRs so engineers can review infra changes before merging. Run `apply` only after approval, on merge to main. Prevents accidental destruction of resources.
+
+Q18: What is a Terraform workspace? When would you use it?
+EXPECTED: Workspaces allow multiple state files within the same config — useful for managing multiple environments (dev/staging/prod) from the same Terraform code with different variable values. Alternative: separate directories per environment or separate backends. Workspaces can get complex; many teams prefer directory-per-environment for clarity.
+
+--------------------------------------------------------------------------------
+SECTION 3: CI/CD — ADVANCED
+--------------------------------------------------------------------------------
+
+Q19: What is the difference between a declarative and imperative pipeline?
+EXPECTED: Declarative — defines the desired outcome in a structured format (GitHub Actions YAML, GitLab CI YAML, Jenkinsfile declarative syntax). Imperative — describes exact steps/logic (Jenkinsfile scripted pipeline with Groovy). Declarative is easier to read and enforce; imperative is more flexible.
+
+Q20: What is a pipeline artifact registry? How do Docker images flow from build to production?
+EXPECTED: A container registry (ECR, GCR, Docker Hub, ACR) stores Docker images by tag. CI pipeline: build image → tag with commit SHA/semver → push to registry → deploy stage pulls image by tag and deploys to K8s/ECS. Never use `latest` tag in production — not reproducible. Use immutable tags (commit SHA).
+
+Q21: What is a blue/green deployment? How does it differ from a canary deployment?
+EXPECTED: Blue/Green — two identical environments; switch traffic all at once from old (blue) to new (green). Instant rollback by switching back. Canary — gradually route a small % of traffic to new version (e.g., 5% → 25% → 100%), monitor for errors before full rollout. Canary is safer for large-scale changes; blue/green better when you need instant cutover.
+
+Q22: What is a feature flag? How does it interact with CI/CD?
+EXPECTED: Feature flags (feature toggles) enable/disable features at runtime without deploying code. Decouple deploy from release — ship code hidden behind a flag, enable it when ready. Works with trunk-based development — no long-lived feature branches. Tools: LaunchDarkly, Unleash, AWS AppConfig. Integrate with CI: always deploy, release via flag.
+
+Q23: How do you manage secrets in a CI/CD pipeline securely?
+EXPECTED: Never hardcode secrets in YAML/code. Use: CI/CD native secret stores (GitHub Actions Secrets, GitLab CI variables), cloud secret managers (AWS Secrets Manager, Azure Key Vault, HashiCorp Vault), environment-injected at runtime. Rotate regularly, audit access. For K8s: use External Secrets Operator to sync from Vault/AWS SM to K8s Secrets.
+
+Q24: What is a monorepo pipeline strategy? What are the challenges?
+EXPECTED: A monorepo holds multiple apps/services in one repo. Pipeline challenge: only build/test/deploy services affected by a change (not everything). Solutions: path-based triggers (GitHub Actions `paths:`, Nx affected, Turborepo), caching shared build artifacts, separate pipeline jobs per service with dependency graphs.
+
+--------------------------------------------------------------------------------
+SECTION 4: MONITORING & OBSERVABILITY
+--------------------------------------------------------------------------------
+
+Q25: What is the difference between monitoring and observability?
+EXPECTED: Monitoring = watching known metrics and alerting on thresholds (known unknowns). Observability = ability to understand system state from its outputs (logs, metrics, traces) — handles unknown unknowns. Three pillars: Metrics (Prometheus/Grafana), Logs (ELK/Loki), Traces (Jaeger/Tempo/OpenTelemetry). Monitoring is a subset of observability.
+
+Q26: What is Prometheus? How does it collect metrics?
+EXPECTED: Prometheus is an open-source time-series metrics database. Pull-based: scrapes HTTP `/metrics` endpoints from targets at regular intervals. Stores data locally. Uses PromQL for querying. Paired with Grafana for dashboards. Exporters expose metrics for non-native apps (node-exporter for OS metrics, blackbox-exporter for endpoint checks).
+
+Q27: What is Grafana? What types of data sources does it support?
+EXPECTED: An open-source visualization and dashboarding tool. Connects to Prometheus, Loki, Elasticsearch, InfluxDB, CloudWatch, Azure Monitor, SQL databases, and more. Supports alerts. In a typical stack: Prometheus (metrics) + Loki (logs) + Tempo (traces) + Grafana (visualization) = PLTGstack.
+
+Q28: What is the ELK stack? What does each component do?
+EXPECTED: Elasticsearch (search/store logs), Logstash (ingest/transform logs from various sources), Kibana (visualize/query logs). Often replaced partially: Beats/Fluentd/Fluent Bit for lightweight log shipping instead of Logstash. OpenSearch is the AWS fork of Elasticsearch. Alternative: Grafana Loki (lighter, label-based, doesn't index full content).
+
+Q29: What is an SLI, SLO, and SLA?
+EXPECTED: SLI (Service Level Indicator) — a metric measuring service behavior (e.g., % of requests < 200ms). SLO (Service Level Objective) — a target for an SLI (e.g., 99.9% of requests < 200ms over 30 days). SLA (Service Level Agreement) — a contractual commitment to customers (SLO + consequences for breach). DevOps engineers define and track SLIs/SLOs; SLAs are business agreements.
+
+Q30: What is an error budget? How is it used in SRE practice?
+EXPECTED: Error budget = 100% - SLO. If SLO is 99.9% availability, error budget is 0.1% downtime (~43 min/month). If budget is spent, slow down feature releases and focus on reliability. If budget is healthy, teams can move faster. Encourages balance between innovation (which causes incidents) and reliability.
+
+--------------------------------------------------------------------------------
+SECTION 5: CLOUD & NETWORKING
+--------------------------------------------------------------------------------
+
+Q31: What is a VPC? What are subnets, route tables, and security groups?
+EXPECTED: VPC (Virtual Private Cloud) — isolated network in the cloud. Subnets — subdivisions of the VPC (public: internet-accessible, private: internal only). Route table — rules for where network traffic goes (e.g., `0.0.0.0/0 → Internet Gateway` for public subnets). Security groups — stateful virtual firewalls at the instance/ENI level (allow rules only).
+
+Q32: What is the difference between a security group and a network ACL (NACL) in AWS?
+EXPECTED: Security Group — stateful (return traffic automatically allowed), attached to instances/ENIs, allow rules only. NACL — stateless (must explicitly allow inbound AND outbound), attached to subnets, supports allow and deny rules. Security Groups are the primary defense; NACLs add subnet-level control.
+
+Q33: What is a load balancer? What's the difference between Layer 4 and Layer 7 load balancing?
+EXPECTED: Layer 4 (transport) — routes based on IP/TCP/UDP (fast, no content inspection). AWS NLB. Layer 7 (application) — routes based on HTTP headers, path, host, cookies (more intelligent). AWS ALB. Use ALB for web apps (path-based routing, SSL termination, auth). Use NLB for TCP/UDP workloads needing extreme performance.
+
+Q34: What is a NAT Gateway? When do private subnet instances need one?
+EXPECTED: Network Address Translation Gateway allows instances in private subnets to initiate outbound internet traffic (e.g., download packages, call external APIs) without being directly reachable from the internet. Private subnets route `0.0.0.0/0` to NAT Gateway in a public subnet, which has an Elastic IP.
+
+Q35: What is the difference between vertical and horizontal scaling? What does "auto scaling" mean in cloud?
+EXPECTED: Vertical — bigger machine (more CPU/RAM). Has limits, causes downtime. Horizontal — more instances behind a load balancer. Scales indefinitely, fault-tolerant. Auto scaling — automatically add/remove instances based on metrics (CPU, request count). AWS Auto Scaling Groups, Azure VMSS, K8s HPA are examples. Most cloud-native apps scale horizontally.
+
+Q36: What is IAM? What is the principle of least privilege?
+EXPECTED: IAM (Identity and Access Management) — manages who can do what in your cloud account. Principle of least privilege: grant only the minimum permissions needed for a task. Example: a Lambda function that reads S3 should only have `s3:GetObject` on that specific bucket, not `s3:*` or `AdministratorAccess`. Use roles, not long-lived access keys.
+
+--------------------------------------------------------------------------------
+SECTION 6: SCRIPTING & AUTOMATION
+--------------------------------------------------------------------------------
+
+Q37: What scripting languages are commonly used in DevOps? When would you choose each?
+EXPECTED: Bash — quick automation, glue scripts, CI steps, Linux administration. Python — complex automation, SDK usage (boto3 for AWS), data processing, writing tools. Go — performance-critical CLIs and tools (many DevOps tools like Terraform, Docker, K8s are written in Go). PowerShell — Windows/Azure environments.
+
+Q38: Write a bash script that checks if a service is running and restarts it if not.
+EXPECTED:
+```bash
+#!/bin/bash
+SERVICE="nginx"
+if ! systemctl is-active --quiet $SERVICE; then
+  echo "$SERVICE is not running. Restarting..."
+  systemctl restart $SERVICE
+  echo "$SERVICE restarted."
+else
+  echo "$SERVICE is running."
+fi
+```
+Key points: `systemctl is-active`, exit code checking with `!`, restart logic.
+
+Q39: What is `jq` and why is it useful in DevOps scripts?
+EXPECTED: A command-line JSON processor. Useful for parsing API responses, AWS CLI output, and config files in shell scripts. Example: `aws ec2 describe-instances | jq '.Reservations[].Instances[].InstanceId'`. Avoids fragile string parsing of JSON with grep/awk.
+
+Q40: What is the difference between `ansible`, `terraform`, and a bash script for automation?
+EXPECTED: Bash — imperative, procedural, good for simple tasks, not idempotent by default, hard to scale. Ansible — agentless configuration management (SSH-based), idempotent playbooks, good for provisioning/configuring existing servers. Terraform — declarative IaC for provisioning cloud infrastructure, tracks state. Use all three in combination: Terraform to create infra, Ansible to configure it, Bash for simple CI glue.
+
+================================================================================
+END OF FILE — MID-LEVEL
+Total Questions: 40
+================================================================================

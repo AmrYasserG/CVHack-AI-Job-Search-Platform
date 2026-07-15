@@ -1,0 +1,33 @@
+<div class="flex flex-col gap-3">
+  <button
+    (click)="startMockInterview()"
+    class="w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 border-0"
+    style="background: var(--copper); color: var(--white); font-family: var(--font-display); box-shadow: var(--shadow);">
+    <span>🎙️</span>
+    <span>Start mock interview</span>
+  </button>
+
+  <button
+    (click)="onDownloadCV()"
+    [disabled]="!canDownloadCv || downloading()"
+    [title]="canDownloadCv ? '' : 'Available when your match score is 50% or higher'"
+    class="w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+    style="background: var(--surface); color: var(--text); font-family: var(--font-display); box-shadow: var(--shadow); border: 1px solid var(--border);">
+    <span>⬇</span>
+    <span>{{ downloading() ? 'Generating…' : 'Download CV' }}</span>
+  </button>
+
+  @if (downloadError()) {
+    <p class="text-xs m-0 text-center" style="color: var(--red); font-family: var(--font-body);">
+      {{ downloadError() }}
+    </p>
+  }
+
+  
+  <button
+    (click)="applyNow()"
+    class="w-full py-3 rounded-xl text-sm font-bold border-0"
+    style="background: var(--teal); color: var(--white); font-family: var(--font-display); box-shadow: var(--shadow);">
+    Apply now
+  </button>
+</div>

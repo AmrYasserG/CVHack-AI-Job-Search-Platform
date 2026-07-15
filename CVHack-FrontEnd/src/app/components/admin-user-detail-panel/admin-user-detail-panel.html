@@ -1,0 +1,138 @@
+<div
+  class="rounded-2xl border p-6"
+  style="background: var(--surface); border-color: var(--border); box-shadow: var(--shadow)"
+>
+  @if (user) {
+    <!-- Avatar + name -->
+    <div class="flex flex-col items-center text-center mb-5">
+      <div
+        class="w-16 h-16 rounded-2xl flex items-center justify-center text-lg font-bold mb-3"
+        style="background: var(--copper); color: var(--white); font-family: var(--font-display)"
+      >
+        {{ user | initials }}
+      </div>
+      <h3 class="text-lg font-bold" style="color: var(--text); font-family: var(--font-display)">
+        {{ user | fullName }}
+      </h3>
+      <p class="text-sm" style="color: var(--muted)">{{ user.email }}</p>
+    </div>
+
+    <div class="border-t mb-5" style="border-color: var(--border)"></div>
+
+    <!-- Info grid -->
+    <div class="grid grid-cols-2 gap-y-4 mb-6">
+      <div>
+        <p
+          class="text-xs tracking-widest uppercase mb-1"
+          style="color: var(--faint); font-family: var(--font-mono)"
+        >
+          Role
+        </p>
+        <p class="text-sm font-semibold" style="color: var(--text)">
+          {{ isAdmin ? 'Admin' : 'User' }}
+        </p>
+      </div>
+      <div>
+        <p
+          class="text-xs tracking-widest uppercase mb-1"
+          style="color: var(--faint); font-family: var(--font-mono)"
+        >
+          Plan
+        </p>
+        <p class="text-sm font-semibold" style="color: var(--text)">{{ user.plan || 'Free' }}</p>
+      </div>
+      <div>
+        <p
+          class="text-xs tracking-widest uppercase mb-1"
+          style="color: var(--faint); font-family: var(--font-mono)"
+        >
+          Joined
+        </p>
+        <p class="text-sm font-semibold" style="color: var(--text)">
+          {{ user.createdAt | date: 'MMM y' }}
+        </p>
+      </div>
+      <div>
+        <p
+          class="text-xs tracking-widest uppercase mb-1"
+          style="color: var(--faint); font-family: var(--font-mono)"
+        >
+          Searches
+        </p>
+        <p class="text-sm font-semibold" style="color: var(--text)">{{ user.searches }}</p>
+      </div>
+    </div>
+
+    <!-- Status badge -->
+    <div class="mb-4">
+      <span
+        class="text-xs font-semibold px-2 py-1 rounded-lg"
+        [style.background]="isSuspended ? 'var(--redSoft)' : 'var(--greenSoft)'"
+        [style.color]="isSuspended ? 'var(--red)' : 'var(--green)'"
+      >
+        {{ user.status || 'Active' }}
+      </span>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-col gap-3">
+      <!-- Message: always available, opens mail app -->
+      <a
+        [href]="'mailto:' + user.email"
+        class="w-full text-center py-2.5 rounded-xl text-sm font-semibold border no-underline"
+        style="background: var(--surface); border-color: var(--border2); color: var(--text)"
+      >
+        Message
+      </a>
+
+      @if (!isAdmin) {
+        <div class="flex gap-3">
+          <button
+            (click)="askMakeAdmin()"
+            [disabled]="loading()"
+            class="flex-1 py-2.5 rounded-xl text-sm font-semibold border disabled:opacity-50"
+            style="background: var(--copperSoft); border-color: var(--copper); color: var(--copper)"
+          >
+            Make Admin
+          </button>
+          <button
+            (click)="askTogglePlan()"
+            [disabled]="loading()"
+            class="flex-1 py-2.5 rounded-xl text-sm font-semibold border disabled:opacity-50"
+            style="background: var(--copperSoft); border-color: var(--copper); color: var(--copper)"
+          >
+            {{ user.plan === 'Pro' ? 'Set Free' : 'Set Pro' }}
+          </button>
+        </div>
+        <button
+          (click)="askToggleStatus()"
+          [disabled]="loading()"
+          class="w-full py-2.5 rounded-xl text-sm font-semibold border disabled:opacity-50"
+          [style.background]="isSuspended ? 'var(--greenSoft)' : 'var(--redSoft)'"
+          [style.border-color]="isSuspended ? 'var(--green)' : 'var(--red)'"
+          [style.color]="isSuspended ? 'var(--green)' : 'var(--red)'"
+        >
+          {{ isSuspended ? 'Activate' : 'Suspend' }}
+        </button>
+      } @else {
+        <p class="text-xs text-center" style="color: var(--muted)">Admins can't be modified.</p>
+      }
+
+      @if (errorMessage()) {
+        <p class="text-xs text-center" style="color: var(--red)">{{ errorMessage() }}</p>
+      }
+    </div>
+  } @else {
+    <p class="text-sm text-center py-10" style="color: var(--muted)">
+      Select a user to view details
+    </p>
+  }
+  <app-confirm-dialog
+    [open]="confirmOpen()"
+    [title]="confirmTitle()"
+    [message]="confirmMessage()"
+    [confirmText]="confirmText()"
+    (confirmed)="onConfirm()"
+    (cancelled)="onCancel()"
+  />
+</div>

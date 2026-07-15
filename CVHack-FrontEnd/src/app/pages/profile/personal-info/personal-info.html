@@ -1,0 +1,129 @@
+<div class="info-card">
+
+  <!-- Success/Error Messages -->
+  <div class="info-card__success" *ngIf="successMessage">✅ {{ successMessage }}</div>
+  <div class="info-card__error" *ngIf="errorMessage">❌ {{ errorMessage }}</div>
+
+  <!-- View Mode -->
+  <ng-container *ngIf="!isEditing">
+    <div class="info-card__header">
+      <h3 class="info-card__title">Personal Information</h3>
+      <button class="info-card__edit-btn" (click)="onEdit()">✏ Edit</button>
+    </div>
+
+    <div class="info-card__grid">
+      <div class="info-card__field">
+        <span class="info-card__label">Full Name</span>
+        <span class="info-card__value">{{ fullName || '—' }}</span>
+      </div>
+      <div class="info-card__field">
+        <span class="info-card__label">Email</span>
+        <span class="info-card__value">{{ email || '—' }}</span>
+      </div>
+      <div class="info-card__field">
+        <span class="info-card__label">Phone</span>
+        <span class="info-card__value">{{ phone || '—' }}</span>
+      </div>
+      <div class="info-card__field">
+  <span class="info-card__label">Location</span>
+  <span class="info-card__value">
+    {{ [location, country].filter(x => x).join(', ') || '—' }}
+  </span>
+</div>
+      <div class="info-card__field">
+        <span class="info-card__label">Headline</span>
+        <span class="info-card__value">{{ headline || '—' }}</span>
+      </div>
+      <div class="info-card__field">
+        <span class="info-card__label">LinkedIn</span>
+        <span class="info-card__value">{{ linkedInUrl || '—' }}</span>
+      </div>
+      <div class="info-card__field">
+        <span class="info-card__label">GitHub</span>
+        <span class="info-card__value">{{ gitHubUrl || '—' }}</span>
+      </div>
+      <div class="info-card__field">
+        <span class="info-card__label">Portfolio</span>
+        <span class="info-card__value">{{ portfolioUrl || '—' }}</span>
+      </div>
+    </div>
+
+    <div class="info-card__field info-card__field--full" *ngIf="summary">
+      <span class="info-card__label">Summary</span>
+      <span class="info-card__value">{{ summary }}</span>
+    </div>
+  </ng-container>
+
+  <!-- Edit Mode -->
+  <ng-container *ngIf="isEditing">
+    <div class="info-card__header">
+      <h3 class="info-card__title">Edit Personal Information</h3>
+      <div class="info-card__actions">
+        <button class="info-card__cancel-btn" (click)="onCancel()">Cancel</button>
+        <button class="info-card__save-btn" (click)="onSave()" [disabled]="isSaving">
+          {{ isSaving ? 'Saving...' : 'Save' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-card__grid">
+      <div class="info-card__field">
+  <label class="info-card__label">Phone</label>
+  <input class="info-card__input"
+    [class.info-card__input--error]="errors.phone"
+    type="tel"
+    [(ngModel)]="editData.phone"
+    placeholder="+20 10 ..." />
+  <span class="info-card__error-msg" *ngIf="errors.phone">{{ errors.phone }}</span>
+</div>
+      <div class="info-card__field">
+  <label class="info-card__label">City</label>
+  <input class="info-card__input" type="text"
+    [(ngModel)]="editData.city" placeholder="Cairo" />
+</div>
+
+<div class="info-card__field">
+  <label class="info-card__label">Country</label>
+  <input class="info-card__input" type="text"
+    [(ngModel)]="editData.country" placeholder="Egypt" />
+</div>
+      <div class="info-card__field">
+        <label class="info-card__label">Headline</label>
+        <input class="info-card__input" type="text" [(ngModel)]="editData.headline" placeholder="Senior Developer..." />
+      </div>
+      <div class="info-card__field">
+  <label class="info-card__label">LinkedIn URL</label>
+  <input class="info-card__input"
+    [class.info-card__input--error]="errors.linkedInUrl"
+    type="text"
+    [(ngModel)]="editData.linkedInUrl"
+    placeholder="https://linkedin.com/in/..." />
+  <span class="info-card__error-msg" *ngIf="errors.linkedInUrl">{{ errors.linkedInUrl }}</span>
+</div>
+      <div class="info-card__field">
+  <label class="info-card__label">GitHub URL</label>
+  <input class="info-card__input"
+    [class.info-card__input--error]="errors.gitHubUrl"
+    type="text"
+    [(ngModel)]="editData.gitHubUrl"
+    placeholder="https://github.com/..." />
+  <span class="info-card__error-msg" *ngIf="errors.gitHubUrl">{{ errors.gitHubUrl }}</span>
+</div>
+      <div class="info-card__field">
+  <label class="info-card__label">Portfolio URL</label>
+  <input class="info-card__input"
+    [class.info-card__input--error]="errors.portfolioUrl"
+    type="text"
+    [(ngModel)]="editData.portfolioUrl"
+    placeholder="https://..." />
+  <span class="info-card__error-msg" *ngIf="errors.portfolioUrl">{{ errors.portfolioUrl }}</span>
+</div>
+    </div>
+
+    <div class="info-card__field info-card__field--full">
+      <label class="info-card__label">Summary</label>
+      <textarea class="info-card__textarea" [(ngModel)]="editData.summary" placeholder="Write a short summary about yourself..."></textarea>
+    </div>
+  </ng-container>
+
+</div>

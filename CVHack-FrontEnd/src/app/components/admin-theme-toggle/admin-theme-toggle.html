@@ -1,0 +1,13 @@
+<button
+  type="button"
+  (click)="toggleTheme()"
+  class="admin-link no-underline font-medium flex items-center justify-center lg:justify-start gap-2 cursor-pointer bg-transparent border-0 py-2 w-full"
+  style="color: var(--faint)"
+>
+  @if (!isDark()) {
+    <app-moon-icon></app-moon-icon>
+  } @else {
+    <app-sun-icon></app-sun-icon>
+  }
+  <span class="hidden lg:inline">{{ isDark() ? 'Light mode' : 'Dark mode' }}</span>
+</button>

@@ -1,0 +1,21 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=.\\SQLEXPRESS;Initial Catalog=CVHackDb;Integrated Security=True;Trust Server Certificate=True"
+  },
+  "JwtSettings": {
+    "Key": "CVHackSecureSuperSecretKey2026!X",
+    "Issuer": "CVHackAPI",
+    "Audience": "CVHackClient",
+    "DurationInMinutes": 60
+  },
+  "Rag": {
+    "KnowledgeBasePath": "RAG/KnowledgeBases"
+  }
+}

@@ -1,0 +1,211 @@
+@media (max-width: 768px) {
+  .ticket-detail__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ticket-detail__value {
+    word-break: break-all;
+  }
+
+  .ticket-detail__card,
+  .ticket-detail__message-card {
+    padding: 16px;
+  }
+}
+.ticket-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ticket-detail__card,
+.ticket-detail__message-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  font-family: var(--font-body);
+}
+
+.ticket-detail__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.ticket-detail__id {
+  font-size: 13px;
+  color: var(--copper);
+  font-weight: 600;
+}
+
+.ticket-detail__subject {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+}
+
+.ticket-detail__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.ticket-detail__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ticket-detail__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ticket-detail__value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ticket-detail__message {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.ticket-detail__reply-input {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px 14px;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  background-color: var(--surface2);
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--font-body);
+  resize: vertical;
+  margin-bottom: 16px;
+}
+
+.ticket-detail__reply-input:focus {
+  outline: none;
+  border-color: var(--copper);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+a.ticket-detail__send-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--teal);
+  color: var(--white);
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+a.ticket-detail__send-btn:hover {
+  background-color: var(--tealHover);
+}
+
+a.ticket-detail__send-btn.disabled {
+  background-color: var(--border2);
+  color: var(--faint);
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.status-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.status-badge--open {
+  background-color: var(--amberSoft);
+  color: var(--amber);
+}
+
+.status-badge--in-progress {
+  background-color: var(--tealSoft);
+  color: var(--onSoft);
+}
+
+.status-badge--resolved {
+  background-color: var(--greenSoft);
+  color: var(--green);
+}
+
+.ticket-detail__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--faint);
+  font-size: 14px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.ticket-detail__status-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.status-badge--closed {
+  background-color: var(--greenSoft);
+  color: var(--green);
+}
+.ticket-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--greenSoft);
+  color: var(--green);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  border: 1px solid var(--green);
+}
+
+.ticket-alert__close {
+  background: none;
+  border: none;
+  color: var(--green);
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.ticket-detail__status-select{
+  padding: 8px 12px;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  background-color: var(--surface2);
+  color: var(--text);
+  font-size: 14px;
+  font-family: var(--font-body);
+}

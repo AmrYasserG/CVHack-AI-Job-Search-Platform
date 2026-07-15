@@ -1,0 +1,19 @@
+<app-navbar></app-navbar>
+
+<div class="support-page">
+  <div class="support-page__header">
+    <div class="support-page__icon">❓</div>
+    <div>
+      <h2 class="support-page__title">Support</h2>
+      <p class="support-page__subtitle">We usually reply within a few hours</p>
+    </div>
+  </div>
+
+  <div class="support-page__grid">
+    <app-submit-ticket-form
+      (ticketSubmitted)="onTicketSubmitted()"
+    ></app-submit-ticket-form>
+
+    <app-my-tickets></app-my-tickets>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="ticket-form-card">
+  <h3 class="ticket-form-card__title">Submit a ticket</h3>
+
+  <!-- Success Message -->
+  <div class="ticket-form__success" *ngIf="successMessage">
+    ✅ {{ successMessage }}
+  </div>
+
+  <!-- Error Message -->
+  <div class="ticket-form__error" *ngIf="errorMessage">
+    ❌ {{ errorMessage }}
+  </div>
+
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label class="form-label">Subject</label>
+      <input
+        type="text"
+        class="form-input"
+        placeholder="Brief summary of your issue"
+        [(ngModel)]="subject"
+        name="subject"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Category</label>
+      <select class="form-select" [(ngModel)]="category" name="category">
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea
+        class="form-textarea"
+        placeholder="Tell us what's happening, and what you expected..."
+        [(ngModel)]="description"
+        name="description"
+        required
+      ></textarea>
+    </div>
+
+   <button
+  type="submit"
+  class="ticket-form-card__submit-btn"
+  [disabled]="isSubmitting || !subject.trim() || !category || !description.trim()"
+>
+  {{ isSubmitting ? 'Submitting...' : '➤ Submit ticket' }}
+</button>
+  </form>
+</div>

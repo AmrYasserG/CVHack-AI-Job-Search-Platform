@@ -1,0 +1,46 @@
+<div class="skills-card">
+  <h3 class="skills-card__title">Skills</h3>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" style="color: var(--muted); font-size: 14px; padding: 12px 0;">
+    Loading skills...
+  </div>
+
+  <!-- Skills Tags -->
+  <div class="skills-card__tags" *ngIf="!isLoading">
+    <span class="skill-tag" *ngFor="let skill of skills">
+  {{ skill.skillName || skill.name }}
+  <button class="skill-tag__remove" (click)="removeSkill(skill)">×</button>
+</span>
+
+    <span *ngIf="skills.length === 0" style="color: var(--muted); font-size: 13px;">
+      No skills added yet.
+    </span>
+  </div>
+
+  <!-- Search & Add -->
+  <div class="skills-card__add" style="position: relative;">
+    <input
+      type="text"
+      class="skills-card__input"
+      placeholder="Search for a skill..."
+      [(ngModel)]="searchQuery"
+      (input)="onSearch()"
+      (blur)="hideDropdown()"
+    />
+    <span *ngIf="isSearching" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px;">
+      Searching...
+    </span>
+
+    <!-- Dropdown Results -->
+    <div class="skills-card__dropdown" *ngIf="showDropdown">
+      <div
+  class="skills-card__dropdown-item"
+  *ngFor="let skill of searchResults"
+  (mousedown)="addSkill(skill)"
+>
+  {{ skill.skillName || skill.name }}
+</div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+
+<div class="ticket-detail" *ngIf="ticket">
+
+  <!-- Alert -->
+  <div class="ticket-alert" *ngIf="successMessage">
+    <span>✓ Status updated successfully!</span>
+    <button class="ticket-alert__close" (click)="successMessage = ''">×</button>
+  </div>
+
+  <div class="ticket-detail__card">
+    <div class="ticket-detail__header">
+      <span class="ticket-detail__id">#{{ ticket!.id }}</span>
+      <span [ngClass]="statusClass(ticket!.status)">{{ ticket!.status }}</span>
+    </div>
+
+    <h3 class="ticket-detail__subject">{{ ticket!.subject }}</h3>
+
+    <div class="ticket-detail__grid">
+      <div class="ticket-detail__field">
+        <span class="ticket-detail__label">From</span>
+        <span class="ticket-detail__value">{{ ticket!.userName || ticket!.email }}</span>
+      </div>
+      <div class="ticket-detail__field">
+        <span class="ticket-detail__label">Email</span>
+        <span class="ticket-detail__value">{{ ticket!.email }}</span>
+      </div>
+      <div class="ticket-detail__field">
+        <span class="ticket-detail__label">Category</span>
+        <span class="ticket-detail__value">{{ ticket!.category || '—' }}</span>
+      </div>
+      <div class="ticket-detail__field">
+        <span class="ticket-detail__label">Opened</span>
+        <span class="ticket-detail__value">{{ ticket!.createdAt | date:'MMM d' }}</span>
+      </div>
+     
+      <div class="ticket-detail__field">
+        <span class="ticket-detail__label">Update Status</span>
+        <select class="ticket-detail__status-select" [(ngModel)]="selectedStatus" (change)="updateStatus()">
+          <option value="Open">Open</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Closed">Closed</option>
+        </select>
+      </div>
+       <div class="ticket-detail__field">
+        <span class="ticket-detail__label">Ticket Description</span>
+        <p class="ticket-detail__message" *ngIf="ticket!.description">
+      {{ ticket!.description }}
+    </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ticket-detail__message-card">
+    
+
+    <textarea
+      class="ticket-detail__reply-input"
+      placeholder="Write a reply..."
+      [(ngModel)]="replyText"
+    ></textarea>
+
+    <a
+      class="ticket-detail__send-btn"
+      [href]="'mailto:' + ticket!.email + '?subject=Re: ' + ticket!.subject + '&body=' + replyText"
+      [class.disabled]="!replyText.trim()"
+      (click)="onSendReply()"
+    >
+      ➤ Send reply
+    </a>
+  </div>
+</div>
+
+<div class="ticket-detail__empty" *ngIf="!ticket">
+  Select a ticket to view details
+</div>

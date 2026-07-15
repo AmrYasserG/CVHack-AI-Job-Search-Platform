@@ -1,0 +1,29 @@
+<div class="relative w-14 h-14">
+  <svg class="w-full h-full -rotate-90" viewBox="0 0 56 56">
+
+    <!-- Track -->
+    <circle
+      cx="28" cy="28" r="24"
+      fill="none" stroke-width="4"
+      [style.stroke]="'var(--border2)'"
+    />
+
+    <!-- Progress arc -->
+    <circle
+      cx="28" cy="28" r="24"
+      fill="none" stroke-width="4"
+      stroke-linecap="round"
+      [style.stroke]="scoreColor"
+      [attr.stroke-dasharray]="150.8"
+      [attr.stroke-dashoffset]="150.8 - (150.8 * score) / 100"
+    />
+
+  </svg>
+
+  <!-- Number -->
+  <span class="absolute inset-0 flex items-center justify-center text-sm font-bold"
+        [style.color]="scoreColor"
+        style="font-family: var(--font-display)">
+    {{ score }}
+  </span>
+</div>

@@ -1,0 +1,74 @@
+<div class="flex flex-col">
+  <app-navbar class="shrink-0 sticky top-0 z-50" (search)="onSearchChange($event)"></app-navbar>
+
+  <div class="flex p-4 md:p-6 gap-4 flex-1 min-h-0">
+    <!-- Backdrop (mobile only) -->
+        <!-- Backdrop (mobile only) -->
+    @if (showFilters()) {
+      <div class="fixed inset-0 z-40 bg-black/50 md:hidden" (click)="showFilters.set(false)"></div>
+    }
+
+    <!-- Filters: bottom sheet on mobile, static column on desktop -->
+    <div
+      class="bg-[var(--surface)] md:bg-transparent md:block md:static md:inset-auto md:rounded-none md:z-auto"
+      [class.hidden]="!showFilters()"
+      [class.fixed]="showFilters()"
+      [class.inset-x-0]="showFilters()"
+      [class.bottom-0]="showFilters()"
+      [class.z-50]="showFilters()"
+      [class.flex]="showFilters()"
+      [class.flex-col]="showFilters()"
+      [class.rounded-t-2xl]="showFilters()"
+      [style.maxHeight]="showFilters() ? '85vh' : null"
+    >
+      <!-- Drag handle (mobile only) -->
+      <div class="md:hidden shrink-0 pt-3 pb-1">
+        <div class="mx-auto h-1.5 w-12 rounded-full" style="background: var(--border2)"></div>
+      </div>
+
+      <!-- Filters (scrollable) -->
+      <div class="flex-1 min-h-0 overflow-y-auto md:overflow-visible">
+        <app-sidebar
+          [options]="filterOptions()"
+          (filtersChanged)="onFiltersChanged($event)"
+        ></app-sidebar>
+      </div>
+
+      <!-- Footer (mobile only) -->
+      <div class="md:hidden shrink-0 p-4 border-t" style="border-color: var(--border)">
+        <button
+          type="button"
+          (click)="showFilters.set(false)"
+          class="w-full py-3 rounded-xl text-sm font-semibold"
+          style="background: var(--copper); color: var(--white)"
+        >
+          Show results
+        </button>
+      </div>
+    </div>
+
+    <!-- <div
+      class="md:static md:block md:z-auto md:inset-auto md:overflow-visible"
+      [class.hidden]="!showFilters()"
+      [class.fixed]="showFilters()"
+      [class.inset-y-0]="showFilters()"
+      [class.left-0]="showFilters()"
+      [class.z-50]="showFilters()"
+      [class.overflow-y-auto]="showFilters()"
+    >
+      <app-sidebar
+        [options]="filterOptions()"
+        (filtersChanged)="onFiltersChanged($event)"
+      ></app-sidebar>
+    </div> -->
+
+    <app-job-cards-container
+      class="flex-1 min-h-0"
+      [jobs]="jobs()"
+      [activeFilters]="currentFilters"
+      [searchTerm]="searchTerm()"
+      [isLoading]="isLoading()"
+      (openFilters)="showFilters.set(true)"
+    ></app-job-cards-container>
+  </div>
+</div>

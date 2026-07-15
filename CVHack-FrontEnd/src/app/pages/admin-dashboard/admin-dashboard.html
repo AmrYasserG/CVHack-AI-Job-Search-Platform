@@ -1,0 +1,127 @@
+<div
+  class="grid grid-cols-[5rem_1fr] lg:grid-cols-[16rem_1fr] min-h-screen md:h-screen md:overflow-hidden"
+>
+  <app-admin-sidebar></app-admin-sidebar>
+  <main class="dashboard-main min-w-0 md:min-h-0">
+
+    <!-- Header -->
+    <div class="dash-header">
+      <div>
+        <h1 class="dash-title">Dashboard</h1>
+        <p class="dash-sub">Platform overview · last 7 days</p>
+      </div>
+    </div>
+
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+      <div class="welcome-text">
+        <span class="welcome-icon">👋</span>
+        <div>
+          <div class="welcome-title">Welcome back, Admin!</div>
+          <div class="welcome-sub">Here's what's happening on CVHack today.</div>
+        </div>
+      </div>
+      <div class="welcome-badge">CVHack Admin Console</div>
+    </div>
+
+    <!-- Stats -->
+    <app-stats-cards [cards]="stats"></app-stats-cards>
+
+    <!-- Row 1: Chart + System Info -->
+    <div class="dash-row">
+      <div class="chart-narrow">
+        <!-- اتعمله كومنت بناءً على طلب المستخدمة، ممكن نرجعه تاني لو احتجناه
+        <div class="chart-wide">
+          <app-daily-searches-chart [data]="dailySearches"></app-daily-searches-chart>
+        </div>
+        -->
+        <app-jobs-by-category-chart [data]="jobsByCategory"></app-jobs-by-category-chart>
+      </div>
+
+      <!-- System Info -->
+      <div class="dash-card">
+        <div class="card-header">
+          <span class="card-icon">🖥️</span>
+          <span class="card-title">System Info</span>
+        </div>
+        <div class="info-list">
+          <div class="info-row">
+            <span class="info-label">Platform</span>
+            <span class="info-value">CVHack.ai</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Version</span>
+            <span class="info-value">v2.1.0</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Environment</span>
+            <span class="info-value info-value--green">Production</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">API</span>
+            <span class="info-value info-value--green">Online</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Database</span>
+            <span class="info-value info-value--green">Connected</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Last Deploy</span>
+            <span class="info-value">Jul 3, 2026</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Region</span>
+            <span class="info-value">Egypt · MENA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Tips & Announcements -->
+    <div class="dash-row dash-row--announcements">
+
+      <div class="announce-card announce-card--info">
+        <div class="announce-top">
+          <span class="announce-tag announce-tag--info">📢 Announcement</span>
+          <span class="announce-date">Jul 3, 2026</span>
+        </div>
+        <div class="announce-title">New Feature Released</div>
+        <div class="announce-desc">AI Match Analysis is now live! Users can see how well their profile matches any job posting with detailed skill breakdown and gap analysis.</div>
+      </div>
+
+      <div class="announce-card announce-card--warn">
+        <div class="announce-top">
+          <span class="announce-tag announce-tag--warn">🔧 Maintenance</span>
+          <span class="announce-date">Jul 5, 2026</span>
+        </div>
+        <div class="announce-title">Scheduled Maintenance</div>
+        <div class="announce-desc">Platform maintenance is scheduled for July 5th from 2:00 AM to 4:00 AM. Expect brief downtime during this window.</div>
+      </div>
+
+      <div class="announce-card announce-card--tip">
+        <div class="announce-top">
+          <span class="announce-tag announce-tag--tip">💡 Tip</span>
+          <span class="announce-date">Admin Tip</span>
+        </div>
+        <div class="announce-title">Review Support Tickets Regularly</div>
+        <div class="announce-desc">Check the Tickets section daily to ensure user issues are resolved quickly. Aim to respond within 24 hours for the best user experience.</div>
+      </div>
+
+      <div class="announce-card announce-card--tip">
+        <div class="announce-top">
+          <span class="announce-tag announce-tag--tip">💡 Tip</span>
+          <span class="announce-date">Admin Tip</span>
+        </div>
+        <div class="announce-title">Keep Job Listings Updated</div>
+        <div class="announce-desc">Outdated job listings reduce user trust. Review and update job postings regularly to ensure accuracy and relevance for job seekers.</div>
+      </div>
+
+    </div>
+
+    <!-- Charts row 2 -->
+    <!-- اتعمله كومنت بناءً على طلب المستخدمة، ممكن نرجعه تاني لو احتجناه
+    <app-match-score-chart [data]="matchScores"></app-match-score-chart>
+    -->
+
+  </main>
+</div>

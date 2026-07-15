@@ -1,0 +1,107 @@
+.sidebar {
+  min-height: 100vh;
+  height: 100%;
+  background: var(--teal);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+}
+
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.logo-cv   { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; color: var(--copper); }
+.logo-hack { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; color: #FFFFFF; }
+.logo-sub  { font-family: var(--font-body); font-size: .65rem; font-weight: 600; letter-spacing: .1em; color: rgba(255,255,255,.4); margin-top: 2px; }
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: .875rem;
+  font-weight: 500;
+  color: rgba(255,255,255,.6);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+
+.nav-item:hover  { background: rgba(255,255,255,.07); color: #fff; }
+.nav-item.active { background: var(--copper); color: #fff; }
+
+.nav-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+.sidebar-bottom {
+  padding: 12px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Responsive: على الموبايل الـ sidebar يبقى شريط مرتب فوق المحتوى */
+@media (max-width: 900px) {
+  .sidebar {
+    min-height: auto;
+    height: auto;
+    position: relative;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sidebar-logo {
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 16px 20px;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+
+  .sidebar-bottom {
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-top: none;
+    padding: 10px 16px;
+    gap: 8px;
+  }
+
+  .nav-item {
+    width: auto;
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar-nav,
+  .sidebar-bottom {
+    justify-content: center;
+  }
+
+  .nav-item {
+    font-size: .8rem;
+    padding: 8px 10px;
+  }
+}

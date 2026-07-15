@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="CVHack.AI/CVHack.AI.csproj" Id="4e09d266-e454-4cd9-924b-60bc2c3b37a1" />
+  <Project Path="CVHack.API/CVHack.API.csproj" />
+  <Project Path="CVHack.BLL/CVHack.BLL.csproj" />
+  <Project Path="CVHack.Common/CVHack.Common.csproj" />
+  <Project Path="CVHack.DAL/CVHack.DAL.csproj" />
+</Solution>

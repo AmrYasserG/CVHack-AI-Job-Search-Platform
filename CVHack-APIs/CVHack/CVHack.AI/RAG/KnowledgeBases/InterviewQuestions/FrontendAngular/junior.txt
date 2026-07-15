@@ -1,0 +1,182 @@
+====================================================
+ANGULAR FRONTEND INTERVIEW QUESTIONS — JUNIOR LEVEL
+====================================================
+Target: 0–2 years of experience
+Focus: Angular fundamentals, TypeScript basics, templates, components, services, basic RxJS
+
+----------------------------------------------------
+SECTION 1: ANGULAR CORE FUNDAMENTALS
+----------------------------------------------------
+
+Q1. What is Angular and how does it differ from React or Vue?
+Expected answer: Angular is a full-featured, opinionated front-end framework by Google. Unlike React (a UI library) or Vue (progressive framework), Angular includes everything out of the box: routing, forms, HTTP client, dependency injection, and a CLI. It uses TypeScript by default and follows a strict component/module architecture. Best for large enterprise apps where conventions and structure matter.
+
+Q2. What is a component in Angular? What are the minimum requirements to define one?
+Expected answer: A component controls a portion of the UI. Minimum: a TypeScript class decorated with @Component, which requires a selector (the HTML tag name) and a template (inline templateUrl). Example:
+  @Component({ selector: 'app-hello', template: '<h1>Hello</h1>' })
+  export class HelloComponent {}
+Components must be declared in an NgModule or be standalone.
+
+Q3. What is the difference between a standalone component and a module-based component in Angular 17+?
+Expected answer: Traditional Angular uses NgModules to declare and group components. Standalone components (stable since Angular 15, default in Angular 17+) skip NgModule — they declare their own imports directly in the @Component decorator with imports: []. New Angular projects default to standalone architecture, making NgModules optional.
+
+Q4. What are the main Angular CLI commands you use day to day?
+Expected answer:
+  - ng new my-app: create a new project.
+  - ng serve: start the dev server.
+  - ng generate component my-comp (ng g c): scaffold a component.
+  - ng generate service my-svc (ng g s): scaffold a service.
+  - ng build: compile for production.
+  - ng test: run unit tests with Karma/Jest.
+
+Q5. Explain the difference between one-way data binding and two-way data binding in Angular.
+Expected answer: One-way binding flows in one direction. Property binding [src]="imageUrl" pushes data from component to template. Event binding (click)="doSomething()" pushes events from template to component. Two-way binding [(ngModel)]="username" syncs both directions — a shorthand for [ngModel] + (ngModelChange). It requires FormsModule.
+
+Q6. What is interpolation in Angular? Give an example.
+Expected answer: Interpolation renders component properties in the template using double curly braces: {{ title }}. Angular evaluates the expression and converts it to a string. Example: <h1>{{ user.name }}</h1>. It's for displaying data, not setting properties — for properties use [property] binding.
+
+Q7. What are the built-in structural directives? Explain each.
+Expected answer:
+  - *ngIf / @if: conditionally adds or removes an element from the DOM.
+  - *ngFor / @for: repeats an element for each item in a list.
+  - *ngSwitch / @switch: selects one of several possible templates.
+  Angular 17 introduced the new @if / @for / @switch control flow syntax as a replacement for the *ng directives.
+
+Q8. What is the difference between *ngIf and [hidden]?
+Expected answer: *ngIf removes the element from the DOM entirely when false. [hidden] keeps the element in the DOM but sets display: none via CSS. Use *ngIf when the component shouldn't be initialized at all (lifecycle hooks won't run). Use [hidden] when you need the element to retain its state but be invisible.
+
+Q9. What is a service in Angular and why do you use one?
+Expected answer: A service is a TypeScript class decorated with @Injectable that holds business logic, data fetching, or shared state — things that don't belong in a component. Services are injected into components via Angular's Dependency Injection system. This keeps components lean and logic reusable and testable.
+
+Q10. What is Dependency Injection (DI) in Angular at a basic level?
+Expected answer: DI is a design pattern where a class receives its dependencies from the outside rather than creating them itself. Angular's DI system creates and provides service instances automatically. You declare a dependency in a constructor: constructor(private userService: UserService) {} and Angular injects it. providedIn: 'root' makes a service a singleton available app-wide.
+
+----------------------------------------------------
+SECTION 2: TEMPLATES & DIRECTIVES
+----------------------------------------------------
+
+Q11. What is the difference between attribute directives and structural directives?
+Expected answer: Structural directives change the DOM layout by adding or removing elements (*ngIf, *ngFor). Attribute directives change the appearance or behavior of an existing element without adding/removing it (ngClass, ngStyle, or custom ones). Structural directives are prefixed with * which Angular transforms into <ng-template>.
+
+Q12. How do you use ngClass and ngStyle?
+Expected answer:
+  - [ngClass]="{ 'active': isActive, 'disabled': isDisabled }" — applies CSS classes conditionally.
+  - [ngStyle]="{ 'color': textColor, 'font-size': fontSize + 'px' }" — applies inline styles dynamically.
+  Both accept objects, strings, or arrays.
+
+Q13. What is a template reference variable and how do you use it?
+Expected answer: A template reference variable (#varName) gives you a reference to a DOM element or component within the template. Example: <input #nameInput> then <button (click)="greet(nameInput.value)">Greet</button>. Also used with ViewChild in the component class.
+
+Q14. What is the async pipe and why is it useful?
+Expected answer: The async pipe subscribes to an Observable or Promise directly in the template and automatically unsubscribes when the component is destroyed. Example: <div *ngIf="user$ | async as user">{{ user.name }}</div>. It prevents memory leaks from manual subscriptions and simplifies template code.
+
+----------------------------------------------------
+SECTION 3: COMPONENT COMMUNICATION
+----------------------------------------------------
+
+Q15. How do you pass data from a parent to a child component?
+Expected answer: Using @Input() decorator in the child:
+  @Input() title: string = '';
+  Parent template: <app-child [title]="parentTitle"></app-child>
+  Angular binds the parent's parentTitle to the child's title input property.
+
+Q16. How does a child component send data or events to its parent?
+Expected answer: Using @Output() with an EventEmitter:
+  @Output() itemSelected = new EventEmitter<string>();
+  Then emit: this.itemSelected.emit('Hello');
+  Parent template: <app-child (itemSelected)="onSelect($event)"></app-child>
+
+Q17. What is content projection (ng-content)?
+Expected answer: <ng-content> is a slot where parent content is projected into a child component's template. Example: a card component uses <ng-content> so the parent can put any content inside the card tags: <app-card><p>Custom content</p></app-card>. Similar to React's children prop.
+
+----------------------------------------------------
+SECTION 4: LIFECYCLE HOOKS
+----------------------------------------------------
+
+Q18. What are Angular's lifecycle hooks? Which ones do you use most?
+Expected answer: In order: ngOnChanges → ngOnInit → ngDoCheck → ngAfterContentInit → ngAfterContentChecked → ngAfterViewInit → ngAfterViewChecked → ngOnDestroy. Most commonly used:
+  - ngOnInit: initialize data, fetch from services. Runs once after first ngOnChanges.
+  - ngOnDestroy: clean up subscriptions and timers to prevent memory leaks.
+  - ngOnChanges: respond to @Input() changes.
+  - ngAfterViewInit: interact with child components/DOM after view is ready.
+
+Q19. What is the difference between ngOnInit and the constructor?
+Expected answer: The constructor is for DI and simple initialization — not for logic that depends on inputs or DOM. ngOnInit runs after Angular sets up @Input() bindings, making it the right place for data fetching and initialization. Calling a service in the constructor before DI is complete can cause issues.
+
+Q20. Why is ngOnDestroy important?
+Expected answer: To prevent memory leaks. Any Observable subscriptions created in the component (from services, intervals, etc.) continue running after the component is destroyed unless explicitly unsubscribed. ngOnDestroy is where you call subscription.unsubscribe() or use a Subject to complete them.
+
+----------------------------------------------------
+SECTION 5: FORMS
+----------------------------------------------------
+
+Q21. What is the difference between Template-driven forms and Reactive forms?
+Expected answer:
+  - Template-driven: logic in the HTML template using ngModel. Simpler for basic forms. Asynchronous, less testable.
+  - Reactive: logic in the component class using FormGroup, FormControl, FormBuilder. More explicit, synchronous, easier to test, better for complex validation. Preferred in most professional Angular projects.
+
+Q22. How do you create a simple reactive form?
+Expected answer:
+  form = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', Validators.required)
+  });
+  Template: <form [formGroup]="form"> <input formControlName="email"> </form>
+  On submit: this.form.value gives the values.
+
+Q23. How do you display a validation error message in a reactive form?
+Expected answer: Check the control's validity state:
+  <span *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+    Email is required.
+  </span>
+  Use touched or dirty to avoid showing errors before the user interacts.
+
+----------------------------------------------------
+SECTION 6: ROUTING BASICS
+----------------------------------------------------
+
+Q24. How do you set up basic routing in Angular?
+Expected answer: Define routes as an array: const routes: Routes = [{ path: 'home', component: HomeComponent }, { path: '', redirectTo: 'home', pathMatch: 'full' }]. Provide it with provideRouter(routes) in app.config.ts (standalone) or RouterModule.forRoot(routes) in app module. Add <router-outlet> to the template where routed components render.
+
+Q25. What is routerLink and how does it differ from using an href?
+Expected answer: [routerLink]="['/home']" navigates without a full page reload — it uses the Angular router for client-side navigation. href triggers a full browser navigation, reloading the app. Always use routerLink for internal navigation in Angular apps.
+
+Q26. How do you read query params or route params in Angular?
+Expected answer: Inject ActivatedRoute in the constructor. Route params: this.route.params.subscribe(params => this.id = params['id']). Query params: this.route.queryParams.subscribe(qp => this.filter = qp['filter']). Or use the snapshot for one-time reads: this.route.snapshot.paramMap.get('id').
+
+----------------------------------------------------
+SECTION 7: HTTP & RXJS BASICS
+----------------------------------------------------
+
+Q27. How do you make an HTTP GET request in Angular?
+Expected answer: Inject HttpClient, then call this.http.get<User[]>('/api/users'). This returns an Observable — subscribe to it or use the async pipe. In standalone apps, provide it with provideHttpClient() in app.config.ts.
+
+Q28. What is an Observable? How is it different from a Promise?
+Expected answer: An Observable is a stream that can emit multiple values over time and is lazy (doesn't execute until subscribed). A Promise is eager and resolves once with a single value. Observables are cancellable (unsubscribe) and can be transformed with RxJS operators. Angular uses Observables throughout (HTTP, Router, Forms).
+
+Q29. What are three common RxJS operators and what do they do?
+Expected answer:
+  - map: transforms each emitted value (like Array.map).
+  - filter: only passes values that meet a condition.
+  - catchError: handles errors in the stream and returns a fallback Observable.
+  Also common: tap (side effects without transforming), switchMap (cancel previous inner Observable).
+
+Q30. What happens if you forget to unsubscribe from an Observable in Angular?
+Expected answer: Memory leak — the subscription keeps running even after the component is destroyed, potentially causing errors (updating destroyed components) and wasted resources. Fix: unsubscribe in ngOnDestroy, use the async pipe (auto-unsubscribes), use takeUntilDestroyed() (Angular 16+), or use a Subject + takeUntil pattern.
+
+----------------------------------------------------
+SECTION 8: PRACTICAL CHALLENGES
+----------------------------------------------------
+
+Q31. Create a component that fetches a list of posts from an API and displays them with a loading indicator.
+Expected answer: Inject HttpClient into a service method returning Observable<Post[]>. In the component: posts$: Observable<Post[]>, loading flag managed with tap/finalize. Template uses async pipe with *ngIf for loading state.
+
+Q32. Build a reactive form with two fields (name and email) with required validation and show errors on submit.
+Expected answer: FormGroup with FormControl + Validators.required. Submit handler marks all fields as touched if invalid. Template shows error spans conditionally.
+
+Q33. Pass a selected item from a child list component back to the parent and display it.
+Expected answer: Child emits via @Output() EventEmitter. Parent binds to (selectedItem)="onItemSelect($event)" and stores the value in a property displayed in the template.
+
+====================================================
+END OF JUNIOR QUESTION BANK
+====================================================

@@ -1,0 +1,61 @@
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.chart-header { margin-bottom: 8px; }
+.chart-title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text); }
+.chart-sub { font-family: var(--font-body); font-size: .8rem; color: var(--muted); margin-top: 2px; }
+
+.bar-values {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.bar-val {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+.bars-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: 160px;
+}
+
+.bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.bar-wrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 6px 6px 0 0;
+  animation: growBar .5s ease both;
+  transform-origin: bottom;
+}
+
+.bar-label {
+  font-family: var(--font-body);
+  font-size: .7rem;
+  color: var(--muted);
+  margin-top: 8px;
+  text-align: center;
+}

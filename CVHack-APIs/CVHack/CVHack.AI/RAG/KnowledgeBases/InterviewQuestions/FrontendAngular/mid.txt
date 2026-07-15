@@ -1,0 +1,225 @@
+====================================================
+ANGULAR FRONTEND INTERVIEW QUESTIONS — MID-LEVEL
+====================================================
+Target: 2–5 years of experience
+Focus: RxJS depth, change detection, advanced routing, DI, state management, testing, performance
+
+----------------------------------------------------
+SECTION 1: CHANGE DETECTION
+----------------------------------------------------
+
+Q1. Explain Angular's change detection mechanism. What triggers it?
+Expected answer: Angular's default change detection (CheckAlways) runs after every asynchronous event: browser events (click, input), HTTP responses, setTimeout/setInterval, Promises resolving. Angular uses Zone.js to monkey-patch async APIs and notify the framework. When triggered, Angular checks the entire component tree from root to leaves, comparing current and previous values.
+
+Q2. What is OnPush change detection and when should you use it?
+Expected answer: ChangeDetectionStrategy.OnPush makes a component only re-check when: its @Input() references change (not deep equality — new reference), an Observable via async pipe emits, an event originates inside the component, or change detection is triggered manually via ChangeDetectorRef. Use it for pure/presentational components that receive immutable data — it significantly reduces the number of checks in large trees.
+
+Q3. What is ChangeDetectorRef and what are its key methods?
+Expected answer:
+  - detectChanges(): manually trigger change detection for this component and its children. Useful in OnPush components after imperatively changing data.
+  - markForCheck(): marks this component and all ancestors for checking on the next change detection cycle. Used when an Observable (outside async pipe) pushes a new value.
+  - detach() / reattach(): completely detach a component from the change detection tree (for performance-critical scenarios like live charts) and reattach when needed.
+
+Q4. What is Zone.js and what role does it play in Angular? What is "zone-less Angular"?
+Expected answer: Zone.js intercepts async APIs (setTimeout, XHR, Promises) so Angular knows when async operations complete and can trigger change detection. It works transparently but adds overhead. Angular 17+ supports running without Zone.js (provideExperimentalZonelessChangeDetection()) — the developer is responsible for triggering change detection via signals or explicit marks. Signals-based Angular (Angular 16+) is the path to fully zone-less reactivity.
+
+Q5. What are Angular Signals and how do they change reactivity?
+Expected answer: Signals (stable in Angular 17) are reactive primitives: const count = signal(0); count.set(1); count.update(v => v + 1); count(). Computed signals: const doubled = computed(() => count() * 2) — derived values that update automatically. Effects: effect(() => console.log(count())) — run side effects when signals change. Signals integrate with change detection without Zone.js — Angular knows exactly which components depend on a signal and re-renders only them.
+
+Q6. How do Signals interact with OnPush components?
+Expected answer: When a Signal used in a template changes, Angular marks only the components that read that Signal for re-checking — without needing Zone.js to fire a global check. This makes OnPush + Signals a highly efficient combination. toSignal() converts an Observable to a Signal; toObservable() does the reverse, enabling gradual migration from RxJS-based patterns.
+
+----------------------------------------------------
+SECTION 2: RXJS — INTERMEDIATE TO ADVANCED
+----------------------------------------------------
+
+Q7. Explain the difference between switchMap, mergeMap, concatMap, and exhaustMap.
+Expected answer: All are "flattening operators" that map each outer emission to an inner Observable:
+  - switchMap: cancels the previous inner Observable when a new outer value arrives. Best for type-ahead search (cancel stale requests).
+  - mergeMap: subscribes to all inner Observables concurrently. Best when order doesn't matter (parallel uploads).
+  - concatMap: queues inner Observables, subscribes one at a time in order. Best for sequential operations (save then navigate).
+  - exhaustMap: ignores new outer values while an inner Observable is active. Best for preventing double-submit (login button).
+
+Q8. What is the difference between Subject, BehaviorSubject, and ReplaySubject?
+Expected answer:
+  - Subject: multicasts to subscribers, but new subscribers miss past values.
+  - BehaviorSubject: requires an initial value, replays the last value to new subscribers. Best for current state (user auth state, selected item).
+  - ReplaySubject(n): replays the last n emissions to new subscribers. Useful when latecomers need recent history.
+  - AsyncSubject: only emits the last value on completion.
+
+Q9. What is the takeUntilDestroyed operator and how does it improve the unsubscribe pattern?
+Expected answer: Angular 16+ introduced takeUntilDestroyed() from @angular/core/rxjs-interop. It automatically completes an Observable when the component/directive is destroyed — no need for a destroy$ Subject and ngOnDestroy. Must be called in an injection context (constructor or field initializer). Example: this.http.get('/api').pipe(takeUntilDestroyed()).subscribe().
+
+Q10. What is a cold vs. hot Observable? Give a React-world or Angular-world example of each.
+Expected answer: Cold: the producer starts when you subscribe — each subscriber gets its own execution (HttpClient.get() is cold — each subscription makes a new HTTP request). Hot: the producer is active regardless of subscribers — all subscribers share the same execution (fromEvent(document, 'click') is hot — the DOM event exists independently).
+
+Q11. What does the share() or shareReplay() operator do?
+Expected answer: They turn a cold Observable into a hot, multicast one. shareReplay(1) is common — it replays the last emission to new subscribers so multiple template bindings to the same Observable (e.g., via async pipe used twice) don't make duplicate HTTP calls. Essential when you have users$ | async used in multiple places in a template.
+
+Q12. How do you handle errors in an RxJS stream in production Angular code?
+Expected answer: catchError in the pipe: .pipe(catchError(err => { this.error = err.message; return EMPTY; })). Use EMPTY or of(fallbackValue) to gracefully complete the stream. For global HTTP error handling, use an HttpInterceptor. Always handle errors — unhandled errors complete the Observable, preventing future emissions (e.g., a search box stops working after one failed request).
+
+----------------------------------------------------
+SECTION 3: DEPENDENCY INJECTION — ADVANCED
+----------------------------------------------------
+
+Q13. What are the different DI providers and scopes in Angular?
+Expected answer:
+  - providedIn: 'root': singleton for the whole app, tree-shakeable.
+  - providedIn: 'platform': shared across multiple Angular apps on the same page.
+  - Component-level providers (providers: [MyService] in @Component): new instance per component and its children. Destroyed with the component.
+  - Module-level providers: scoped to that module's component tree.
+  Understanding scope is critical — a service injected at component level is not the same instance as the root one.
+
+Q14. What is the InjectionToken and when do you use it?
+Expected answer: InjectionToken provides a way to inject non-class values (strings, objects, configs) into the DI system. Example: export const API_URL = new InjectionToken<string>('api_url'); then provide: [{ provide: API_URL, useValue: 'https://api.example.com' }]. Inject: constructor(@Inject(API_URL) private apiUrl: string). Useful for app configuration.
+
+Q15. What is the difference between useClass, useValue, useFactory, and useExisting?
+Expected answer:
+  - useClass: provide a different class than the token (useful for mocking in tests).
+  - useValue: provide a static value.
+  - useFactory: provide a value via a factory function (can have its own deps: deps: []).
+  - useExisting: alias one token to another (both tokens resolve to the same instance).
+
+Q16. What is the inject() function and how does it differ from constructor injection?
+Expected answer: inject() (Angular 14+) allows DI outside the constructor — in field initializers, factory functions, or standalone functions: private service = inject(UserService). It's required in functional guards and resolvers (Angular 15+ feature). More composable than constructor injection, especially for utility functions. Must be called in an injection context.
+
+----------------------------------------------------
+SECTION 4: ROUTING — ADVANCED
+----------------------------------------------------
+
+Q17. What are lazy-loaded routes in Angular and how do you implement them?
+Expected answer: Lazy loading defers loading a feature module's JS bundle until the user navigates to that route:
+  { path: 'admin', loadComponent: () => import('./admin/admin.component').then(m => m.AdminComponent) }
+  (standalone) or
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }
+  (module-based). Reduces initial bundle size significantly.
+
+Q18. What are Route Guards? Explain CanActivate, CanDeactivate, and CanMatch.
+Expected answer:
+  - canActivate: prevents navigation to a route (auth check). Returns boolean or UrlTree.
+  - canDeactivate: prevents leaving a route (unsaved changes warning).
+  - canMatch: determines whether a route can even be considered for matching (replaces canLoad in Angular 15+). Used for feature flags or role-based route availability.
+  Angular 15+ uses functional guards: canActivate: [() => inject(AuthService).isLoggedIn()].
+
+Q19. What is a Route Resolver? When would you use it?
+Expected answer: A resolver pre-fetches data before the component renders — the route won't activate until the data is ready. Prevents partially loaded views. Use when the component absolutely needs data to render at all (a detail page needing an entity). For most cases, showing a loading state within the component is preferable (better UX). Resolvers delay navigation, which can feel sluggish.
+
+Q20. How does the Angular router handle route parameters for the same component (e.g., navigating from /user/1 to /user/2)?
+Expected answer: By default, Angular reuses the component instance — it doesn't destroy and recreate it. ngOnInit won't fire again. You must subscribe to route.params as an Observable (not use snapshot) to react to param changes. In Angular 16+ with functional APIs, you can use input() with withComponentInputBinding() to automatically bind route params as signal inputs.
+
+----------------------------------------------------
+SECTION 5: STATE MANAGEMENT
+----------------------------------------------------
+
+Q21. What state management options are available in Angular? How do you choose?
+Expected answer:
+  - Services + BehaviorSubject: sufficient for small-to-medium apps with simple shared state.
+  - Signals (Angular 17+): built-in, fine-grained reactivity without a library. Best for new projects.
+  - NgRx Store: Redux pattern for Angular. Best for large apps needing time-travel debug, strict action-based mutations, and a shared team vocabulary.
+  - NgRx ComponentStore: local state management scoped to a component tree — lighter than global Store.
+  - Akita / Elf: less opinionated alternatives to NgRx.
+
+Q22. Explain the NgRx data flow (Actions → Reducer → Store → Selector → Component).
+Expected answer:
+  1. Component dispatches an Action: store.dispatch(loadUsers()).
+  2. Effects intercept the action, make HTTP calls, dispatch success/failure actions.
+  3. Reducer handles the success action and returns new state (pure function, no side effects).
+  4. Store holds the new state.
+  5. Selector derives/memoizes a slice: const users = createSelector(selectUsersState, s => s.users).
+  6. Component selects: users$ = this.store.select(selectAllUsers) and renders via async pipe.
+
+Q23. What is NgRx Effects and why are they needed?
+Expected answer: Effects handle side effects (HTTP calls, localStorage, routing) in response to actions — keeping reducers pure. An effect listens for an action type, performs async work, and dispatches a result action. Example: loadUsers$ = createEffect(() => this.actions$.pipe(ofType(loadUsers), switchMap(() => this.userService.getAll().pipe(map(users => loadUsersSuccess({ users })), catchError(err => of(loadUsersFailure({ error: err.message })))))));
+
+----------------------------------------------------
+SECTION 6: PERFORMANCE
+----------------------------------------------------
+
+Q24. What are some common causes of slow Angular apps and how do you fix them?
+Expected answer:
+  - Too much change detection: use OnPush, Signals.
+  - Large initial bundle: lazy load routes and heavy libraries, use esbuild (Angular 17 default).
+  - Slow template expressions: avoid function calls in templates (recalculated every check) — use pipes or computed properties.
+  - Memory leaks from subscriptions: async pipe or takeUntilDestroyed.
+  - Large lists: use CDK Virtual Scrolling (CdkVirtualScrollViewport).
+  - No trackBy in *ngFor: Angular re-creates all DOM nodes on array change without it.
+
+Q25. What is trackBy in *ngFor and why does it matter?
+Expected answer: trackBy provides a function that returns a unique identifier for each list item. Angular uses it to match existing DOM nodes to updated array items — only re-rendering changed items instead of destroying and recreating the entire list. Without it, replacing the array reference causes Angular to re-render all items even if content is the same. Critical for large, frequently updated lists.
+
+Q26. What is the Angular CDK and name some components you've used?
+Expected answer: The Component Dev Kit is a library of behavior primitives without opinionated styling. Commonly used: CdkVirtualScrollViewport (virtual scrolling), CdkDragDrop (drag and drop), CdkOverlay (positioning overlays/tooltips), CdkPortal (render content in a different DOM location), CdkA11y (accessibility utilities like focus traps). Foundation for Angular Material.
+
+Q27. What is the Angular build optimizer and what does it do with esbuild?
+Expected answer: Angular 17 defaults to esbuild + Vite for development (replacing Webpack). Esbuild is significantly faster for both dev server startup and production builds. The build optimizer enables tree-shaking, dead code elimination, and Angular-specific optimizations like removing decorators and ivy static analysis. Production builds with esbuild are typically 2-4x faster than Webpack builds.
+
+----------------------------------------------------
+SECTION 7: PIPES
+----------------------------------------------------
+
+Q28. What is a pipe in Angular? What is the difference between pure and impure pipes?
+Expected answer: Pipes transform displayed values in templates: {{ date | date:'shortDate' }}. Pure pipes (default) only re-run when input reference changes — Angular memoizes the result. Impure pipes run on every change detection cycle — use only when necessary (e.g., when the pipe needs to respond to mutable input like an array being mutated). Impure pipes have a significant performance cost.
+
+Q29. Create a custom pipe that truncates a string to a given length.
+Expected answer:
+  @Pipe({ name: 'truncate', standalone: true })
+  export class TruncatePipe implements PipeTransform {
+    transform(value: string, limit: number = 50): string {
+      return value.length > limit ? value.slice(0, limit) + '…' : value;
+    }
+  }
+  Usage: {{ longText | truncate:100 }}
+
+----------------------------------------------------
+SECTION 8: TESTING
+----------------------------------------------------
+
+Q30. What is TestBed in Angular testing?
+Expected answer: TestBed is Angular's primary testing utility that creates a mini Angular environment for unit tests. It compiles components, sets up DI, and provides a test module:
+  TestBed.configureTestingModule({ declarations: [MyComponent], providers: [{ provide: MyService, useValue: mockService }] });
+  const fixture = TestBed.createComponent(MyComponent);
+  fixture.detectChanges(); // trigger initial change detection
+
+Q31. How do you test a component that depends on a service?
+Expected answer: Provide a spy or mock of the service in the test module. Use jasmine.createSpyObj or provide a simple object with mocked methods that return of(mockData) (RxJS of). Test that the component renders correctly given the service response, not the service itself (unit test isolation).
+
+Q32. What is the difference between shallow and deep rendering in Angular component tests?
+Expected answer: Shallow rendering (NO_ERRORS_SCHEMA or CUSTOM_ELEMENTS_SCHEMA): child components are not rendered, preventing the need to declare them. Deep rendering: all child components are compiled and rendered. Shallow is faster and more isolated (unit test). Deep catches integration issues. Most Angular teams use shallow for component unit tests and deeper integration for critical flows.
+
+Q33. How do you test a service that makes HTTP calls?
+Expected answer: Use HttpClientTestingModule and HttpTestingController:
+  httpMock.expectOne('/api/users').flush(mockUsers);
+  — this intercepts the request and provides mock data without real HTTP calls. Verify no unexpected requests with httpMock.verify() after each test.
+
+----------------------------------------------------
+SECTION 9: TYPESCRIPT ADVANCED USAGE
+----------------------------------------------------
+
+Q34. How do you use generics in Angular services?
+Expected answer: Generic services work well for reusable CRUD patterns:
+  class ApiService<T> {
+    getAll(): Observable<T[]> { return this.http.get<T[]>(this.endpoint); }
+  }
+  class UserService extends ApiService<User> { endpoint = '/api/users'; }
+  Keeps HTTP logic DRY across multiple resource types.
+
+Q35. What are decorators in TypeScript/Angular and how do they work?
+Expected answer: Decorators are functions that modify classes, methods, properties, or parameters at design time. Angular uses them extensively: @Component, @Injectable, @Input, @Output, @HostListener. They receive metadata which Angular's compiler processes to generate efficient code. Under the hood, @Component({ ... }) is a function call that adds metadata to the class.
+
+----------------------------------------------------
+SECTION 10: PRACTICAL CHALLENGES
+----------------------------------------------------
+
+Q36. Implement a type-ahead search that debounces input, cancels previous requests, and displays results.
+Expected answer: fromEvent on the input, pipe through debounceTime(300), distinctUntilChanged(), switchMap(() => this.searchService.search(query)), catchError. Display via async pipe. Tests knowledge of switchMap + debounce + error handling.
+
+Q37. You have a list of 10,000 items to display. How do you handle this in Angular?
+Expected answer: CdkVirtualScrollViewport with itemSize set to the row height. Only renders visible items. trackBy on the virtual for loop. If data is paginated, switch to server-side pagination instead of loading all 10,000 at once.
+
+Q38. Implement a shared authentication service using BehaviorSubject that components can subscribe to for the current user.
+Expected answer: currentUser$ = new BehaviorSubject<User | null>(null); login() sets via .next(user); logout() sets .next(null). Components subscribe or use async pipe. CanActivate guard reads the current value. Shows stateful service design with RxJS.
+
+====================================================
+END OF MID-LEVEL QUESTION BANK
+====================================================
